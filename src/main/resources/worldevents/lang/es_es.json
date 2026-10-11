@@ -1,0 +1,33 @@
+{
+	"bossbar.title": "%1$s · %2$s",
+
+	"event.blood_moon.name": "Luna de sangre",
+	"event.blood_moon.start.title": "Luna de sangre",
+	"event.blood_moon.start.subtitle": "Los monstruos se vuelven más fuertes...",
+	"event.blood_moon.start.chat": "Sale la luna de sangre. Esta noche hay más monstruos y son más fuertes, pero sueltan mejor botín.",
+	"event.blood_moon.end": "La luna de sangre se desvanece. Sobreviviste a la noche.",
+	"event.blood_moon.no_sleep": "No puedes dormir durante la luna de sangre",
+
+	"event.gold_rush.name": "Fiebre del oro",
+	"event.gold_rush.start.title": "Fiebre del oro",
+	"event.gold_rush.start.subtitle": "¡Los minerales sueltan el doble!",
+	"event.gold_rush.start.chat": "¡Fiebre del oro! Durante unos minutos, los minerales sueltan más. Saca el pico.",
+	"event.gold_rush.end": "Se acabó la fiebre del oro.",
+
+	"command.list.header": "Eventos disponibles:",
+	"command.list.entry": " - %1$s (%2$s) · peso %3$s · %4$s",
+	"command.list.enabled": "activado",
+	"command.list.disabled": "desactivado",
+	"command.list.cooldown": "en espera %s",
+	"command.list.ready": "listo",
+	"command.start.success": "%1$s iniciado en %2$s.",
+	"command.start.unknown": "Evento desconocido: %s",
+	"command.start.busy": "%s ya está activo aquí. Usa /worldevents stop primero.",
+	"command.stop.success": "%s detenido.",
+	"command.stop.none": "No hay ningún evento activo en esta dimensión.",
+	"command.status.active": "%1$s: %2$s, quedan %3$s",
+	"command.status.idle": "%1$s: sin evento, el próximo podría llegar en %2$s",
+	"command.status.ready": "%s: sin evento, listo",
+	"command.reload.success": "Config recargada.",
+	"command.reload.failure": "No se pudo recargar la config; se mantiene la anterior. Revisa el log del servidor."
+}

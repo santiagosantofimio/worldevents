@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "worldevents",
+	"version": "${version}",
+	"name": "World Events",
+	"description": "Random server-side world events: blood moon, gold rush, meteor shower and more. Vanilla clients can join.",
+	"authors": [
+		"Santiago Santofimio"
+	],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.santiagosantofimio.worldevents.WorldEventsMod"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

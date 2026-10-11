@@ -1,0 +1,33 @@
+{
+	"bossbar.title": "%1$s · %2$s",
+
+	"event.blood_moon.name": "Blood Moon",
+	"event.blood_moon.start.title": "Blood Moon",
+	"event.blood_moon.start.subtitle": "The monsters grow stronger...",
+	"event.blood_moon.start.chat": "A Blood Moon rises. Monsters are more numerous and stronger tonight, but drop better loot.",
+	"event.blood_moon.end": "The Blood Moon fades. You survived the night.",
+	"event.blood_moon.no_sleep": "You cannot sleep during the Blood Moon",
+
+	"event.gold_rush.name": "Gold Rush",
+	"event.gold_rush.start.title": "Gold Rush",
+	"event.gold_rush.start.subtitle": "Ores drop double!",
+	"event.gold_rush.start.chat": "Gold Rush! For a few minutes, ores drop more. Grab your pickaxe.",
+	"event.gold_rush.end": "The Gold Rush is over.",
+
+	"command.list.header": "Available events:",
+	"command.list.entry": " - %1$s (%2$s) · weight %3$s · %4$s",
+	"command.list.enabled": "enabled",
+	"command.list.disabled": "disabled",
+	"command.list.cooldown": "on cooldown %s",
+	"command.list.ready": "ready",
+	"command.start.success": "Started %1$s in %2$s.",
+	"command.start.unknown": "Unknown event: %s",
+	"command.start.busy": "%s is already active here. Use /worldevents stop first.",
+	"command.stop.success": "Stopped %s.",
+	"command.stop.none": "No event is active in this dimension.",
+	"command.status.active": "%1$s: %2$s, %3$s left",
+	"command.status.idle": "%1$s: no event, next possible in %2$s",
+	"command.status.ready": "%s: no event, ready",
+	"command.reload.success": "Config reloaded.",
+	"command.reload.failure": "Could not reload the config; keeping the previous one. Check the server log."
+}

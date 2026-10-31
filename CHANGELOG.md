@@ -15,6 +15,10 @@ All notable changes to this project are documented here. The format follows
   bar tells each one how warm they are. The first to open it takes the prize, but the **Spectral
   Captain** (boss; calls cannon fire that never harms the terrain) rises to guard it and the chest
   stays shut until it falls. It may drop the **Captain's Cutlass**, which lunges forward.
+- **Eruption** (`eruption`, Nether only): geysers of fire burst around players after a moment's
+  warning and the **Magma Colossus** (boss; its slams burn and throw everything around it) comes up
+  to hunt them. Nothing touches a block. Monsters killed meanwhile may leave a **Magma Heart**, and
+  the colossus may drop the **Colossus Hammer**, a heavy mace that sets its target on fire.
 - Nomad merchants now sell relics (the strongest event items) for event seals.
 - Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
   by command skip it.

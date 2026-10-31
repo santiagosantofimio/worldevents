@@ -9,7 +9,7 @@ Big creatures (tall ones, see Creature.Part#big) use a 32x32x32 grid that fills 
 Usage:
     python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldevents:item/NAME [--preview PNG]
 Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big),
-spectral_captain (big).
+spectral_captain (big), magma_colossus (big).
 """
 
 import argparse
@@ -298,6 +298,38 @@ def spectral_captain():
     return filled, colours
 
 
+def magma_colossus():
+    """A hulking boar-like beast of black rock with lava running through its cracks and obsidian tusks."""
+    rng = random.Random(33)
+    filled, colours = grid(BIG_SIZE)
+    bone = np.array([70, 40, 90])
+
+    def rock(x, y, z):
+        veins = abs(math.sin(x * 0.7) + math.sin(y * 0.6 + 1.0) + math.sin(z * 0.8 + 2.0))
+        if veins < 0.28:
+            return np.array([255, 150, 40]) if rng.random() < 0.6 else np.array([235, 80, 24])
+        return np.array([44, 38, 42])
+
+    sphere(filled, colours, (16, 16, 18), 9.0, lambda x, y, z, d: rock(x, y, z), squash=(1.2, 0.95, 1.3))
+    box(filled, colours, (9, 7, 2), (24, 20, 12), rock)
+    for lo_x in (5, 22):
+        for lo_z in (8, 21):
+            box(filled, colours, (lo_x, 0, lo_z), (lo_x + 6, 10, lo_z + 6), rock)
+    for x, top in ((10, 27), (14, 29), (18, 29), (22, 27)):
+        for y in range(23, top + 1):
+            filled[x, y, 20] = True
+            colours[x, y, 20] = np.array([255, 120, 30]) if y == top else np.array([50, 44, 48])
+    for lo_x, step in ((9, -1), (23, 1)):
+        for i in range(5):
+            filled[lo_x + step * (i // 2), 8 + i, 1] = True
+            colours[lo_x + step * (i // 2), 8 + i, 1] = bone
+            filled[lo_x + step * (i // 2), 8 + i, 2] = True
+            colours[lo_x + step * (i // 2), 8 + i, 2] = bone
+    paint_front(filled, colours, [(12, 16), (13, 16), (19, 16), (20, 16)], np.array([255, 220, 90]))
+    paint_front(filled, colours, [(x, 10) for x in range(12, 21)], np.array([235, 80, 24]))
+    return filled, colours
+
+
 BUILDERS = {
     "blood_moon_lord": blood_moon_lord,
     "blood_eye": blood_eye,
@@ -306,8 +338,9 @@ BUILDERS = {
     "nomad_merchant": nomad_merchant,
     "horde_warlord": horde_warlord,
     "spectral_captain": spectral_captain,
+    "magma_colossus": magma_colossus,
 }
-BIG = {"nomad_merchant", "horde_warlord", "spectral_captain"}
+BIG = {"nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus"}
 
 
 def main():

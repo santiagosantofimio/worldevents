@@ -7,6 +7,7 @@ import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
@@ -21,6 +22,7 @@ import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.HarvestSpirit;
 import dev.santiagosantofimio.worldevents.mob.HordeWarlord;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
+import dev.santiagosantofimio.worldevents.mob.MagmaColossus;
 import dev.santiagosantofimio.worldevents.mob.MimicSack;
 import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
@@ -48,9 +50,10 @@ public class WorldEventsMod implements ModInitializer {
 		EventRegistry.register(new MerchantCaravanEvent());
 		EventRegistry.register(new HordeEvent());
 		EventRegistry.register(new TreasureHuntEvent());
+		EventRegistry.register(new EruptionEvent());
 
 		Creature.registerKinds(BloodMoonLord.KIND, BloodEye.KIND, MimicSack.KIND, LivingMeteorite.KIND, StormSpirit.KIND,
-				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND);
+				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND);
 
 		ModConfig.load();
 		Lang.load();

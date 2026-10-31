@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:colossus_hammer",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/colossus_hammer"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/mace"
+		}
+	}
+}

@@ -13,6 +13,7 @@ import dev.santiagosantofimio.worldevents.event.EventScores;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
@@ -26,6 +27,7 @@ import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.HarvestSpirit;
 import dev.santiagosantofimio.worldevents.mob.HordeWarlord;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
+import dev.santiagosantofimio.worldevents.mob.MagmaColossus;
 import dev.santiagosantofimio.worldevents.mob.MimicSack;
 import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
@@ -73,10 +75,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.animal.equine.TraderLlama;
+import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.monster.illager.Vindicator;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
@@ -96,6 +100,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
@@ -1041,6 +1046,58 @@ public class WorldEventsGameTests {
 		helper.assertValueEqual(helper.getEntities(EntityTypes.ITEM).size(), 0, "items spilled by the chest");
 		remove(player);
 		helper.succeed();
+	}
+
+	@GameTest(environment = "worldevents-test:eruption", maxTicks = 100)
+	public void eruptionBurnsWithoutTouchingBlocksAndTheColossusDropsItsHammer(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		JsonObject settings = new JsonObject();
+		settings.addProperty("hammerChance", 1.0);
+		Runnable restore = overrideEventSettings(EruptionEvent.ID, settings);
+		buildGround(helper);
+		ServerPlayer player = player(helper, new BlockPos(1, 4, 1), "en_us");
+		EruptionEvent eruption = (EruptionEvent) event(EruptionEvent.ID);
+		helper.assertFalse(eruption.isAvailable(level), "eruptions are for the Nether");
+		helper.assertTrue(eruption.isAvailable(level.getServer().getLevel(Level.NETHER)), "no eruptions in the Nether");
+		EventManager.start(level, eruption);
+
+		Zombie zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 4, 4));
+		EruptionEvent.erupt(level, helper.absolutePos(new BlockPos(4, 4, 4)), 6.0f);
+		helper.assertTrue(zombie.getHealth() < zombie.getMaxHealth() && zombie.isOnFire(), "the geyser did not burn the zombie");
+		helper.assertBlockPresent(Blocks.GRASS_BLOCK, new BlockPos(4, 3, 4));
+		helper.assertBlockPresent(Blocks.AIR, new BlockPos(4, 4, 4));
+		zombie.discard();
+
+		Hoglin colossus = eruption.spawnColossus(level, EventManager.active(level), helper.absolutePos(new BlockPos(5, 4, 5)), "en_us");
+		helper.assertTrue(colossus != null && MagmaColossus.is(colossus), "no colossus");
+		assertCreature(helper, colossus, "magma_colossus");
+		helper.assertFalse(colossus.isBaby(), "a baby colossus");
+		helper.assertTrue(Math.abs(colossus.getMaxHealth() - 250.0f) < 1e-3, "colossus health should be 250, is " + colossus.getMaxHealth());
+
+		Pig pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 4, 5));
+		MagmaColossus.slam(level, colossus);
+		helper.assertTrue(pig.isOnFire(), "the slam did not burn the pig");
+		helper.assertBlockPresent(Blocks.GRASS_BLOCK, new BlockPos(3, 3, 5));
+		pig.discard();
+
+		colossus.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
+		helper.runAfterDelay(3, () -> {
+			helper.assertValueEqual(countSpecial(helper, EventItems.COLOSSUS_HAMMER), 1, "hammers from the colossus");
+			helper.assertTrue(countSpecial(helper, EventItems.MAGMA_HEART) >= 1, "no magma heart from the colossus");
+			helper.assertTrue(Advancements.has(player, "defeat_magma_colossus"), "no advancement for the colossus");
+			helper.assertTrue(Creature.parts(colossus).stream().allMatch(Entity::isRemoved), "the colossus's model was left behind");
+			EventManager.stop(level);
+
+			player.setItemInHand(InteractionHand.MAIN_HAND, EventItems.COLOSSUS_HAMMER.create("en_us", 1));
+			Pig target = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(2, 4, 2));
+			target.hurtServer(level, level.damageSources().playerAttack(player), 1.0f);
+			helper.assertTrue(target.isOnFire(), "the hammer did not set its target on fire");
+			target.discard();
+			restore.run();
+			remove(player);
+			helper.succeed();
+		});
 	}
 
 	private static int seals(ServerPlayer player) {

@@ -66,5 +66,16 @@
 	"advancements.worldevents.defeat_spectral_captain.title": "Historia de fantasmas",
 	"advancements.worldevents.defeat_spectral_captain.description": "Derrota al Capitán espectral",
 	"advancements.worldevents.captains_cutlass.title": "¡Al abordaje!",
-	"advancements.worldevents.captains_cutlass.description": "Consigue el Sable del capitán"
+	"advancements.worldevents.captains_cutlass.description": "Consigue el Sable del capitán",
+	"item.worldevents.magma_heart": "Corazón de magma",
+	"item.worldevents.magma_heart.lore": "Cómelo: Resistencia al fuego (5 min) y Fuerza (2 min)",
+	"item.worldevents.colossus_hammer": "Martillo del coloso",
+	"item.worldevents.colossus_hammer.lore": "Una maza pesada cuyos golpes prenden fuego al objetivo",
+	"entity.worldevents.magma_colossus": "Coloso de magma",
+	"advancements.worldevents.magma_heart.title": "Corazón de fuego",
+	"advancements.worldevents.magma_heart.description": "Consigue un corazón de magma durante una erupción",
+	"advancements.worldevents.defeat_magma_colossus.title": "Enfriado",
+	"advancements.worldevents.defeat_magma_colossus.description": "Derrota al Coloso de magma",
+	"advancements.worldevents.colossus_hammer.title": "Hora del martillo",
+	"advancements.worldevents.colossus_hammer.description": "Consigue el Martillo del coloso"
 }

@@ -138,6 +138,19 @@ public final class EventItems {
 		stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(LUNGE));
 	}));
 
+	/** Fire resistance and strength; left by monsters killed during an eruption and by the colossus. */
+	public static final EventItem MAGMA_HEART = register(new EventItem("magma_heart", Items.MAGMA_CREAM, Rarity.RARE, false,
+			stack -> stack.set(DataComponents.CONSUMABLE, consumable(SoundEvents.FIRECHARGE_USE,
+					new MobEffectInstance(MobEffects.FIRE_RESISTANCE, minutes(5), 0),
+					new MobEffectInstance(MobEffects.STRENGTH, minutes(2), 0)))));
+
+	/** A heavier mace whose hits set the target on fire; see {@code EruptionEvent}. */
+	public static final EventItem COLOSSUS_HAMMER = register(new EventItem("colossus_hammer", Items.MACE, Rarity.EPIC, false,
+			stack -> stack.set(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+					.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 9.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.2, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.build())));
+
 	/** Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. */
 	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, true, stack -> {
 	}));

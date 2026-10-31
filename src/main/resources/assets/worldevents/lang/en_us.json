@@ -66,5 +66,16 @@
 	"advancements.worldevents.defeat_spectral_captain.title": "Ghost Story",
 	"advancements.worldevents.defeat_spectral_captain.description": "Defeat the Spectral Captain",
 	"advancements.worldevents.captains_cutlass.title": "Boarding Party",
-	"advancements.worldevents.captains_cutlass.description": "Get the Captain's Cutlass"
+	"advancements.worldevents.captains_cutlass.description": "Get the Captain's Cutlass",
+	"item.worldevents.magma_heart": "Magma Heart",
+	"item.worldevents.magma_heart.lore": "Eat it: Fire Resistance (5 min) and Strength (2 min)",
+	"item.worldevents.colossus_hammer": "Colossus Hammer",
+	"item.worldevents.colossus_hammer.lore": "A heavy mace whose hits set the target on fire",
+	"entity.worldevents.magma_colossus": "Magma Colossus",
+	"advancements.worldevents.magma_heart.title": "Heart of Fire",
+	"advancements.worldevents.magma_heart.description": "Get a magma heart during an eruption",
+	"advancements.worldevents.defeat_magma_colossus.title": "Cooled Down",
+	"advancements.worldevents.defeat_magma_colossus.description": "Defeat the Magma Colossus",
+	"advancements.worldevents.colossus_hammer.title": "Hammer Time",
+	"advancements.worldevents.colossus_hammer.description": "Get the Colossus Hammer"
 }

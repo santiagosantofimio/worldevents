@@ -69,7 +69,8 @@ public final class NomadMerchant {
 			Ware.of(EventItems.LUCKY_NUGGET, 1, 8, 3),
 			Ware.of(EventItems.GOLDEN_SEED, 1, 6, 3),
 			Ware.of(EventItems.BOTTLED_LIGHTNING, 1, 12, 2),
-			Ware.of(EventItems.BLOODY_TEAR, 1, 20, 1));
+			Ware.of(EventItems.BLOODY_TEAR, 1, 20, 1),
+			Ware.of(EventItems.MAGMA_HEART, 1, 10, 2));
 
 	/** Hard-to-find vanilla goods. */
 	private static final List<Ware> EXOTIC_WARES = List.of(
@@ -89,7 +90,8 @@ public final class NomadMerchant {
 			new Relic(EventItems.BLOOD_SCYTHE, 8),
 			new Relic(EventItems.STARFALL_PICKAXE, 8),
 			new Relic(EventItems.WARLORD_AXE, 8),
-			new Relic(EventItems.CAPTAINS_CUTLASS, 6));
+			new Relic(EventItems.CAPTAINS_CUTLASS, 6),
+			new Relic(EventItems.COLOSSUS_HAMMER, 10));
 
 	/** A crop the merchant buys, and how many of it per emerald. */
 	private record Purchase(Item crop, int count) {

@@ -55,5 +55,7 @@
 	"advancements.worldevents.warlord_axe.description": "Consigue el Hacha del caudillo",
 	"itemGroup.worldevents": "Eventos del mundo",
 	"item.worldevents.spawn_egg": "Huevo generador de %s",
-	"item.worldevents.spawn_egg.lore": "Úsalo sobre un bloque para invocarlo, aunque no sea su evento"
+	"item.worldevents.spawn_egg.lore": "Úsalo sobre un bloque para invocarlo, aunque no sea su evento",
+	"item.worldevents.event_seal": "Sello de evento",
+	"item.worldevents.event_seal.lore": "Prueba de haber participado en un evento. Los mercaderes nómadas lo cambian por reliquias"
 }

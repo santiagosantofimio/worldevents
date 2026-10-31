@@ -80,5 +80,9 @@
 	"item.warlord_axe.war_cry": "¡Grito de guerra!",
 	"command.summon.success": "Criatura invocada: %s.",
 	"command.summon.unknown": "Criatura desconocida: %s",
-	"command.summon.failed": "No se pudo invocar «%s» ahí (¿está cargada la zona?)."
+	"command.summon.failed": "No se pudo invocar «%s» ahí (¿está cargada la zona?).",
+	"event.warning": "Algo se acerca: %1$s, en unos %2$s segundos.",
+	"event.ranking.header": "Los mejores del evento:",
+	"event.ranking.entry": " %1$s. %2$s: %3$s puntos",
+	"event.ranking.seals": "Has ganado %s sello(s) de evento. Los mercaderes nómadas los cambian por reliquias."
 }

@@ -9,6 +9,7 @@ import dev.santiagosantofimio.worldevents.data.WorldEventsData;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
+import dev.santiagosantofimio.worldevents.event.EventScores;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
@@ -89,6 +90,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.AbstractBedBlock;
@@ -414,10 +416,13 @@ public class WorldEventsGameTests {
 		});
 	}
 
-	@GameTest(environment = "worldevents-test:planner", maxTicks = 700)
-	public void plannedEventWaitsForItsMoment(GameTestHelper helper) {
+	@GameTest(environment = "worldevents-test:planner", maxTicks = 1200)
+	public void plannedEventWaitsForItsMomentAndWarnsPlayers(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		reset(level);
+		JsonObject shortWarning = new JsonObject();
+		shortWarning.addProperty("warningSeconds", 5);
+		Runnable restore = overrideGlobalSettings(shortWarning);
 		boolean spawnMobs = level.getGameRules().get(GameRules.SPAWN_MOBS);
 		level.getGameRules().set(GameRules.SPAWN_MOBS, true, level.getServer());
 		ServerPlayer player = player(helper, new BlockPos(4, 1, 4), "en_us");
@@ -425,17 +430,31 @@ public class WorldEventsGameTests {
 		WorldEventsData.get(level).setPlan(new WorldEventsData.Plan(BloodMoonEvent.ID, level.getGameTime()));
 
 		// The manager checks every 200 ticks: by then it must still be waiting for the night.
+		boolean[] night = {false};
+		boolean[] warned = {false};
 		helper.runAfterDelay(250, () -> {
 			helper.assertTrue(EventManager.active(level) == null, "the blood moon started during the day");
 			helper.assertTrue(EventManager.planned(level) == event(BloodMoonEvent.ID), "the plan was dropped");
+			helper.assertFalse(WorldEventsData.get(level).plan().warned(), "players were warned during the day");
 			helper.setTime(13000);
+			night[0] = true;
 		});
-		helper.runAfterDelay(500, () -> {
+		helper.onEachTick(() -> {
+			if (!night[0]) {
+				return;
+			}
 			ActiveEvent active = EventManager.active(level);
-			helper.assertTrue(active != null && active.event() == event(BloodMoonEvent.ID), "the planned blood moon did not start at night");
+			if (active == null) {
+				WorldEventsData.Plan plan = WorldEventsData.get(level).plan();
+				warned[0] |= plan != null && plan.warned();
+				return;
+			}
+			helper.assertTrue(warned[0], "the blood moon started without a warning");
+			helper.assertTrue(active.event() == event(BloodMoonEvent.ID), "the wrong event started");
 			helper.assertTrue(EventManager.planned(level) == null, "the plan was not cleared");
 			EventManager.stop(level);
 			level.getGameRules().set(GameRules.SPAWN_MOBS, spawnMobs, level.getServer());
+			restore.run();
 			remove(player);
 			helper.succeed();
 		});
@@ -740,8 +759,12 @@ public class WorldEventsGameTests {
 		assertCreature(helper, merchant, "nomad_merchant");
 		helper.assertTrue(merchant.isNoAi(), "the merchant would wander off (and drink milk)");
 		MerchantOffers offers = merchant.getOffers();
-		helper.assertValueEqual(offers.size(), 8, "offers");
-		helper.assertTrue(offers.stream().filter(offer -> EventItems.identify(offer.getResult()) != null).count() == 4, "the merchant does not sell four event items");
+		helper.assertValueEqual(offers.size(), 10, "offers");
+		helper.assertTrue(offers.stream().filter(offer -> EventItems.identify(offer.getResult()) != null).count() == 6, "the merchant does not sell six event items");
+		// Relics cost event seals, and only real seals pay for them.
+		MerchantOffer relic = offers.stream().filter(offer -> offer.getBaseCostA().is(EventItems.EVENT_SEAL.base())).findFirst().orElseThrow();
+		helper.assertTrue(relic.satisfiedBy(EventItems.EVENT_SEAL.create("en_us", 64), ItemStack.EMPTY), "seals do not pay for a relic");
+		helper.assertFalse(relic.satisfiedBy(new ItemStack(EventItems.EVENT_SEAL.base(), 64), ItemStack.EMPTY), "plain pottery sherds pay for a relic");
 		List<TraderLlama> llamas = MerchantCaravanEvent.llamas(EventManager.active(level));
 		helper.assertFalse(llamas.isEmpty(), "the caravan has no llamas");
 		helper.assertTrue(llamas.stream().allMatch(llama -> llama.getLeashHolder() == merchant), "a llama is not leashed to the merchant");
@@ -908,6 +931,45 @@ public class WorldEventsGameTests {
 		});
 	}
 
+	@GameTest(environment = "worldevents-test:ranking", maxTicks = 100)
+	public void bestPlayersEarnSealsWhenAnEventEnds(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		ServerPlayer best = player(helper, new BlockPos(1, 1, 1), "es_es");
+		ServerPlayer second = player(helper, new BlockPos(2, 1, 2), "en_us");
+		ServerPlayer idle = player(helper, new BlockPos(3, 1, 3), "en_us");
+		EventManager.start(level, event(GoldRushEvent.ID));
+		EventManager.score(best, GoldRushEvent.ID, 7);
+		EventManager.score(second, GoldRushEvent.ID, 3);
+		EventManager.score(idle, GoldRushEvent.ID, 1);
+		EventManager.score(idle, BloodMoonEvent.ID, 50);
+
+		List<EventScores.Entry> ranking = EventScores.ranking(EventManager.active(level));
+		helper.assertValueEqual(ranking.size(), 3, "players in the ranking");
+		helper.assertTrue(ranking.get(0).player().equals(best.getUUID()) && ranking.get(0).points() == 7, "unexpected winner: " + ranking.get(0));
+		helper.assertValueEqual(ranking.get(2).points(), 1, "points for another event should not count");
+
+		EventManager.stop(level);
+		helper.assertValueEqual(seals(best), 3, "seals for the winner");
+		helper.assertValueEqual(seals(second), 1, "seals for taking part");
+		helper.assertValueEqual(seals(idle), 0, "seals for barely taking part");
+		remove(best);
+		remove(second);
+		remove(idle);
+		helper.succeed();
+	}
+
+	private static int seals(ServerPlayer player) {
+		int total = 0;
+		for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
+			ItemStack stack = player.getInventory().getItem(slot);
+			if (EventItems.EVENT_SEAL.is(stack)) {
+				total += stack.getCount();
+			}
+		}
+		return total;
+	}
+
 	private static WorldEvent event(String id) {
 		return EventRegistry.get(id);
 	}
@@ -1067,11 +1129,20 @@ public class WorldEventsGameTests {
 
 	/** Merges {@code values} into one event's section of the config file and reloads; the result undoes it. */
 	private static Runnable overrideEventSettings(String eventId, JsonObject values) {
+		return overrideSettings(eventId, values);
+	}
+
+	/** Merges {@code values} into the top of the config file and reloads; the result undoes it. */
+	private static Runnable overrideGlobalSettings(JsonObject values) {
+		return overrideSettings(null, values);
+	}
+
+	private static Runnable overrideSettings(String eventId, JsonObject values) {
 		Path path = ModConfig.path();
 		try {
 			String original = Files.readString(path, StandardCharsets.UTF_8);
 			JsonObject json = JsonParser.parseString(original).getAsJsonObject();
-			JsonObject section = json.getAsJsonObject("events").getAsJsonObject(eventId);
+			JsonObject section = eventId == null ? json : json.getAsJsonObject("events").getAsJsonObject(eventId);
 			for (String key : values.keySet()) {
 				section.add(key, values.get(key));
 			}

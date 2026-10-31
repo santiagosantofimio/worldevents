@@ -5,9 +5,12 @@ import dev.santiagosantofimio.worldevents.config.EventSettings;
 import dev.santiagosantofimio.worldevents.config.ModConfig;
 import dev.santiagosantofimio.worldevents.data.WorldEventsData;
 import dev.santiagosantofimio.worldevents.i18n.Lang;
+import dev.santiagosantofimio.worldevents.item.EventItems;
+import dev.santiagosantofimio.worldevents.util.Drops;
 import dev.santiagosantofimio.worldevents.util.WeightedPicker;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -18,7 +21,9 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Starts, ticks and ends events, one at a time per dimension.
@@ -33,6 +38,7 @@ public final class EventManager {
 	public static final int ACTIVE_TICK_INTERVAL = 20;
 	/** A planned event that has not started after this long (two in-game days) is dropped and drawn again. */
 	private static final long PLAN_TIMEOUT_TICKS = 48000;
+	private static final int RANKING_LINES = 3;
 
 	private EventManager() {
 	}
@@ -85,7 +91,12 @@ public final class EventManager {
 				data.setPlan(null);
 				WorldEventsMod.LOGGER.debug("Dropped plan {} in {}", plan.eventId(), level.dimension().identifier());
 			} else if (enoughPlayers && event.canStart(level)) {
-				start(level, event);
+				if (plan.warned() && now - plan.warnedAt() >= config.warningTicks() || config.warningTicks() == 0) {
+					start(level, event);
+				} else if (!plan.warned()) {
+					data.setPlan(plan.warnedAt(now));
+					warn(level, event, config.warningTicks() / 20);
+				}
 			}
 			return;
 		}
@@ -105,6 +116,17 @@ public final class EventManager {
 			data.setPlan(new WorldEventsData.Plan(picked.id(), now));
 			WorldEventsMod.LOGGER.info("Planned {} in {}", picked.id(), level.dimension().identifier());
 		}
+	}
+
+	/** Players get a moment to get ready before a drawn event starts. Events started by command skip this. */
+	private static void warn(ServerLevel level, WorldEvent event, int seconds) {
+		for (ServerPlayer player : level.players()) {
+			String name = Lang.text(Lang.language(player), "event." + event.id() + ".name");
+			player.sendSystemMessage(Lang.component(player, "event.warning", name, seconds).withStyle(event.textColor()));
+			player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_BELL, SoundSource.MASTER,
+					player.getX(), player.getY(), player.getZ(), 1.0f, 0.7f, player.getRandom().nextLong()));
+		}
+		WorldEventsMod.LOGGER.info("Warned of {} in {}", event.id(), level.dimension().identifier());
 	}
 
 	private static int countPlayers(ServerLevel level) {
@@ -191,6 +213,47 @@ public final class EventManager {
 			player.sendSystemMessage(Lang.component(player, "event." + event.id() + ".end").withStyle(event.textColor()));
 		}
 		WorldEventsMod.LOGGER.info("Ended {} in {}", event.id(), level.dimension().identifier());
+		if (ModConfig.get().ranking()) {
+			announceRanking(level, active);
+		}
+	}
+
+	/** Credits {@code player} for something done during {@code eventId}, if it is running in their dimension. */
+	public static void score(ServerPlayer player, String eventId, int points) {
+		ActiveEvent active = active(player.level());
+		if (active != null && active.event().id().equals(eventId)) {
+			EventScores.add(active, player, points);
+		}
+	}
+
+	/** Shows the best players and hands out event seals to whoever took part and is still here. */
+	private static void announceRanking(ServerLevel level, ActiveEvent active) {
+		List<EventScores.Entry> ranking = EventScores.ranking(active);
+		ModConfig config = ModConfig.get();
+		if (ranking.isEmpty() || ranking.get(0).points() < config.minScoreForSeal()) {
+			return;
+		}
+		for (ServerPlayer player : level.players()) {
+			player.sendSystemMessage(Lang.component(player, "event.ranking.header").withStyle(ChatFormatting.GOLD));
+			for (int i = 0; i < Math.min(RANKING_LINES, ranking.size()); i++) {
+				EventScores.Entry entry = ranking.get(i);
+				player.sendSystemMessage(Lang.component(player, "event.ranking.entry", i + 1, entry.name(), entry.points()).withStyle(ChatFormatting.YELLOW));
+			}
+		}
+		for (EventScores.Entry entry : ranking) {
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(entry.player());
+			if (player == null || player.level() != level || entry.points() < config.minScoreForSeal()) {
+				continue;
+			}
+			int seals = config.sealsPerEvent() + (entry == ranking.get(0) ? config.sealsForWinner() : 0);
+			if (seals > 0) {
+				ItemStack stack = EventItems.EVENT_SEAL.create(Lang.language(player), seals);
+				if (!player.getInventory().add(stack)) {
+					Drops.spawn(level, player.position(), stack);
+				}
+				player.sendSystemMessage(Lang.component(player, "event.ranking.seals", seals).withStyle(ChatFormatting.GOLD));
+			}
+		}
 	}
 
 	/** Tells a player who joins or changes dimension about the event already running there. */

@@ -448,6 +448,9 @@ public final class BloodMoonEvent implements WorldEvent {
 				return;
 			}
 			BloodMoonLord.dropLoot(level, lord, killer, settings().getDouble("scytheChance"));
+			if (!Creature.isSummoned(lord)) {
+				EventManager.score(killer, ID, 10);
+			}
 			Advancements.award(killer, "defeat_blood_moon_lord");
 			for (ServerPlayer player : level.players()) {
 				player.sendSystemMessage(Lang.component(player, "mob.blood_moon_lord.defeated", killer.getName().getString()).withStyle(ChatFormatting.GOLD));
@@ -473,6 +476,9 @@ public final class BloodMoonEvent implements WorldEvent {
 			}
 			if (!(mob.level() instanceof ServerLevel level) || !EventManager.isActive(level, this) || !mob.shouldDropExperience()) {
 				return;
+			}
+			if (mob.getLastHurtByPlayer() instanceof ServerPlayer killer) {
+				EventManager.score(killer, ID, 1);
 			}
 			double multiplier = settings().getDouble("xpMultiplier");
 			int bonus = (int) Math.round(mob.getExperienceReward(level, source.getEntity()) * (multiplier - 1.0));

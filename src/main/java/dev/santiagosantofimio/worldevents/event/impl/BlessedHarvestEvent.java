@@ -340,6 +340,9 @@ public final class BlessedHarvestEvent implements WorldEvent {
 				return;
 			}
 			Drops.multiply(drops, settings().getDouble("dropMultiplier"), context.getRandom());
+			if (context.getOptional(LootContextParams.THIS_ENTITY) instanceof ServerPlayer farmer) {
+				EventManager.score(farmer, ID, 1);
+			}
 		});
 	}
 

@@ -55,5 +55,7 @@
 	"advancements.worldevents.warlord_axe.description": "Get the Warlord's Axe",
 	"itemGroup.worldevents": "World Events",
 	"item.worldevents.spawn_egg": "%s Spawn Egg",
-	"item.worldevents.spawn_egg.lore": "Use it on a block to summon it, even outside its event"
+	"item.worldevents.spawn_egg.lore": "Use it on a block to summon it, even outside its event",
+	"item.worldevents.event_seal": "Event Seal",
+	"item.worldevents.event_seal.lore": "Proof of taking part in a world event. Nomad merchants take it for relics"
 }

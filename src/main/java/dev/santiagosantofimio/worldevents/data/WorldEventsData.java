@@ -18,11 +18,25 @@ import net.minecraft.world.level.saveddata.SavedDataType;
  */
 public final class WorldEventsData extends SavedData {
 	/** The event drawn to run next, waiting for the right moment to start. */
-	public record Plan(String eventId, long plannedAt) {
+	public record Plan(String eventId, long plannedAt, long warnedAt) {
+		private static final long NOT_WARNED = -1;
 		private static final Codec<Plan> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.STRING.fieldOf("id").forGetter(Plan::eventId),
-				Codec.LONG.fieldOf("at").forGetter(Plan::plannedAt)
+				Codec.LONG.fieldOf("at").forGetter(Plan::plannedAt),
+				Codec.LONG.optionalFieldOf("warned", NOT_WARNED).forGetter(Plan::warnedAt)
 		).apply(instance, Plan::new));
+
+		public Plan(String eventId, long plannedAt) {
+			this(eventId, plannedAt, NOT_WARNED);
+		}
+
+		public boolean warned() {
+			return warnedAt != NOT_WARNED;
+		}
+
+		public Plan warnedAt(long gameTime) {
+			return new Plan(eventId, plannedAt, gameTime);
+		}
 	}
 
 	private static final Codec<WorldEventsData> CODEC = RecordCodecBuilder.create(instance -> instance.group(

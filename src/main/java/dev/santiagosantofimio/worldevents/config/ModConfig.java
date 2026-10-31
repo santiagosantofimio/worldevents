@@ -82,6 +82,11 @@ public final class ModConfig {
 		root.addProperty("globalCooldown", 3600);
 		root.addProperty("minPlayers", 1);
 		root.addProperty("blockDamage", true);
+		root.addProperty("warningSeconds", 60);
+		root.addProperty("ranking", true);
+		root.addProperty("sealsPerEvent", 1);
+		root.addProperty("sealsForWinner", 2);
+		root.addProperty("minScoreForSeal", 3);
 		JsonObject events = new JsonObject();
 		for (WorldEvent event : EventRegistry.all()) {
 			events.add(event.id(), event.defaultSettings());
@@ -128,6 +133,31 @@ public final class ModConfig {
 	/** Master switch for any event that changes blocks. */
 	public boolean blockDamage() {
 		return root().getBoolean("blockDamage");
+	}
+
+	/** How long before a drawn event starts players are warned. 0 starts it right away. */
+	public int warningTicks() {
+		return Math.max(0, root().getInt("warningSeconds") * 20);
+	}
+
+	/** Whether the best players are announced when an event ends, and seals handed out. */
+	public boolean ranking() {
+		return root().getBoolean("ranking");
+	}
+
+	/** Event seals for everyone who took part, when an event ends. */
+	public int sealsPerEvent() {
+		return Math.max(0, root().getInt("sealsPerEvent"));
+	}
+
+	/** Extra seals for the player who did the most. */
+	public int sealsForWinner() {
+		return Math.max(0, root().getInt("sealsForWinner"));
+	}
+
+	/** Points that count as taking part in an event. */
+	public int minScoreForSeal() {
+		return Math.max(1, root().getInt("minScoreForSeal"));
 	}
 
 	public EventSettings event(String id) {

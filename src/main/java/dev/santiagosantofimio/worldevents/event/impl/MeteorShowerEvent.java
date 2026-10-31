@@ -281,6 +281,9 @@ public final class MeteorShowerEvent implements WorldEvent {
 					: meteorite.getLastHurtByPlayer() instanceof ServerPlayer player ? player : null;
 			if (killer != null) {
 				LivingMeteorite.dropLoot(level, meteorite, killer, settings().getInt("fragmentsPerImpact") + 2, settings().getDouble("pickaxeChance"));
+				if (!Creature.isSummoned(meteorite)) {
+					EventManager.score(killer, ID, 5);
+				}
 			}
 		});
 

@@ -80,5 +80,9 @@
 	"item.warlord_axe.war_cry": "War cry!",
 	"command.summon.success": "Summoned: %s.",
 	"command.summon.unknown": "Unknown creature: %s",
-	"command.summon.failed": "Could not summon %s there (is the area loaded?)."
+	"command.summon.failed": "Could not summon %s there (is the area loaded?).",
+	"event.warning": "Something is coming: %1$s, in about %2$s seconds.",
+	"event.ranking.header": "Best in this event:",
+	"event.ranking.entry": " %1$s. %2$s: %3$s points",
+	"event.ranking.seals": "You earned %s event seal(s). Nomad merchants take them for relics."
 }

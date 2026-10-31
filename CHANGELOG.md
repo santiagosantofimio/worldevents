@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Event ranking**: players score points during events (kills, ores, crops, trades, bosses).
+  When an event ends, the best three are announced and everyone who took part earns
+  **Event Seals**, with extra seals for the winner.
+- Nomad merchants now sell relics (the strongest event items) for event seals.
+- Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
+  by command skip it.
+
 ## [0.1.0] - 2026-10-31
 
 ### Added

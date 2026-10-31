@@ -228,6 +228,9 @@ public final class ThunderstormEvent implements WorldEvent {
 			if (killer != null) {
 				StormSpirit.dropLoot(level, spirit, killer, settings().getDouble("bottledLightningChance"));
 				Advancements.award(killer, "calm_the_storm");
+				if (!Creature.isSummoned(spirit)) {
+					EventManager.score(killer, ID, 5);
+				}
 			}
 		});
 

@@ -169,6 +169,7 @@ public final class GoldRushEvent implements WorldEvent {
 			if (entity instanceof Rabbit sack && MimicSack.is(sack) && source.getEntity() instanceof ServerPlayer player
 					&& sack.level() instanceof ServerLevel level) {
 				MimicSack.caught(level, sack, player);
+				EventManager.score(player, ID, 5);
 				return false;
 			}
 			return true;
@@ -206,6 +207,9 @@ public final class GoldRushEvent implements WorldEvent {
 			if (context.getRandom().nextDouble() < settings().getDouble("luckyNuggetChance")
 					&& context.getOptional(LootContextParams.THIS_ENTITY) instanceof Player miner) {
 				drops.add(EventItems.LUCKY_NUGGET.create(Lang.languageOf(miner), 1));
+			}
+			if (context.getOptional(LootContextParams.THIS_ENTITY) instanceof ServerPlayer miner) {
+				EventManager.score(miner, ID, 1);
 			}
 			Vec3 origin = context.getOptional(LootContextParams.ORIGIN);
 			if (origin != null && settings().getBoolean("particles")) {

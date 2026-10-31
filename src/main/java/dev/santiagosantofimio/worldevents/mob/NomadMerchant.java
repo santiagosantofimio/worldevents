@@ -2,6 +2,7 @@ package dev.santiagosantofimio.worldevents.mob;
 
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.config.ModConfig;
+import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.util.Advancements;
@@ -79,6 +80,15 @@ public final class NomadMerchant {
 			Ware.of(Items.ENDER_PEARL, 2, 5, 3),
 			Ware.of(Items.NAUTILUS_SHELL, 1, 6, 2),
 			Ware.of(Items.TOTEM_OF_UNDYING, 1, 40, 1));
+
+	/** The strongest event items, only for event seals: what taking part in events is for. */
+	private record Relic(EventItems.EventItem item, int seals) {
+	}
+
+	private static final List<Relic> RELICS = List.of(
+			new Relic(EventItems.BLOOD_SCYTHE, 8),
+			new Relic(EventItems.STARFALL_PICKAXE, 8),
+			new Relic(EventItems.WARLORD_AXE, 8));
 
 	/** A crop the merchant buys, and how many of it per emerald. */
 	private record Purchase(Item crop, int count) {
@@ -172,6 +182,7 @@ public final class NomadMerchant {
 		ServerPlayer trader = LAST_TRADER.get(merchant);
 		if (trades > (before == null ? 0 : before) && trader != null) {
 			Advancements.award(trader, "trade_with_caravan");
+			EventManager.score(trader, MerchantCaravanEvent.ID, 2);
 		}
 	}
 
@@ -217,7 +228,7 @@ public final class NomadMerchant {
 		Creature.remove(merchant);
 	}
 
-	/** A random selection: four of the event's items, three exotic goods and one crop the merchant buys. */
+	/** A random selection: four of the events' items, three exotic goods, two relics and one crop the merchant buys. */
 	private static MerchantOffers offers(RandomSource random, String language, double priceMultiplier) {
 		MerchantOffers offers = new MerchantOffers();
 		for (Ware ware : pick(RARE_WARES, 4, random)) {
@@ -225,6 +236,9 @@ public final class NomadMerchant {
 		}
 		for (Ware ware : pick(EXOTIC_WARES, 3, random)) {
 			offers.add(sell(ware, language, priceMultiplier));
+		}
+		for (Relic relic : pick(RELICS, 2, random)) {
+			offers.add(new MerchantOffer(EventItems.sealCost(relic.seals()), relic.item().create(language, 1), 1, 1, 0.0f));
 		}
 		Purchase purchase = HARVEST_PURCHASES.get(random.nextInt(HARVEST_PURCHASES.size()));
 		offers.add(new MerchantOffer(new ItemCost(purchase.crop(), purchase.count()), new ItemStack(Items.EMERALD), 8, 1, PRICE_GROWTH));

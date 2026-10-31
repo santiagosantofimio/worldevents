@@ -454,6 +454,7 @@ public final class HordeEvent implements WorldEvent {
 			if (active != null && active.event() == this && !Creature.isSummoned(mob)) {
 				if (killer != null) {
 					active.state(HordeState::new).fighters.add(killer.getUUID());
+					EventManager.score(killer, ID, warlord ? 10 : 1);
 				}
 				if (warlord) {
 					active.data().putBoolean(WARLORD_DEFEATED, true);

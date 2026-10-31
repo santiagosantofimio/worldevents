@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -47,6 +48,7 @@ import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.UseCooldown;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -124,6 +126,10 @@ public final class EventItems {
 		// Only names the cooldown group, so the war cry's cooldown shows on this axe alone. Its own length is one
 		// tick: vanilla applies it after the axe's other uses too (stripping a log), which must not use up the cry.
 		stack.set(DataComponents.USE_COOLDOWN, new UseCooldown(0.05f, Optional.of(WAR_CRY)));
+	}));
+
+	/** Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. */
+	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, true, stack -> {
 	}));
 
 	/** Key in a creature spawn egg's custom data that says which creature it summons. */
@@ -207,6 +213,17 @@ public final class EventItems {
 		tag.putString(CREATURE_KEY, kind.id());
 		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 		return stack;
+	}
+
+	/** A price in event seals, for merchants. Only real seals pay it, not plain pottery sherds. */
+	public static ItemCost sealCost(int count) {
+		CompoundTag tag = new CompoundTag();
+		tag.putString(DATA_KEY, EVENT_SEAL.id());
+		return new ItemCost(EVENT_SEAL.base().builtInRegistryHolder(), count, DataComponentExactPredicate.builder()
+				.expect(DataComponents.CUSTOM_DATA, CustomData.of(tag))
+				// Not needed to match it: it makes the merchant's screen show the seal's own icon.
+				.expect(DataComponents.CUSTOM_MODEL_DATA, modelData(EVENT_SEAL.id()))
+				.build());
 	}
 
 	/** The creature a spawn egg summons, or {@code null} for any other item. */

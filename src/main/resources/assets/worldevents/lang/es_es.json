@@ -77,5 +77,12 @@
 	"advancements.worldevents.defeat_magma_colossus.title": "Enfriado",
 	"advancements.worldevents.defeat_magma_colossus.description": "Derrota al Coloso de magma",
 	"advancements.worldevents.colossus_hammer.title": "Hora del martillo",
-	"advancements.worldevents.colossus_hammer.description": "Consigue el Martillo del coloso"
+	"advancements.worldevents.colossus_hammer.description": "Consigue el Martillo del coloso",
+	"item.worldevents.unstable_pearl": "Perla inestable",
+	"item.worldevents.unstable_pearl.lore": "Úsala para saltar hacia delante. Cuidado adónde apuntas",
+	"entity.worldevents.void_stalker": "Acechador del vacío",
+	"advancements.worldevents.defeat_void_stalker.title": "Cazasombras",
+	"advancements.worldevents.defeat_void_stalker.description": "Derrota a un acechador del vacío",
+	"advancements.worldevents.unstable_pearl.title": "En un parpadeo",
+	"advancements.worldevents.unstable_pearl.description": "Consigue una perla inestable de un acechador del vacío"
 }

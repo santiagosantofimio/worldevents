@@ -106,5 +106,11 @@
 	"event.eruption.end": "The eruption dies down.",
 	"mob.magma_colossus.arrived": "The magma colossus has risen!",
 	"mob.magma_colossus.defeated": "%s has defeated the magma colossus!",
-	"mob.magma_colossus.retreat": "The magma colossus sinks back into the lava."
+	"mob.magma_colossus.retreat": "The magma colossus sinks back into the lava.",
+	"event.void_storm.name": "Void Storm",
+	"event.void_storm.start.title": "Void Storm",
+	"event.void_storm.start.subtitle": "The void is watching...",
+	"event.void_storm.start.chat": "A void storm! Stalkers blink out of nowhere to hunt you, and pulses of the void lift you off the ground. Defeat them for their unstable pearls.",
+	"event.void_storm.end": "The void falls silent.",
+	"item.unstable_pearl.fail": "There is no room there."
 }

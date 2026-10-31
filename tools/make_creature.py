@@ -9,7 +9,7 @@ Big creatures (tall ones, see Creature.Part#big) use a 32x32x32 grid that fills 
 Usage:
     python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldevents:item/NAME [--preview PNG]
 Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big),
-spectral_captain (big), magma_colossus (big).
+spectral_captain (big), magma_colossus (big), void_stalker (big).
 """
 
 import argparse
@@ -330,6 +330,30 @@ def magma_colossus():
     return filled, colours
 
 
+def void_stalker():
+    """A tall, thin shadow: long arms with pale claws, a tattered cloak and two burning eyes."""
+    rng = random.Random(44)
+    filled, colours = grid(BIG_SIZE)
+    shadow = np.array([20, 12, 32])
+    cloak = np.array([38, 20, 60])
+    claw = np.array([170, 120, 220])
+
+    box(filled, colours, (11, 8, 18), (22, 25, 20), lambda x, y, z: cloak)
+    for x in range(11, 22):
+        for y in range(8, 8 + rng.randint(0, 6)):
+            filled[x, y, 18:20] = False
+    box(filled, colours, (13, 12, 13), (20, 25, 18), shadow)
+    for lo_x in (13, 17):
+        box(filled, colours, (lo_x, 0, 14), (lo_x + 3, 12, 17), shadow)
+    for lo_x in (9, 21):
+        box(filled, colours, (lo_x, 8, 14), (lo_x + 3, 25, 17), shadow)
+        box(filled, colours, (lo_x, 5, 14), (lo_x + 3, 8, 17), claw)
+    box(filled, colours, (13, 25, 12), (20, 32, 18), shadow)
+    paint_front(filled, colours, [(14, 28), (15, 28), (17, 28), (18, 28)], np.array([255, 80, 220]))
+    paint_front(filled, colours, [(14, 27), (18, 27)], np.array([120, 30, 160]))
+    return filled, colours
+
+
 BUILDERS = {
     "blood_moon_lord": blood_moon_lord,
     "blood_eye": blood_eye,
@@ -339,8 +363,9 @@ BUILDERS = {
     "horde_warlord": horde_warlord,
     "spectral_captain": spectral_captain,
     "magma_colossus": magma_colossus,
+    "void_stalker": void_stalker,
 }
-BIG = {"nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus"}
+BIG = {"nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker"}
 
 
 def main():

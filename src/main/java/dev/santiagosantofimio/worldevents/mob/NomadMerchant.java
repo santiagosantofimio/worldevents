@@ -70,7 +70,8 @@ public final class NomadMerchant {
 			Ware.of(EventItems.GOLDEN_SEED, 1, 6, 3),
 			Ware.of(EventItems.BOTTLED_LIGHTNING, 1, 12, 2),
 			Ware.of(EventItems.BLOODY_TEAR, 1, 20, 1),
-			Ware.of(EventItems.MAGMA_HEART, 1, 10, 2));
+			Ware.of(EventItems.MAGMA_HEART, 1, 10, 2),
+			Ware.of(EventItems.UNSTABLE_PEARL, 2, 10, 2));
 
 	/** Hard-to-find vanilla goods. */
 	private static final List<Ware> EXOTIC_WARES = List.of(

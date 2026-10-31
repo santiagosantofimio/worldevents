@@ -7,12 +7,16 @@ import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
+import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
+import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
+import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -32,7 +36,7 @@ import net.minecraft.world.entity.player.ChatVisiblity;
  */
 public class WorldEventsClientGameTests implements FabricClientGameTest {
 	private static final String[] ITEMS = {"meteorite_fragment", "lucky_nugget", "bloody_tear", "blood_scythe", "starfall_pickaxe", "bottled_lightning",
-			"golden_seed", "warlord_axe"};
+			"golden_seed", "warlord_axe", "captains_cutlass", "colossus_hammer", "magma_heart", "unstable_pearl", "event_seal"};
 
 	@FunctionalInterface
 	private interface MobSpawner {
@@ -89,6 +93,12 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 					(event, level, active, pos) -> ((MerchantCaravanEvent) event).spawnCaravan(level, active, pos, "es_es"));
 			showMob(context, singleplayer, HordeEvent.ID, "worldevents_creature_horde_warlord", 5,
 					(event, level, active, pos) -> ((HordeEvent) event).spawnWarlord(level, active, pos, "es_es"));
+			showMob(context, singleplayer, TreasureHuntEvent.ID, "worldevents_creature_spectral_captain", 4,
+					(event, level, active, pos) -> SpectralCaptain.spawn(level, pos, "es_es", 120.0));
+			showMob(context, singleplayer, EruptionEvent.ID, "worldevents_creature_magma_colossus", 6,
+					(event, level, active, pos) -> ((EruptionEvent) event).spawnColossus(level, active, pos, "es_es"));
+			showMob(context, singleplayer, VoidStormEvent.ID, "worldevents_creature_void_stalker", 4,
+					(event, level, active, pos) -> ((VoidStormEvent) event).spawnStalker(level, active, pos, "es_es"));
 
 			// The creative tab, with the special items and the creature eggs.
 			singleplayer.getServer().runCommand("gamemode creative @a");

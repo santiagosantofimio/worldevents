@@ -106,5 +106,11 @@
 	"event.eruption.end": "La erupción se apaga.",
 	"mob.magma_colossus.arrived": "¡El coloso de magma ha emergido!",
 	"mob.magma_colossus.defeated": "¡%s ha derrotado al coloso de magma!",
-	"mob.magma_colossus.retreat": "El coloso de magma se hunde de nuevo en la lava."
+	"mob.magma_colossus.retreat": "El coloso de magma se hunde de nuevo en la lava.",
+	"event.void_storm.name": "Tormenta del vacío",
+	"event.void_storm.start.title": "Tormenta del vacío",
+	"event.void_storm.start.subtitle": "El vacío te observa...",
+	"event.void_storm.start.chat": "¡Tormenta del vacío! Los acechadores aparecen de la nada para cazarte y los pulsos del vacío te levantan del suelo. Derrótalos para conseguir sus perlas inestables.",
+	"event.void_storm.end": "El vacío guarda silencio.",
+	"item.unstable_pearl.fail": "Ahí no hay sitio."
 }

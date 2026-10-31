@@ -20,6 +20,7 @@ import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
 import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
+import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
 import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.BloodMoonLord;
 import dev.santiagosantofimio.worldevents.mob.BloodEye;
@@ -32,6 +33,7 @@ import dev.santiagosantofimio.worldevents.mob.MimicSack;
 import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import dev.santiagosantofimio.worldevents.mob.StormSpirit;
+import dev.santiagosantofimio.worldevents.mob.VoidStalker;
 import dev.santiagosantofimio.worldevents.util.Advancements;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -105,10 +107,12 @@ import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.BlockHitResult;
@@ -992,6 +996,15 @@ public class WorldEventsGameTests {
 		helper.assertTrue(EventItems.CAPTAINS_CUTLASS.is(captain.getMainHandItem()), "the captain does not hold its cutlass");
 		helper.assertTrue(Math.abs(captain.getMaxHealth() - 120.0f) < 1e-3, "captain health should be 120, is " + captain.getMaxHealth());
 
+		// A chest placed next to it would make a double chest: it stays shut too.
+		BlockPos chestAt = helper.absolutePos(chest);
+		BlockState left = level.getBlockState(chestAt).setValue(ChestBlock.TYPE, ChestType.LEFT);
+		BlockPos neighbour = chestAt.relative(ChestBlock.getConnectedDirection(left));
+		level.setBlock(chestAt, left, Block.UPDATE_ALL);
+		level.setBlock(neighbour, left.setValue(ChestBlock.TYPE, ChestType.RIGHT), Block.UPDATE_ALL);
+		helper.assertTrue(useOnAbsolute(helper, player, neighbour) == InteractionResult.FAIL, "the guarded chest opened as a double chest");
+		level.setBlock(neighbour, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+
 		captain.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
 		helper.runAfterDelay(3, () -> {
 			helper.assertValueEqual(countSpecial(helper, EventItems.CAPTAINS_CUTLASS), 1, "cutlasses from the captain");
@@ -1100,6 +1113,61 @@ public class WorldEventsGameTests {
 		});
 	}
 
+	@GameTest(environment = "worldevents-test:void_storm", maxTicks = 100)
+	public void voidStalkerBlinksBehindItsPreyAndDropsPearlsThatBlink(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		JsonObject settings = new JsonObject();
+		settings.addProperty("pearlChance", 1.0);
+		Runnable restore = overrideEventSettings(VoidStormEvent.ID, settings);
+		buildGround(helper);
+		ServerPlayer player = player(helper, new BlockPos(1, 4, 1), "en_us");
+		VoidStormEvent storm = (VoidStormEvent) event(VoidStormEvent.ID);
+		helper.assertFalse(storm.isAvailable(level), "void storms are for the End");
+		helper.assertTrue(storm.isAvailable(level.getServer().getLevel(Level.END)), "no void storms in the End");
+		EventManager.start(level, storm);
+
+		Vindicator stalker = storm.spawnStalker(level, EventManager.active(level), helper.absolutePos(new BlockPos(7, 4, 7)), "en_us");
+		helper.assertTrue(stalker != null && VoidStalker.is(stalker), "no stalker");
+		assertCreature(helper, stalker, "void_stalker");
+		helper.assertTrue(stalker.getMainHandItem().isEmpty(), "the stalker holds an item that would float next to it");
+
+		Zombie prey = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 4, 5));
+		prey.setYRot(0.0f);
+		helper.assertTrue(VoidStalker.blinkBehind(level, stalker, prey), "the stalker found nowhere to blink to");
+		helper.assertTrue(stalker.distanceTo(prey) < 4.0f, "the stalker did not blink next to its prey");
+		helper.assertTrue(stalker.getZ() < prey.getZ(), "the stalker did not blink behind its prey");
+		helper.assertTrue(Creature.parts(stalker).stream().allMatch(part -> part.getVehicle() == stalker), "the model stayed behind");
+		prey.hurtServer(level, level.damageSources().mobAttack(stalker), 1.0f);
+		helper.assertTrue(prey.hasEffect(MobEffects.BLINDNESS), "the stalker's touch did not blind");
+		prey.discard();
+
+		stalker.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
+		helper.runAfterDelay(3, () -> {
+			helper.assertValueEqual(countSpecial(helper, EventItems.UNSTABLE_PEARL), 1, "pearls from the stalker");
+			helper.assertTrue(Advancements.has(player, "defeat_void_stalker"), "no advancement for the stalker");
+			EventManager.stop(level);
+
+			// The pearl: straight ahead, stopping short of the wall.
+			helper.killAllEntitiesOfClass(ItemEntity.class);
+			for (int y = 4; y < 8; y++) {
+				helper.setBlock(new BlockPos(1, y, 7), Blocks.STONE);
+			}
+			player.setYRot(0.0f);
+			player.setXRot(0.0f);
+			double from = player.getZ();
+			player.setItemInHand(InteractionHand.MAIN_HAND, EventItems.UNSTABLE_PEARL.create("en_us", 2));
+			InteractionResult used = UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND);
+			helper.assertTrue(used instanceof InteractionResult.Success, "the pearl did not work: " + used);
+			helper.assertTrue(player.getZ() > from + 2.0, "the pearl did not move the player");
+			helper.assertTrue(player.getZ() < helper.absolutePos(new BlockPos(1, 4, 7)).getZ(), "the pearl went through the wall");
+			helper.assertTrue(player.hasEffect(MobEffects.SLOW_FALLING), "no slow falling after the blink");
+			restore.run();
+			remove(player);
+			helper.succeed();
+		});
+	}
+
 	private static int seals(ServerPlayer player) {
 		int total = 0;
 		for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
@@ -1187,7 +1255,10 @@ public class WorldEventsGameTests {
 
 	/** Right-clicks the top of a block with the item in the player's main hand. */
 	private static InteractionResult useOn(GameTestHelper helper, ServerPlayer player, BlockPos relative) {
-		BlockPos pos = helper.absolutePos(relative);
+		return useOnAbsolute(helper, player, helper.absolutePos(relative));
+	}
+
+	private static InteractionResult useOnAbsolute(GameTestHelper helper, ServerPlayer player, BlockPos pos) {
 		BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
 		return UseBlockCallback.EVENT.invoker().interact(player, helper.getLevel(), InteractionHand.MAIN_HAND, hit);
 	}

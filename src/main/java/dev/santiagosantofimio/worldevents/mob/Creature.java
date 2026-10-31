@@ -131,7 +131,7 @@ public final class Creature {
 
 	/**
 	 * A kind of creature. Its id names its model, its entity tag ({@code worldevents.<id>}) and its name
-	 * ({@code entity.worldevents.<id>}); {@code egg} is the vanilla spawn egg of its base mob, which spawns it.
+	 * ({@code entity.worldevents.<id>}); {@code egg} is the vanilla spawn egg it is built on, which spawns it.
 	 */
 	public record Kind(String id, Item egg, Summoner summoner, Behaviour behaviour, BossBar bossBar) {
 		public String tag() {

@@ -151,6 +151,10 @@ public final class EventItems {
 					.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.2, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 					.build())));
 
+	/** Moves the player forward in a blink; see {@code VoidStormEvent}. */
+	public static final EventItem UNSTABLE_PEARL = register(new EventItem("unstable_pearl", Items.POPPED_CHORUS_FRUIT, Rarity.RARE, true, stack -> {
+	}));
+
 	/** Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. */
 	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, true, stack -> {
 	}));
@@ -219,7 +223,7 @@ public final class EventItems {
 	}
 
 	/**
-	 * A spawn egg for one of the mod's creatures: the vanilla egg of its base mob, which summons the creature
+	 * A spawn egg for one of the mod's creatures: a vanilla egg, usually its base mob's, which summons the creature
 	 * instead. Named in {@code language} for players without the resource pack, like the other items.
 	 */
 	public static ItemStack egg(Creature.Kind kind, String language, int count) {

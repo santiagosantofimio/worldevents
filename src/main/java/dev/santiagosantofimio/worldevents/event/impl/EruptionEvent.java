@@ -29,6 +29,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -162,7 +163,8 @@ public final class EruptionEvent implements WorldEvent {
 	private void tickColossus(ServerLevel level, ActiveEvent active, EruptionState state) {
 		EventSettings settings = settings();
 		int elapsed = (active.totalTicks() - active.remainingTicks()) / 20;
-		if (settings.getBoolean("colossus") && !active.data().getBooleanOr(COLOSSUS_SPAWNED, false) && elapsed >= settings.getInt("colossusDelay")) {
+		if (settings.getBoolean("colossus") && !active.data().getBooleanOr(COLOSSUS_SPAWNED, false) && elapsed >= settings.getInt("colossusDelay")
+				&& level.getDifficulty() != Difficulty.PEACEFUL) {
 			List<ServerPlayer> players = new ArrayList<>();
 			for (ServerPlayer player : level.players()) {
 				if (!player.isSpectator()) {

@@ -35,6 +35,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
@@ -43,7 +44,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -148,7 +152,7 @@ public final class TreasureHuntEvent implements WorldEvent {
 		if (state.captain != null && (state.captain.isRemoved() || !state.captain.isAlive())) {
 			state.captain = null;
 		}
-		if (settings().getBoolean("guardian") && !active.data().getBooleanOr(CAPTAIN_RAISED, false)) {
+		if (guarded(level, active) && !active.data().getBooleanOr(CAPTAIN_RAISED, false)) {
 			for (ServerPlayer player : level.players()) {
 				if (!player.isSpectator() && player.distanceToSqr(Vec3.atCenterOf(chest)) < GUARD_RANGE * GUARD_RANGE) {
 					raiseCaptain(level, active, chest, Lang.language(player));
@@ -217,7 +221,7 @@ public final class TreasureHuntEvent implements WorldEvent {
 				new ItemStack(Items.DIAMOND, Mth.nextInt(random, 1, 3)),
 				EventItems.EVENT_SEAL.create(language, 2)));
 		List<EventItems.EventItem> treasures = new ArrayList<>(List.of(EventItems.METEORITE_FRAGMENT, EventItems.LUCKY_NUGGET,
-				EventItems.GOLDEN_SEED, EventItems.BOTTLED_LIGHTNING));
+				EventItems.GOLDEN_SEED, EventItems.BOTTLED_LIGHTNING, EventItems.MAGMA_HEART, EventItems.UNSTABLE_PEARL));
 		Util.shuffle(treasures, random);
 		loot.add(treasures.get(0).create(language, 1));
 		loot.add(treasures.get(1).create(language, 1));
@@ -260,9 +264,20 @@ public final class TreasureHuntEvent implements WorldEvent {
 		return captain != null && captain.isAlive() ? captain : null;
 	}
 
-	/** Whether the captain still keeps players away from the chest. */
-	private boolean guarded(ActiveEvent active) {
-		return settings().getBoolean("guardian") && !active.data().getBooleanOr(CAPTAIN_DOWN, false);
+	/** Whether the captain still keeps players away from the chest. Monsters do not exist on peaceful. */
+	private boolean guarded(ServerLevel level, ActiveEvent active) {
+		return settings().getBoolean("guardian") && level.getDifficulty() != Difficulty.PEACEFUL && !active.data().getBooleanOr(CAPTAIN_DOWN, false);
+	}
+
+	/** Whether {@code pos} opens the treasure: the chest itself, or a chest placed next to it to make a double one. */
+	private static boolean isTreasure(ServerLevel level, ActiveEvent active, BlockPos pos) {
+		BlockPos chest = treasure(active);
+		if (chest == null) {
+			return false;
+		}
+		BlockState state = level.getBlockState(pos);
+		return pos.equals(chest) || state.getBlock() instanceof ChestBlock && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE
+				&& pos.relative(ChestBlock.getConnectedDirection(state)).equals(chest);
 	}
 
 	private static void claim(ServerLevel level, ActiveEvent active, ServerPlayer finder) {
@@ -322,12 +337,12 @@ public final class TreasureHuntEvent implements WorldEvent {
 			}
 			ActiveEvent active = EventManager.active(level);
 			if (active == null || active.event() != this || active.data().getBooleanOr(CLAIMED, false)
-					|| !hit.getBlockPos().equals(treasure(active))) {
+					|| !isTreasure(level, active, hit.getBlockPos())) {
 				return InteractionResult.PASS;
 			}
-			if (guarded(active)) {
+			if (guarded(level, active)) {
 				if (!active.data().getBooleanOr(CAPTAIN_RAISED, false)) {
-					raiseCaptain(level, active, hit.getBlockPos(), Lang.language(hunter));
+					raiseCaptain(level, active, treasure(active), Lang.language(hunter));
 				}
 				hunter.sendSystemMessage(Lang.component(hunter, "event.treasure_hunt.guarded").withStyle(ChatFormatting.AQUA), true);
 				return InteractionResult.FAIL;

@@ -4,7 +4,7 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-31
 
 ### Added
 
@@ -19,6 +19,9 @@ All notable changes to this project are documented here. The format follows
   warning and the **Magma Colossus** (boss; its slams burn and throw everything around it) comes up
   to hunt them. Nothing touches a block. Monsters killed meanwhile may leave a **Magma Heart**, and
   the colossus may drop the **Colossus Hammer**, a heavy mace that sets its target on fire.
+- **Void Storm** (`void_storm`, End only): **Void Stalkers** blink behind their prey and blind it,
+  and pulses of the void lift players straight up and let them float back down. Stalkers may drop
+  the **Unstable Pearl**, which blinks the player forward.
 - Nomad merchants now sell relics (the strongest event items) for event seals.
 - Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
   by command skip it.

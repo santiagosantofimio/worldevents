@@ -77,5 +77,12 @@
 	"advancements.worldevents.defeat_magma_colossus.title": "Cooled Down",
 	"advancements.worldevents.defeat_magma_colossus.description": "Defeat the Magma Colossus",
 	"advancements.worldevents.colossus_hammer.title": "Hammer Time",
-	"advancements.worldevents.colossus_hammer.description": "Get the Colossus Hammer"
+	"advancements.worldevents.colossus_hammer.description": "Get the Colossus Hammer",
+	"item.worldevents.unstable_pearl": "Unstable Pearl",
+	"item.worldevents.unstable_pearl.lore": "Use it to blink forward. Careful where you aim",
+	"entity.worldevents.void_stalker": "Void Stalker",
+	"advancements.worldevents.defeat_void_stalker.title": "Shadow Slayer",
+	"advancements.worldevents.defeat_void_stalker.description": "Defeat a void stalker",
+	"advancements.worldevents.unstable_pearl.title": "In the Blink of an Eye",
+	"advancements.worldevents.unstable_pearl.description": "Get an unstable pearl from a void stalker"
 }

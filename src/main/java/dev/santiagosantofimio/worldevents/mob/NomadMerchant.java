@@ -88,7 +88,8 @@ public final class NomadMerchant {
 	private static final List<Relic> RELICS = List.of(
 			new Relic(EventItems.BLOOD_SCYTHE, 8),
 			new Relic(EventItems.STARFALL_PICKAXE, 8),
-			new Relic(EventItems.WARLORD_AXE, 8));
+			new Relic(EventItems.WARLORD_AXE, 8),
+			new Relic(EventItems.CAPTAINS_CUTLASS, 6));
 
 	/** A crop the merchant buys, and how many of it per emerald. */
 	private record Purchase(Item crop, int count) {

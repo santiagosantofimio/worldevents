@@ -57,5 +57,14 @@
 	"item.worldevents.spawn_egg": "Huevo generador de %s",
 	"item.worldevents.spawn_egg.lore": "Úsalo sobre un bloque para invocarlo, aunque no sea su evento",
 	"item.worldevents.event_seal": "Sello de evento",
-	"item.worldevents.event_seal.lore": "Prueba de haber participado en un evento. Los mercaderes nómadas lo cambian por reliquias"
+	"item.worldevents.event_seal.lore": "Prueba de haber participado en un evento. Los mercaderes nómadas lo cambian por reliquias",
+	"item.worldevents.captains_cutlass": "Sable del capitán",
+	"item.worldevents.captains_cutlass.lore": "Úsalo para lanzarte hacia delante",
+	"entity.worldevents.spectral_captain": "Capitán espectral",
+	"advancements.worldevents.find_treasure.title": "La equis marca el lugar",
+	"advancements.worldevents.find_treasure.description": "Sé el primero en abrir el cofre de una caza del tesoro",
+	"advancements.worldevents.defeat_spectral_captain.title": "Historia de fantasmas",
+	"advancements.worldevents.defeat_spectral_captain.description": "Derrota al Capitán espectral",
+	"advancements.worldevents.captains_cutlass.title": "¡Al abordaje!",
+	"advancements.worldevents.captains_cutlass.description": "Consigue el Sable del capitán"
 }

@@ -123,9 +123,19 @@ public final class EventItems {
 				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 9.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 				.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 				.build());
-		// Only names the cooldown group, so the war cry's cooldown shows on this axe alone. Its own length is one
-		// tick: vanilla applies it after the axe's other uses too (stripping a log), which must not use up the cry.
-		stack.set(DataComponents.USE_COOLDOWN, new UseCooldown(0.05f, Optional.of(WAR_CRY)));
+		stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(WAR_CRY));
+	}));
+
+	/** Cooldown group of the cutlass's lunge. */
+	public static final Identifier LUNGE = Identifier.fromNamespaceAndPath(WorldEventsMod.MOD_ID, "lunge");
+
+	/** Quick and light, and lunges forward on right-click; see {@code TreasureHuntEvent}. */
+	public static final EventItem CAPTAINS_CUTLASS = register(new EventItem("captains_cutlass", Items.IRON_SWORD, Rarity.EPIC, false, stack -> {
+		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 6.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+				.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.2, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+				.build());
+		stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(LUNGE));
 	}));
 
 	/** Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. */
@@ -258,6 +268,14 @@ public final class EventItems {
 		ItemStack stack = new ItemStack(base);
 		stack.set(DataComponents.CUSTOM_MODEL_DATA, modelData(modelId));
 		return stack;
+	}
+
+	/**
+	 * Only names a cooldown group, so a right-click ability's cooldown shows on that item alone. Its own length is one
+	 * tick: vanilla applies it after the item's other uses too (stripping a log), which must not use up the ability.
+	 */
+	private static UseCooldown abilityCooldown(Identifier group) {
+		return new UseCooldown(0.05f, Optional.of(group));
 	}
 
 	private static CustomModelData modelData(String id) {

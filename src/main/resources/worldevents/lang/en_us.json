@@ -84,5 +84,19 @@
 	"event.warning": "Something is coming: %1$s, in about %2$s seconds.",
 	"event.ranking.header": "Best in this event:",
 	"event.ranking.entry": " %1$s. %2$s: %3$s points",
-	"event.ranking.seals": "You earned %s event seal(s). Nomad merchants take them for relics."
+	"event.ranking.seals": "You earned %s event seal(s). Nomad merchants take them for relics.",
+	"event.treasure_hunt.name": "Treasure Hunt",
+	"event.treasure_hunt.start.title": "Treasure Hunt",
+	"event.treasure_hunt.start.subtitle": "A treasure is hidden nearby...",
+	"event.treasure_hunt.start.chat": "Treasure hunt! A chest full of loot lies hidden on the surface nearby. Watch the action bar to know how warm you are; the first to open it wins. Beware of whatever guards it.",
+	"event.treasure_hunt.end": "The treasure hunt is over.",
+	"event.treasure_hunt.hidden": "The treasure has appeared. Follow the column of light!",
+	"event.treasure_hunt.hint.cold": "Treasure: cold",
+	"event.treasure_hunt.hint.warm": "Treasure: warm",
+	"event.treasure_hunt.hint.hot": "Treasure: hot!",
+	"event.treasure_hunt.hint.burning": "Treasure: burning!",
+	"event.treasure_hunt.guarded": "The spectral captain keeps the chest shut.",
+	"event.treasure_hunt.free": "The captain has fallen: the treasure is free!",
+	"event.treasure_hunt.found": "%s found the treasure!",
+	"mob.spectral_captain.arrived": "The spectral captain rises to guard the treasure!"
 }

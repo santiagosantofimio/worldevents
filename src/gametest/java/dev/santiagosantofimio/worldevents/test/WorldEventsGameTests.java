@@ -18,6 +18,7 @@ import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
+import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
 import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.BloodMoonLord;
 import dev.santiagosantofimio.worldevents.mob.BloodEye;
@@ -27,6 +28,7 @@ import dev.santiagosantofimio.worldevents.mob.HordeWarlord;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.MimicSack;
 import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
+import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import dev.santiagosantofimio.worldevents.mob.StormSpirit;
 import dev.santiagosantofimio.worldevents.util.Advancements;
 import java.io.IOException;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -98,6 +101,7 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -956,6 +960,86 @@ public class WorldEventsGameTests {
 		remove(best);
 		remove(second);
 		remove(idle);
+		helper.succeed();
+	}
+
+	@GameTest(environment = "worldevents-test:treasure_hunt", maxTicks = 100)
+	public void treasureStaysShutUntilTheCaptainFalls(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		JsonObject settings = new JsonObject();
+		settings.addProperty("cutlassChance", 1.0);
+		Runnable restore = overrideEventSettings(TreasureHuntEvent.ID, settings);
+		buildGround(helper);
+		ServerPlayer player = player(helper, new BlockPos(1, 4, 1), "es_es");
+		TreasureHuntEvent hunt = (TreasureHuntEvent) event(TreasureHuntEvent.ID);
+		EventManager.start(level, hunt);
+		ActiveEvent active = EventManager.active(level);
+		BlockPos chest = new BlockPos(4, 4, 4);
+		hunt.placeTreasure(level, active, helper.absolutePos(chest), "es_es");
+		helper.assertBlockPresent(Blocks.CHEST, chest);
+
+		// Touching the chest wakes the captain, and it stays shut.
+		helper.assertTrue(useOn(helper, player, chest) == InteractionResult.FAIL, "the guarded chest opened");
+		Vindicator captain = TreasureHuntEvent.captain(active);
+		helper.assertTrue(captain != null && SpectralCaptain.is(captain), "no captain");
+		assertCreature(helper, captain, "spectral_captain");
+		helper.assertTrue(EventItems.CAPTAINS_CUTLASS.is(captain.getMainHandItem()), "the captain does not hold its cutlass");
+		helper.assertTrue(Math.abs(captain.getMaxHealth() - 120.0f) < 1e-3, "captain health should be 120, is " + captain.getMaxHealth());
+
+		captain.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
+		helper.runAfterDelay(3, () -> {
+			helper.assertValueEqual(countSpecial(helper, EventItems.CAPTAINS_CUTLASS), 1, "cutlasses from the captain");
+			helper.assertTrue(Advancements.has(player, "defeat_spectral_captain"), "no advancement for the captain");
+			InteractionResult opened = useOn(helper, player, chest);
+			helper.assertTrue(opened == InteractionResult.PASS, "the free chest did not open: " + opened);
+			helper.assertTrue(Advancements.has(player, "find_treasure"), "no advancement for the treasure");
+		});
+		// The hunt ends within a second, and the chest stays with its loot for whoever found it.
+		helper.runAfterDelay(30, () -> {
+			helper.assertTrue(EventManager.active(level) == null, "the hunt did not end when the treasure was found");
+			helper.assertBlockPresent(Blocks.CHEST, chest);
+			boolean loot = false;
+			if (level.getBlockEntity(helper.absolutePos(chest)) instanceof ChestBlockEntity treasure) {
+				for (int slot = 0; slot < treasure.getContainerSize(); slot++) {
+					loot |= EventItems.EVENT_SEAL.is(treasure.getItem(slot));
+				}
+			}
+			helper.assertTrue(loot, "no seals in the chest");
+			helper.assertTrue(seals(player) >= 3, "no seals for the winner of the hunt");
+			restore.run();
+			remove(player);
+			helper.succeed();
+		});
+	}
+
+	@GameTest(environment = "worldevents-test:treasure_left", maxTicks = 100)
+	public void unclaimedTreasureLeavesWithTheEventAndCannotBeBroken(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		buildGround(helper);
+		ServerPlayer player = player(helper, new BlockPos(1, 4, 1), "en_us");
+		TreasureHuntEvent hunt = (TreasureHuntEvent) event(TreasureHuntEvent.ID);
+		EventManager.start(level, hunt);
+		BlockPos chest = new BlockPos(5, 4, 5);
+		BlockPos at = helper.absolutePos(chest);
+		hunt.placeTreasure(level, EventManager.active(level), at, "en_us");
+		helper.assertFalse(PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(level, player, at, level.getBlockState(at), level.getBlockEntity(at)),
+				"the treasure could be broken during the hunt");
+
+		// The cutlass: right-click to lunge forward, then a cooldown.
+		ItemStack cutlass = EventItems.CAPTAINS_CUTLASS.create("en_us", 1);
+		player.setItemInHand(InteractionHand.MAIN_HAND, cutlass);
+		player.setYRot(0.0f);
+		player.setXRot(0.0f);
+		helper.assertTrue(UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success, "no lunge");
+		helper.assertTrue(player.getDeltaMovement().horizontalDistance() > 1.0, "the lunge did not push the player: " + player.getDeltaMovement());
+		helper.assertTrue(player.getCooldowns().isOnCooldown(cutlass), "the cutlass has no cooldown");
+
+		EventManager.stop(level);
+		helper.assertBlockPresent(Blocks.AIR, chest);
+		helper.assertValueEqual(helper.getEntities(EntityTypes.ITEM).size(), 0, "items spilled by the chest");
+		remove(player);
 		helper.succeed();
 	}
 

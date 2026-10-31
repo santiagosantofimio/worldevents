@@ -8,7 +8,8 @@ Big creatures (tall ones, see Creature.Part#big) use a 32x32x32 grid that fills 
 
 Usage:
     python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldevents:item/NAME [--preview PNG]
-Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big).
+Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big),
+spectral_captain (big).
 """
 
 import argparse
@@ -262,6 +263,41 @@ def horde_warlord():
     return filled, colours
 
 
+def spectral_captain():
+    """A ghost pirate: tricorn hat, pale skull face, and a long tattered coat that fades into mist."""
+    rng = random.Random(21)
+    filled, colours = grid(BIG_SIZE)
+    teal = np.array([44, 104, 118])
+    gold = np.array([224, 180, 70])
+    pale = np.array([196, 236, 232])
+    navy = np.array([20, 34, 58])
+
+    def coat(x, y, z):
+        return teal * rng.uniform(0.85, 1.1)
+
+    for y in range(2, 21):
+        radius = 7.2 - (y - 2) * 0.13
+        for x in range(BIG_SIZE):
+            for z in range(BIG_SIZE):
+                if math.dist((x + 0.5, z + 0.5), (16, 15)) > radius or (y < 6 and rng.random() < (6 - y) * 0.22):
+                    continue
+                filled[x, y, z] = True
+                colours[x, y, z] = pale * 0.8 if y < 4 else coat(x, y, z)
+    box(filled, colours, (15, 8, 8), (17, 20, 10), gold)
+    box(filled, colours, (9, 18, 12), (23, 22, 19), coat)
+    for lo_x in (7, 21):
+        box(filled, colours, (lo_x, 21, 12), (lo_x + 4, 23, 18), gold)
+        box(filled, colours, (lo_x, 9, 13), (lo_x + 4, 21, 17), coat)
+    box(filled, colours, (12, 22, 11), (21, 29, 19), lambda x, y, z: pale * rng.uniform(0.92, 1.03))
+    paint_front(filled, colours, [(13, 26), (14, 26), (13, 25), (14, 25), (18, 26), (19, 26), (18, 25), (19, 25)], np.array([14, 30, 40]))
+    paint_front(filled, colours, [(14, 25), (18, 25)], np.array([120, 255, 240]))
+    paint_front(filled, colours, [(x, 23) for x in range(14, 19) if x % 2 == 0], np.array([40, 70, 76]))
+    box(filled, colours, (7, 29, 10), (26, 30, 21), navy)
+    box(filled, colours, (11, 30, 12), (22, 32, 19), navy)
+    box(filled, colours, (7, 29, 9), (26, 30, 10), gold)
+    return filled, colours
+
+
 BUILDERS = {
     "blood_moon_lord": blood_moon_lord,
     "blood_eye": blood_eye,
@@ -269,8 +305,9 @@ BUILDERS = {
     "harvest_spirit": harvest_spirit,
     "nomad_merchant": nomad_merchant,
     "horde_warlord": horde_warlord,
+    "spectral_captain": spectral_captain,
 }
-BIG = {"nomad_merchant", "horde_warlord"}
+BIG = {"nomad_merchant", "horde_warlord", "spectral_captain"}
 
 
 def main():

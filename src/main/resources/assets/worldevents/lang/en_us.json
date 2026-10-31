@@ -57,5 +57,14 @@
 	"item.worldevents.spawn_egg": "%s Spawn Egg",
 	"item.worldevents.spawn_egg.lore": "Use it on a block to summon it, even outside its event",
 	"item.worldevents.event_seal": "Event Seal",
-	"item.worldevents.event_seal.lore": "Proof of taking part in a world event. Nomad merchants take it for relics"
+	"item.worldevents.event_seal.lore": "Proof of taking part in a world event. Nomad merchants take it for relics",
+	"item.worldevents.captains_cutlass": "Captain's Cutlass",
+	"item.worldevents.captains_cutlass.lore": "Use it to lunge forward",
+	"entity.worldevents.spectral_captain": "Spectral Captain",
+	"advancements.worldevents.find_treasure.title": "X Marks the Spot",
+	"advancements.worldevents.find_treasure.description": "Be the first to open the chest in a treasure hunt",
+	"advancements.worldevents.defeat_spectral_captain.title": "Ghost Story",
+	"advancements.worldevents.defeat_spectral_captain.description": "Defeat the Spectral Captain",
+	"advancements.worldevents.captains_cutlass.title": "Boarding Party",
+	"advancements.worldevents.captains_cutlass.description": "Get the Captain's Cutlass"
 }

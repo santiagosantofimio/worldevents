@@ -84,5 +84,19 @@
 	"event.warning": "Algo se acerca: %1$s, en unos %2$s segundos.",
 	"event.ranking.header": "Los mejores del evento:",
 	"event.ranking.entry": " %1$s. %2$s: %3$s puntos",
-	"event.ranking.seals": "Has ganado %s sello(s) de evento. Los mercaderes nómadas los cambian por reliquias."
+	"event.ranking.seals": "Has ganado %s sello(s) de evento. Los mercaderes nómadas los cambian por reliquias.",
+	"event.treasure_hunt.name": "Caza del tesoro",
+	"event.treasure_hunt.start.title": "Caza del tesoro",
+	"event.treasure_hunt.start.subtitle": "Hay un tesoro escondido cerca...",
+	"event.treasure_hunt.start.chat": "¡Caza del tesoro! Un cofre lleno de botín está escondido en la superficie, no muy lejos. Mira la barra de acción para saber si vas bien; quien lo abra primero gana. Cuidado con lo que lo guarda.",
+	"event.treasure_hunt.end": "La caza del tesoro ha terminado.",
+	"event.treasure_hunt.hidden": "El tesoro ha aparecido. ¡Sigue la columna de luz!",
+	"event.treasure_hunt.hint.cold": "Tesoro: frío",
+	"event.treasure_hunt.hint.warm": "Tesoro: templado",
+	"event.treasure_hunt.hint.hot": "Tesoro: ¡caliente!",
+	"event.treasure_hunt.hint.burning": "Tesoro: ¡ardiendo!",
+	"event.treasure_hunt.guarded": "El capitán espectral mantiene el cofre cerrado.",
+	"event.treasure_hunt.free": "El capitán ha caído: ¡el tesoro está libre!",
+	"event.treasure_hunt.found": "¡%s ha encontrado el tesoro!",
+	"mob.spectral_captain.arrived": "¡El capitán espectral se alza para guardar el tesoro!"
 }

@@ -11,6 +11,10 @@ All notable changes to this project are documented here. The format follows
 - **Event ranking**: players score points during events (kills, ores, crops, trades, bosses).
   When an event ends, the best three are announced and everyone who took part earns
   **Event Seals**, with extra seals for the winner.
+- **Treasure Hunt** (`treasure_hunt`): a chest full of loot appears near players, and the action
+  bar tells each one how warm they are. The first to open it takes the prize, but the **Spectral
+  Captain** (boss; calls cannon fire that never harms the terrain) rises to guard it and the chest
+  stays shut until it falls. It may drop the **Captain's Cutlass**, which lunges forward.
 - Nomad merchants now sell relics (the strongest event items) for event seals.
 - Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
   by command skip it.

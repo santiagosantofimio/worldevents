@@ -9,6 +9,13 @@
 					"type": "minecraft:model",
 					"model": "worldevents:item/horde_warlord"
 				}
+			},
+			{
+				"when": "worldevents:spectral_captain",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/spectral_captain"
+				}
 			}
 		],
 		"fallback": {

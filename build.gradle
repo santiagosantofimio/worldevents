@@ -7,6 +7,17 @@ base {
 	archivesName = project.name
 }
 
+fabricApi {
+	// Game tests in src/gametest. Server tests: ./gradlew runGameTest (also part of ./gradlew build).
+	// Client tests: ./gradlew runClientGameTest (opens a window and saves screenshots; not part of the build).
+	configureTests {
+		createSourceSet = true
+		modId = "worldevents-test"
+		enableGameTests = true
+		enableClientGameTests = true
+	}
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -41,6 +52,51 @@ java {
 
 test {
 	useJUnitPlatform()
+}
+
+// Optional resource pack for players: looks and names for the mod's items, mobs and advancements.
+// Built from src/main/resources/assets, which the mod also loads by itself in singleplayer.
+def resourcePackFormat = project.resource_pack_format as int
+def modVersion = project.version
+def resourcePack = tasks.register("resourcePack", Zip) {
+	group = "build"
+	description = "Builds the optional resource pack and its SHA-1 for server.properties."
+	archiveFileName = "worldevents-${modVersion}-resourcepack.zip"
+	destinationDirectory = layout.buildDirectory.dir("libs")
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+	inputs.property("format", resourcePackFormat)
+	from("src/resourcepack") {
+		filesMatching("pack.mcmeta") {
+			expand("format": resourcePackFormat)
+		}
+	}
+	from("src/main/resources/assets") {
+		into("assets")
+		exclude("worldevents/icon.png")
+	}
+	from("src/main/resources/assets/worldevents/icon.png") {
+		rename { "pack.png" }
+	}
+	def zipFile = archiveFile
+	doLast {
+		def file = zipFile.get().asFile
+		def digest = java.security.MessageDigest.getInstance("SHA-1")
+		file.withInputStream { stream ->
+			byte[] buffer = new byte[8192]
+			int read
+			while ((read = stream.read(buffer)) > 0) {
+				digest.update(buffer, 0, read)
+			}
+		}
+		def sha1 = digest.digest().encodeHex().toString()
+		new File(file.path + ".sha1").text = sha1 + "\n"
+		logger.lifecycle("Resource pack: ${file.name} (sha1 ${sha1})")
+	}
+}
+
+tasks.named("assemble") {
+	dependsOn(resourcePack)
 }
 
 jar {

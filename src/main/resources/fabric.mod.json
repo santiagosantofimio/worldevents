@@ -8,10 +8,14 @@
 		"Santiago Santofimio"
 	],
 	"license": "MIT",
+	"icon": "assets/worldevents/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"dev.santiagosantofimio.worldevents.WorldEventsMod"
+		],
+		"client": [
+			"dev.santiagosantofimio.worldevents.WorldEventsClient"
 		]
 	},
 	"depends": {

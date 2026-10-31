@@ -24,7 +24,15 @@ public interface WorldEvent {
 		return ModConfig.get().event(id());
 	}
 
-	/** Extra conditions for a random start (time of day, dimension…). Not checked by {@code /worldevents start}. */
+	/**
+	 * Whether the event can happen in this dimension at all right now (dimension type, difficulty, game rules),
+	 * ignoring the time of day. Checked when drawing the next event, before it starts, and by {@code /worldevents start}.
+	 */
+	default boolean isAvailable(ServerLevel level) {
+		return true;
+	}
+
+	/** Whether this is the right moment to start (time of day…). A planned event waits until this is true. */
 	default boolean canStart(ServerLevel level) {
 		return true;
 	}
@@ -46,6 +54,10 @@ public interface WorldEvent {
 	default void tick(ServerLevel level, ActiveEvent active) {
 	}
 
+	/** Called every tick while active, for short-lived visual effects. Keep it cheap. */
+	default void fastTick(ServerLevel level, ActiveEvent active) {
+	}
+
 	/** Lets an event end before its time runs out, e.g. at dawn. */
 	default boolean shouldEndEarly(ServerLevel level, ActiveEvent active) {
 		return false;
@@ -53,6 +65,11 @@ public interface WorldEvent {
 
 	/** Called once when the event ends, whether by time, early end or command. */
 	default void end(ServerLevel level, ActiveEvent active) {
+	}
+
+	/** Extra text for the boss bar, between the event name and the time left (a wave counter…), or {@code null}. */
+	default String barDetail(ActiveEvent active, String language) {
+		return null;
 	}
 
 	BossEvent.BossBarColor barColor();

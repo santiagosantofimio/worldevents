@@ -2,8 +2,12 @@ package dev.santiagosantofimio.worldevents.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public final class Drops {
 	private Drops() {
@@ -32,5 +36,17 @@ public final class Drops {
 		}
 		drops.removeIf(ItemStack::isEmpty);
 		drops.addAll(extra);
+	}
+
+	/** Drops {@code stack} at {@code at} with a small random hop, like a mob drop. */
+	public static void spawn(ServerLevel level, Vec3 at, ItemStack stack) {
+		if (stack.isEmpty()) {
+			return;
+		}
+		RandomSource random = level.getRandom();
+		ItemEntity item = new ItemEntity(level, at.x, at.y, at.z, stack,
+				Mth.nextDouble(random, -0.15, 0.15), 0.3, Mth.nextDouble(random, -0.15, 0.15));
+		item.setDefaultPickUpDelay();
+		level.addFreshEntity(item);
 	}
 }

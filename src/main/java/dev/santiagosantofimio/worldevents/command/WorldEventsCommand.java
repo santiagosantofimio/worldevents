@@ -1,9 +1,11 @@
 package dev.santiagosantofimio.worldevents.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.santiagosantofimio.worldevents.config.EventSettings;
 import dev.santiagosantofimio.worldevents.config.ModConfig;
 import dev.santiagosantofimio.worldevents.data.WorldEventsData;
@@ -12,15 +14,26 @@ import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.i18n.Lang;
+import dev.santiagosantofimio.worldevents.item.EventItems;
+import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.util.DropMath;
+import dev.santiagosantofimio.worldevents.util.Drops;
+import java.util.Collection;
+import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-/** /worldevents (alias /eventos): list, start, stop, status, reload. Vanilla argument types only. */
+/** /worldevents (alias /eventos): list, start, stop, give, summon, status, reload. Vanilla argument types only. */
 public final class WorldEventsCommand {
 	private WorldEventsCommand() {
 	}
@@ -42,6 +55,20 @@ public final class WorldEventsCommand {
 										EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(WorldEventsCommand::start)))
 				.then(Commands.literal("stop").executes(WorldEventsCommand::stop))
+				.then(Commands.literal("give")
+						.then(Commands.argument("targets", EntityArgument.players())
+								.then(Commands.argument("item", StringArgumentType.word())
+										.suggests((context, builder) -> SharedSuggestionProvider.suggest(giveableIds(), builder))
+										.executes(context -> give(context, 1))
+										.then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+												.executes(context -> give(context, IntegerArgumentType.getInteger(context, "count")))))))
+				.then(Commands.literal("summon")
+						.then(Commands.argument("creature", StringArgumentType.word())
+								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
+										Creature.kinds().stream().map(Creature.Kind::id), builder))
+								.executes(context -> summon(context, BlockPos.containing(context.getSource().getPosition())))
+								.then(Commands.argument("pos", BlockPosArgument.blockPos())
+										.executes(context -> summon(context, BlockPosArgument.getSpawnablePos(context, "pos"))))))
 				.then(Commands.literal("status").executes(WorldEventsCommand::status))
 				.then(Commands.literal("reload").executes(WorldEventsCommand::reload));
 	}
@@ -83,6 +110,10 @@ public final class WorldEventsCommand {
 			return 0;
 		}
 		ServerLevel level = source.getLevel();
+		if (!event.isAvailable(level)) {
+			source.sendFailure(Lang.component(source, "command.start.unavailable", eventName(source, event)));
+			return 0;
+		}
 		ActiveEvent running = EventManager.active(level);
 		if (running != null) {
 			source.sendFailure(Lang.component(source, "command.start.busy", eventName(source, running.event())));
@@ -104,6 +135,56 @@ public final class WorldEventsCommand {
 		return 1;
 	}
 
+	/** The special items, then the creature eggs ({@code <creature>_spawn_egg}). */
+	private static Stream<String> giveableIds() {
+		return Stream.concat(EventItems.all().stream().map(EventItems.EventItem::id), Creature.kinds().stream().map(EventItems::eggId));
+	}
+
+	private static int give(CommandContext<CommandSourceStack> context, int count) throws CommandSyntaxException {
+		CommandSourceStack source = context.getSource();
+		String id = StringArgumentType.getString(context, "item");
+		EventItems.EventItem item = EventItems.get(id);
+		Creature.Kind egg = item == null ? EventItems.eggKind(id) : null;
+		if (item == null && egg == null) {
+			source.sendFailure(Lang.component(source, "command.give.unknown", id));
+			return 0;
+		}
+		Collection<ServerPlayer> targets = EntityArgument.getPlayers(context, "targets");
+		for (ServerPlayer player : targets) {
+			String language = Lang.language(player);
+			ItemStack stack = item != null ? item.create(language, count) : EventItems.egg(egg, language, count);
+			if (!player.getInventory().add(stack)) {
+				// Inventory full: drop the rest at their feet.
+				Drops.spawn(player.level(), player.position(), stack);
+			}
+		}
+		String language = Lang.language(source);
+		String name = item != null ? Lang.text(language, item.nameKey()) : EventItems.eggName(egg, language);
+		source.sendSuccess(() -> Lang.component(source, "command.give.success", count, name, targets.size()), true);
+		return targets.size();
+	}
+
+	/** Summons a creature outside of any event: it stays until defeated. */
+	private static int summon(CommandContext<CommandSourceStack> context, BlockPos pos) {
+		CommandSourceStack source = context.getSource();
+		String id = StringArgumentType.getString(context, "creature");
+		Creature.Kind kind = Creature.kind(id);
+		if (kind == null) {
+			source.sendFailure(Lang.component(source, "command.summon.unknown", id));
+			return 0;
+		}
+		ServerLevel level = source.getLevel();
+		ServerPlayer player = source.getPlayer();
+		String name = Lang.text(Lang.language(source), kind.nameKey());
+		String language = player != null ? Lang.language(player) : Lang.languageNear(level, Vec3.atCenterOf(pos), 64.0);
+		if (!level.isLoaded(pos) || Creature.summon(kind, level, pos, language, player) == null) {
+			source.sendFailure(Lang.component(source, "command.summon.failed", name));
+			return 0;
+		}
+		source.sendSuccess(() -> Lang.component(source, "command.summon.success", name), true);
+		return 1;
+	}
+
 	private static int status(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack source = context.getSource();
 		int active = 0;
@@ -115,6 +196,8 @@ public final class WorldEventsCommand {
 				active++;
 				line = Lang.component(source, "command.status.active", dimensionName(level), eventName(source, running.event()),
 						DropMath.formatTicks(running.remainingTicks())).withStyle(running.event().textColor());
+			} else if (EventManager.planned(level) != null) {
+				line = Lang.component(source, "command.status.planned", dimensionName(level), eventName(source, EventManager.planned(level)));
 			} else {
 				long wait = EventManager.globalCooldownLeft(data, level.getGameTime());
 				line = wait > 0

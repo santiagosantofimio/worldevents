@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:golden_seed",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/golden_seed"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/glistering_melon_slice"
+		}
+	}
+}

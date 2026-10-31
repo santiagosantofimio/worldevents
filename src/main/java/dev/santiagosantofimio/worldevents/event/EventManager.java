@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -19,10 +20,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 
-/** Starts, ticks and ends events, one at a time per dimension. */
+/**
+ * Starts, ticks and ends events, one at a time per dimension.
+ *
+ * <p>Once the global cooldown is over, the next event is drawn by weight among those available in the dimension
+ * and kept as the plan. The planned event starts as soon as its own conditions hold (night, players…). Drawing
+ * before checking the time of day keeps weights meaningful: an event that can only start at night is not
+ * crowded out by one that can start at any time.
+ */
 public final class EventManager {
 	/** Active events tick once per second rather than every tick. */
 	public static final int ACTIVE_TICK_INTERVAL = 20;
+	/** A planned event that has not started after this long (two in-game days) is dropped and drawn again. */
+	private static final long PLAN_TIMEOUT_TICKS = 48000;
 
 	private EventManager() {
 	}
@@ -35,11 +45,12 @@ public final class EventManager {
 		WorldEventsData data = WorldEventsData.get(level);
 		ActiveEvent active = data.active();
 		if (active != null) {
+			active.event().fastTick(level, active);
 			if (tick % ACTIVE_TICK_INTERVAL == 0) {
 				tickActive(level, data, active);
 			}
 		} else if (tick % ModConfig.get().checkIntervalTicks() == 0) {
-			tryRandomStart(level, data);
+			checkSchedule(level, data);
 		}
 	}
 
@@ -49,7 +60,7 @@ public final class EventManager {
 			// First tick since the server started: the event was loaded from the save.
 			active.setBossBar(new EventBossBar(event));
 			event.resume(level, active);
-			WorldEventsMod.LOGGER.info("Resumed {} in {}", event.id(), level.dimension());
+			WorldEventsMod.LOGGER.info("Resumed {} in {}", event.id(), level.dimension().identifier());
 		}
 		event.tick(level, active);
 		active.countDown(ACTIVE_TICK_INTERVAL);
@@ -61,29 +72,38 @@ public final class EventManager {
 		active.bossBar().update(level, active);
 	}
 
-	private static void tryRandomStart(ServerLevel level, WorldEventsData data) {
+	private static void checkSchedule(ServerLevel level, WorldEventsData data) {
 		ModConfig config = ModConfig.get();
 		long now = level.getGameTime();
 		data.initCooldownIfNew(now);
-		if (now - data.lastEventEnd() < config.globalCooldownTicks()) {
+		boolean enoughPlayers = countPlayers(level) >= config.minPlayers();
+
+		WorldEventsData.Plan plan = data.plan();
+		if (plan != null) {
+			WorldEvent event = EventRegistry.get(plan.eventId());
+			if (event == null || !event.settings().enabled() || !event.isAvailable(level) || now - plan.plannedAt() > PLAN_TIMEOUT_TICKS) {
+				data.setPlan(null);
+				WorldEventsMod.LOGGER.debug("Dropped plan {} in {}", plan.eventId(), level.dimension().identifier());
+			} else if (enoughPlayers && event.canStart(level)) {
+				start(level, event);
+			}
 			return;
 		}
-		if (countPlayers(level) < config.minPlayers()) {
-			return;
-		}
-		if (level.getRandom().nextDouble() >= config.startChance()) {
+
+		if (!enoughPlayers || globalCooldownLeft(data, now) > 0 || level.getRandom().nextDouble() >= config.startChance()) {
 			return;
 		}
 		List<WorldEvent> candidates = new ArrayList<>();
 		for (WorldEvent event : EventRegistry.all()) {
 			EventSettings settings = event.settings();
-			if (settings.enabled() && settings.weight() > 0 && cooldownLeft(data, event, now) <= 0 && event.canStart(level)) {
+			if (settings.enabled() && settings.weight() > 0 && cooldownLeft(data, event, now) <= 0 && event.isAvailable(level)) {
 				candidates.add(event);
 			}
 		}
 		WorldEvent picked = WeightedPicker.pick(candidates, event -> event.settings().weight(), level.getRandom().nextDouble());
 		if (picked != null) {
-			start(level, picked);
+			data.setPlan(new WorldEventsData.Plan(picked.id(), now));
+			WorldEventsMod.LOGGER.info("Planned {} in {}", picked.id(), level.dimension().identifier());
 		}
 	}
 
@@ -103,7 +123,7 @@ public final class EventManager {
 		return lastEnd == null ? 0 : Math.max(0, lastEnd + event.settings().cooldownTicks() - now);
 	}
 
-	/** Ticks until any random event may start in this dimension (0 if ready). */
+	/** Ticks until the next event may be drawn in this dimension (0 if ready). */
 	public static long globalCooldownLeft(WorldEventsData data, long now) {
 		Long lastEnd = data.lastEventEnd();
 		return lastEnd == null ? 0 : Math.max(0, lastEnd + ModConfig.get().globalCooldownTicks() - now);
@@ -118,6 +138,12 @@ public final class EventManager {
 		return active != null && active.event() == event;
 	}
 
+	/** The event planned to run next in {@code level}, or {@code null}. */
+	public static WorldEvent planned(ServerLevel level) {
+		WorldEventsData.Plan plan = WorldEventsData.get(level).plan();
+		return plan != null ? EventRegistry.get(plan.eventId()) : null;
+	}
+
 	/** Starts {@code event} now, ignoring cooldowns and conditions. Returns false if another event is running. */
 	public static boolean start(ServerLevel level, WorldEvent event) {
 		WorldEventsData data = WorldEventsData.get(level);
@@ -127,13 +153,14 @@ public final class EventManager {
 		int duration = Math.max(ACTIVE_TICK_INTERVAL, event.initialDuration(level));
 		ActiveEvent active = new ActiveEvent(event, duration, duration, new CompoundTag());
 		active.setBossBar(new EventBossBar(event));
+		data.setPlan(null);
 		data.setActive(active);
 		event.start(level, active);
 		for (ServerPlayer player : level.players()) {
 			announceStart(player, event, true);
 		}
 		active.bossBar().update(level, active);
-		WorldEventsMod.LOGGER.info("Started {} in {} for {} ticks", event.id(), level.dimension(), duration);
+		WorldEventsMod.LOGGER.info("Started {} in {} for {} ticks", event.id(), level.dimension().identifier(), duration);
 		return true;
 	}
 
@@ -163,7 +190,7 @@ public final class EventManager {
 		for (ServerPlayer player : level.players()) {
 			player.sendSystemMessage(Lang.component(player, "event." + event.id() + ".end").withStyle(event.textColor()));
 		}
-		WorldEventsMod.LOGGER.info("Ended {} in {}", event.id(), level.dimension());
+		WorldEventsMod.LOGGER.info("Ended {} in {}", event.id(), level.dimension().identifier());
 	}
 
 	/** Tells a player who joins or changes dimension about the event already running there. */
@@ -183,18 +210,29 @@ public final class EventManager {
 		}
 	}
 
+	/** The boss bar title {@code player} currently sees, or {@code null} if they see none. */
+	public static Component bossBarTitle(ServerPlayer player) {
+		ActiveEvent active = active(player.level());
+		return active != null && active.bossBar() != null ? active.bossBar().titleFor(player) : null;
+	}
+
 	private static void announceStart(ServerPlayer player, WorldEvent event, boolean withTitle) {
 		String prefix = "event." + event.id() + ".start.";
 		if (withTitle) {
-			player.connection.send(new ClientboundSetTitlesAnimationPacket(10, 70, 20));
-			player.connection.send(new ClientboundSetSubtitleTextPacket(Lang.component(player, prefix + "subtitle")));
-			player.connection.send(new ClientboundSetTitleTextPacket(Lang.component(player, prefix + "title").withStyle(event.textColor())));
-			Holder<SoundEvent> sound = event.startSound();
-			if (sound != null) {
-				player.connection.send(new ClientboundSoundPacket(sound, SoundSource.MASTER,
-						player.getX(), player.getY(), player.getZ(), 1.0f, 1.0f, player.getRandom().nextLong()));
-			}
+			showTitle(player, Lang.component(player, prefix + "title").withStyle(event.textColor()), Lang.component(player, prefix + "subtitle"),
+					event.startSound());
 		}
 		player.sendSystemMessage(Lang.component(player, prefix + "chat").withStyle(event.textColor()));
+	}
+
+	/** Shows a title and subtitle in the middle of the screen, with a sound if {@code sound} is not {@code null}. */
+	public static void showTitle(ServerPlayer player, Component title, Component subtitle, Holder<SoundEvent> sound) {
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(10, 70, 20));
+		player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
+		player.connection.send(new ClientboundSetTitleTextPacket(title));
+		if (sound != null) {
+			player.connection.send(new ClientboundSoundPacket(sound, SoundSource.MASTER,
+					player.getX(), player.getY(), player.getZ(), 1.0f, 1.0f, player.getRandom().nextLong()));
+		}
 	}
 }

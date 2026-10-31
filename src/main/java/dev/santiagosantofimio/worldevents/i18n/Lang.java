@@ -16,7 +16,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Server-side translation. Vanilla clients do not have our language files, so we pick the text by the
@@ -28,22 +31,29 @@ public final class Lang {
 	private Lang() {
 	}
 
+	/**
+	 * Loads the server-side texts ({@code worldevents/lang}) and the client-side ones ({@code assets/worldevents/lang},
+	 * item and mob names also used by the resource pack), so the server can produce fallback names in any language.
+	 */
 	public static void load() {
 		Map<String, Map<String, String>> tables = new HashMap<>();
-		Path dir = FabricLoader.getInstance().getModContainer(WorldEventsMod.MOD_ID)
-				.flatMap(container -> container.findPath(WorldEventsMod.MOD_ID + "/lang"))
-				.orElse(null);
-		if (dir == null) {
-			WorldEventsMod.LOGGER.error("Language folder not found; players will see raw keys");
-			return;
-		}
-		try (Stream<Path> files = Files.list(dir)) {
-			for (Path file : files.filter(p -> p.getFileName().toString().endsWith(".json")).toList()) {
-				String name = file.getFileName().toString();
-				tables.put(name.substring(0, name.length() - ".json".length()), readTable(file));
+		for (String folder : new String[] {WorldEventsMod.MOD_ID + "/lang", "assets/" + WorldEventsMod.MOD_ID + "/lang"}) {
+			Path dir = FabricLoader.getInstance().getModContainer(WorldEventsMod.MOD_ID)
+					.flatMap(container -> container.findPath(folder))
+					.orElse(null);
+			if (dir == null) {
+				WorldEventsMod.LOGGER.error("Language folder {} not found; players will see raw keys", folder);
+				continue;
 			}
-		} catch (IOException e) {
-			WorldEventsMod.LOGGER.error("Could not read language files", e);
+			try (Stream<Path> files = Files.list(dir)) {
+				for (Path file : files.filter(p -> p.getFileName().toString().endsWith(".json")).toList()) {
+					String name = file.getFileName().toString();
+					tables.computeIfAbsent(name.substring(0, name.length() - ".json".length()), language -> new HashMap<>())
+							.putAll(readTable(file));
+				}
+			} catch (IOException e) {
+				WorldEventsMod.LOGGER.error("Could not read language files in {}", folder, e);
+			}
 		}
 		translations = new Translations(tables);
 	}
@@ -60,12 +70,36 @@ public final class Lang {
 	}
 
 	public static String language(ServerPlayer player) {
-		return translations.resolveLanguage(player.clientInformation().language());
+		return resolveLanguage(player.clientInformation().language());
+	}
+
+	/** The language we have texts for that is closest to a game language code (es_mx gets es_es…). */
+	public static String resolveLanguage(String code) {
+		return translations.resolveLanguage(code);
 	}
 
 	public static String language(CommandSourceStack source) {
 		ServerPlayer player = source.getPlayer();
 		return player != null ? language(player) : Translations.DEFAULT_LANGUAGE;
+	}
+
+	/** Language of the player nearest to {@code pos} within {@code maxDistance}, or the default. */
+	public static String languageNear(ServerLevel level, Vec3 pos, double maxDistance) {
+		ServerPlayer nearest = null;
+		double best = maxDistance * maxDistance;
+		for (ServerPlayer player : level.players()) {
+			double distance = player.distanceToSqr(pos);
+			if (distance < best) {
+				best = distance;
+				nearest = player;
+			}
+		}
+		return nearest != null ? language(nearest) : Translations.DEFAULT_LANGUAGE;
+	}
+
+	/** Language of {@code player} if it is a server player, otherwise the default. */
+	public static String languageOf(Player player) {
+		return player instanceof ServerPlayer serverPlayer ? language(serverPlayer) : Translations.DEFAULT_LANGUAGE;
 	}
 
 	public static String text(String language, String key, Object... args) {

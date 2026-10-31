@@ -110,12 +110,12 @@ public final class ModConfig {
 		return Math.max(20, root().getInt("checkIntervalTicks"));
 	}
 
-	/** Chance per check that an event starts once all cooldowns are over. */
+	/** Chance per check, once the global cooldown is over, that the next event gets drawn. */
 	public double startChance() {
 		return Math.clamp(root().getDouble("startChance"), 0.0, 1.0);
 	}
 
-	/** Minimum time between the end of one event and the start of the next, per dimension. */
+	/** Minimum time between the end of one event and drawing the next, per dimension. */
 	public long globalCooldownTicks() {
 		return Math.max(0L, (long) root().getInt("globalCooldown") * 20L);
 	}

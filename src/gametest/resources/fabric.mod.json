@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"id": "worldevents-test",
+	"version": "1.0.0",
+	"name": "World Events game tests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": [
+			"dev.santiagosantofimio.worldevents.test.WorldEventsGameTests"
+		],
+		"fabric-client-gametest": [
+			"dev.santiagosantofimio.worldevents.test.WorldEventsClientGameTests"
+		]
+	},
+	"depends": {
+		"worldevents": "*",
+		"fabric-gametest-api-v1": "*",
+		"fabric-client-gametest-api-v1": "*"
+	}
+}

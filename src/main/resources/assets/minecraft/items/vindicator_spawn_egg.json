@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:horde_warlord",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/horde_warlord"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/vindicator_spawn_egg"
+		}
+	}
+}

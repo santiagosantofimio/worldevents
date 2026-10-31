@@ -12,11 +12,23 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
-/** Per-dimension event state: the running event and when each event last ended (in game time). */
+/**
+ * Per-dimension event state: the running event, the next planned one, and when each event last ended
+ * (in game time).
+ */
 public final class WorldEventsData extends SavedData {
+	/** The event drawn to run next, waiting for the right moment to start. */
+	public record Plan(String eventId, long plannedAt) {
+		private static final Codec<Plan> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("id").forGetter(Plan::eventId),
+				Codec.LONG.fieldOf("at").forGetter(Plan::plannedAt)
+		).apply(instance, Plan::new));
+	}
+
 	private static final Codec<WorldEventsData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			// Lenient so a save with an event id that no longer exists loads as "no event" instead of failing.
 			ActiveEvent.CODEC.lenientOptionalFieldOf("active").forGetter(data -> Optional.ofNullable(data.active)),
+			Plan.CODEC.lenientOptionalFieldOf("planned").forGetter(data -> Optional.ofNullable(data.plan)),
 			Codec.LONG.optionalFieldOf("lastEventEnd").forGetter(data -> Optional.ofNullable(data.lastEventEnd)),
 			Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("lastEnds", Map.of()).forGetter(data -> data.lastEnds)
 	).apply(instance, WorldEventsData::new));
@@ -26,15 +38,17 @@ public final class WorldEventsData extends SavedData {
 			Identifier.fromNamespaceAndPath(WorldEventsMod.MOD_ID, "state"), WorldEventsData::new, CODEC, null);
 
 	private ActiveEvent active;
+	private Plan plan;
 	private Long lastEventEnd;
 	private final Map<String, Long> lastEnds;
 
 	private WorldEventsData() {
-		this(Optional.empty(), Optional.empty(), Map.of());
+		this(Optional.empty(), Optional.empty(), Optional.empty(), Map.of());
 	}
 
-	private WorldEventsData(Optional<ActiveEvent> active, Optional<Long> lastEventEnd, Map<String, Long> lastEnds) {
+	private WorldEventsData(Optional<ActiveEvent> active, Optional<Plan> plan, Optional<Long> lastEventEnd, Map<String, Long> lastEnds) {
 		this.active = active.orElse(null);
+		this.plan = plan.orElse(null);
 		this.lastEventEnd = lastEventEnd.orElse(null);
 		this.lastEnds = new HashMap<>(lastEnds);
 	}
@@ -49,6 +63,15 @@ public final class WorldEventsData extends SavedData {
 
 	public void setActive(ActiveEvent active) {
 		this.active = active;
+		setDirty();
+	}
+
+	public Plan plan() {
+		return plan;
+	}
+
+	public void setPlan(Plan plan) {
+		this.plan = plan;
 		setDirty();
 	}
 

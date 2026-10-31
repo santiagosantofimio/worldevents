@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:glistering_melon_slice",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:golden_seed"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.golden_seed.title",
+			"fallback": "Green Thumb"
+		},
+		"description": {
+			"translate": "advancements.worldevents.golden_seed.description",
+			"fallback": "Get a golden seed from a harvest spirit"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:glistering_melon_slice",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "golden_seed"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

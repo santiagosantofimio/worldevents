@@ -32,9 +32,16 @@ bin/
 
 run/
 
+# python
+
+__pycache__/
+
 # java
 
 hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+# Meshy source models (hundreds of MB); converted with tools/import_model.py
+art/models/

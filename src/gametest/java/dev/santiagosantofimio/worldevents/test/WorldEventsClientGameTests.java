@@ -66,6 +66,9 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			// A slow weapon comes up as its attack recharges: a full second for this axe.
 			context.waitTicks(30);
 			context.takeScreenshot("worldevents_hand_warlord_axe");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
+			context.waitTicks(30);
+			context.takeScreenshot("worldevents_hand_captains_cutlass");
 			context.getInput().pressKey(options -> options.keyHotbarSlots[3]);
 			context.getInput().pressKey(options -> options.keyTogglePerspective);
 			context.getInput().pressKey(options -> options.keyTogglePerspective);
@@ -122,8 +125,9 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			EventManager.start(level, event);
 			Mob mob = spawner.spawn(event, level, EventManager.active(level), player.blockPosition().offset(0, 0, distance));
 			if (mob != null) {
-				// Posed facing the player.
+				// Posed facing the player, and not after them: some creatures act on their own while they have a target.
 				mob.setNoAi(true);
+				mob.setTarget(null);
 				mob.setYRot(180.0f);
 				mob.setYHeadRot(180.0f);
 				mob.setYBodyRot(180.0f);

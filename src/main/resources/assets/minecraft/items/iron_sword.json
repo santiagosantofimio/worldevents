@@ -6,8 +6,26 @@
 			{
 				"when": "worldevents:captains_cutlass",
 				"model": {
-					"type": "minecraft:model",
-					"model": "worldevents:item/captains_cutlass"
+					"type": "minecraft:select",
+					"property": "minecraft:display_context",
+					"cases": [
+						{
+							"when": [
+								"gui",
+								"ground",
+								"fixed",
+								"on_shelf"
+							],
+							"model": {
+								"type": "minecraft:model",
+								"model": "worldevents:item/captains_cutlass"
+							}
+						}
+					],
+					"fallback": {
+						"type": "minecraft:model",
+						"model": "worldevents:item/captains_cutlass_3d"
+					}
 				}
 			}
 		],

@@ -3,10 +3,14 @@
 	"id": "worldevents",
 	"version": "${version}",
 	"name": "World Events",
-	"description": "Random server-side world events: blood moon, gold rush, meteor shower and more. Vanilla clients can join.",
+	"description": "Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.",
 	"authors": [
 		"Santiago Santofimio"
 	],
+	"contact": {
+		"sources": "https://github.com/santiagosantofimio/worldevents",
+		"issues": "https://github.com/santiagosantofimio/worldevents/issues"
+	},
 	"license": "MIT",
 	"icon": "assets/worldevents/icon.png",
 	"environment": "*",

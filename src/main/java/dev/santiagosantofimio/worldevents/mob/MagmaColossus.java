@@ -39,7 +39,7 @@ public final class MagmaColossus {
 			.boss(BossEvent.BossBarColor.RED, ChatFormatting.GOLD);
 	public static final String TAG = KIND.tag();
 	public static final String NAME_KEY = KIND.nameKey();
-	public static final Creature.Part BODY = Creature.register(Creature.Part.of(Items.MAGMA_BLOCK, "magma_colossus", 1.6f).big().bright());
+	public static final Creature.Part BODY = Creature.register(Creature.Part.of(Items.MAGMA_BLOCK, "magma_colossus", 2.0f).big().bright());
 	private static final int SLAM_SECONDS = 8;
 	private static final double SLAM_RANGE = 6.0;
 	private static final float SLAM_DAMAGE = 8.0f;

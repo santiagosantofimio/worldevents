@@ -4,29 +4,9 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [0.2.0] - 2026-10-31
+## [1.0.0] - 2026-11-01
 
-### Added
-
-- **Event ranking**: players score points during events (kills, ores, crops, trades, bosses).
-  When an event ends, the best three are announced and everyone who took part earns
-  **Event Seals**, with extra seals for the winner.
-- **Treasure Hunt** (`treasure_hunt`): a chest full of loot appears near players, and the action
-  bar tells each one how warm they are. The first to open it takes the prize, but the **Spectral
-  Captain** (boss; calls cannon fire that never harms the terrain) rises to guard it and the chest
-  stays shut until it falls. It may drop the **Captain's Cutlass**, which lunges forward.
-- **Eruption** (`eruption`, Nether only): geysers of fire burst around players after a moment's
-  warning and the **Magma Colossus** (boss; its slams burn and throw everything around it) comes up
-  to hunt them. Nothing touches a block. Monsters killed meanwhile may leave a **Magma Heart**, and
-  the colossus may drop the **Colossus Hammer**, a heavy mace that sets its target on fire.
-- **Void Storm** (`void_storm`, End only): **Void Stalkers** blink behind their prey and blind it,
-  and pulses of the void lift players straight up and let them float back down. Stalkers may drop
-  the **Unstable Pearl**, which blinks the player forward.
-- Nomad merchants now sell relics (the strongest event items) for event seals.
-- Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
-  by command skip it.
-
-## [0.1.0] - 2026-10-31
+First public release.
 
 ### Added
 
@@ -88,3 +68,20 @@ All notable changes to this project are documented here. The format follows
 - Game tests (`./gradlew runGameTest`, also part of `./gradlew build`) that run the events,
   items and mobs on a real test server, and a client test (`./gradlew runClientGameTest`)
   that saves screenshots of the items and mobs.
+- **Event ranking**: players score points during events (kills, ores, crops, trades, bosses).
+  When an event ends, the best three are announced and everyone who took part earns
+  **Event Seals**, with extra seals for the winner.
+- **Treasure Hunt** (`treasure_hunt`): a chest full of loot appears near players, and the action
+  bar tells each one how warm they are. The first to open it takes the prize, but the **Spectral
+  Captain** (boss; calls cannon fire that never harms the terrain) rises to guard it and the chest
+  stays shut until it falls. It may drop the **Captain's Cutlass**, which lunges forward.
+- **Eruption** (`eruption`, Nether only): geysers of fire burst around players after a moment's
+  warning and the **Magma Colossus** (boss; its slams burn and throw everything around it) comes up
+  to hunt them. Nothing touches a block. Monsters killed meanwhile may leave a **Magma Heart**, and
+  the colossus may drop the **Colossus Hammer**, a heavy mace that sets its target on fire.
+- **Void Storm** (`void_storm`, End only): **Void Stalkers** blink behind their prey and blind it,
+  and pulses of the void lift players straight up and let them float back down. Stalkers may drop
+  the **Unstable Pearl**, which blinks the player forward.
+- Nomad merchants now sell relics (the strongest event items) for event seals.
+- Players get a warning a minute before a drawn event starts (`warningSeconds`). Events started
+  by command skip it.

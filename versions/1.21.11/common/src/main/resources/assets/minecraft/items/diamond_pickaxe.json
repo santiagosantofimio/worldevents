@@ -1,0 +1,37 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:starfall_pickaxe",
+				"model": {
+					"type": "minecraft:select",
+					"property": "minecraft:display_context",
+					"cases": [
+						{
+							"when": [
+								"gui",
+								"ground",
+								"fixed",
+								"on_shelf"
+							],
+							"model": {
+								"type": "minecraft:model",
+								"model": "worldevents:item/starfall_pickaxe"
+							}
+						}
+					],
+					"fallback": {
+						"type": "minecraft:model",
+						"model": "worldevents:item/starfall_pickaxe_3d"
+					}
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/diamond_pickaxe"
+		}
+	}
+}

@@ -1,0 +1,7 @@
+{
+	"pack": {
+		"description": "World Events: item, mob and advancement looks and names",
+		"min_format": ${format},
+		"max_format": ${format}
+	}
+}

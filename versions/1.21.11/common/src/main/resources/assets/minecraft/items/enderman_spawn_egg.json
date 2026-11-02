@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:void_stalker",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/void_stalker"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/enderman_spawn_egg"
+		}
+	}
+}

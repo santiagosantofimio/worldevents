@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:ghast_tear",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:bloody_tear"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.survive_blood_moon.title",
+			"fallback": "Red Dawn"
+		},
+		"description": {
+			"translate": "advancements.worldevents.survive_blood_moon.description",
+			"fallback": "Survive a blood moon until sunrise"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

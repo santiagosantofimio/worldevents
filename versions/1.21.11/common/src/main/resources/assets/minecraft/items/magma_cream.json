@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:magma_heart",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/magma_heart"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/magma_cream"
+		}
+	}
+}

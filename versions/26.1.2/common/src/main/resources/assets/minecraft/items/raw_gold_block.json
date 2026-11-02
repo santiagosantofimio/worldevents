@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:mimic_sack",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/mimic_sack"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:block/raw_gold_block"
+		}
+	}
+}

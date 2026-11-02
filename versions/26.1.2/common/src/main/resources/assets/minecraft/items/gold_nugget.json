@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:lucky_nugget",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/lucky_nugget"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/gold_nugget"
+		}
+	}
+}

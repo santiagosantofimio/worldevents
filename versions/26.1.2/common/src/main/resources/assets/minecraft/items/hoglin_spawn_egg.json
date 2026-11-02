@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:magma_colossus",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/magma_colossus"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/hoglin_spawn_egg"
+		}
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:raw_iron",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:meteorite_fragment"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.meteorite_fragment.title",
+			"fallback": "Stardust"
+		},
+		"description": {
+			"translate": "advancements.worldevents.meteorite_fragment.description",
+			"fallback": "Pick up a meteorite fragment"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:raw_iron",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "meteorite_fragment"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

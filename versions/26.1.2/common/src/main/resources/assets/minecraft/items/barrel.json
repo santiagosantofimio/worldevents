@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:nomad_merchant",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/nomad_merchant"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:block/barrel"
+		}
+	}
+}

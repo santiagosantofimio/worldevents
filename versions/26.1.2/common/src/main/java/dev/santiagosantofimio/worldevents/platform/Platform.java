@@ -1,7 +1,8 @@
 package dev.santiagosantofimio.worldevents.platform;
 
+import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 /** What the common code needs from the mod loader. Each loader module provides one through {@link ServiceLoader}. */
@@ -12,6 +13,9 @@ public interface Platform {
 	/** The loader's config folder. */
 	Path configDir();
 
-	/** A folder or file inside the mod's jar (or its resources in development). */
-	Optional<Path> findModPath(String path);
+	/**
+	 * The files directly inside a folder of the mod's jar (or its resources in development), by file name, read as
+	 * UTF-8. Empty if the folder does not exist.
+	 */
+	Map<String, String> readModFiles(String folder) throws IOException;
 }

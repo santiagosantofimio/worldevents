@@ -21,8 +21,11 @@ subprojects {
 				java.srcDir(rootProject.file('common/src/main/java'))
 				resources.srcDir(rootProject.file('common/src/main/resources'))
 			}
-			test {
-				java.srcDir(rootProject.file('common/src/test/java'))
+			// The unit tests only test the common code, so they run once, with Fabric.
+			if (project.name == 'fabric') {
+				test {
+					java.srcDir(rootProject.file('common/src/test/java'))
+				}
 			}
 		}
 

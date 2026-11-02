@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[${forge_version},)"
+license = "MIT"
+issueTrackerURL = "https://github.com/santiagosantofimio/worldevents/issues"
+
+[[mods]]
+modId = "worldevents"
+version = "${version}"
+displayName = "World Events"
+authors = "Santiago Santofimio"
+displayURL = "https://github.com/santiagosantofimio/worldevents"
+logoFile = "assets/worldevents/icon.png"
+description = '''
+Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.
+'''
+# Server-side only: clients without the mod can join, and the mod list does not ask for it.
+displayTest = "IGNORE_ALL_VERSION"
+
+[[dependencies.worldevents]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.worldevents]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version},26.2)"
+ordering = "NONE"
+side = "BOTH"

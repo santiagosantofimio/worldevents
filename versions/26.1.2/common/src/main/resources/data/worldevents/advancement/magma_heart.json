@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:magma_cream",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:magma_heart"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.magma_heart.title",
+			"fallback": "Heart of Fire"
+		},
+		"description": {
+			"translate": "advancements.worldevents.magma_heart.description",
+			"fallback": "Get a magma heart during an eruption"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:magma_cream",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "magma_heart"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

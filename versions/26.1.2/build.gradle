@@ -1,0 +1,84 @@
+// World Events for Minecraft 26.1.2: one subproject per loader. The game code lives in common/ and every loader
+// compiles it together with its own entry point and platform glue.
+def javaVersion = project.java_version as int
+
+subprojects {
+	version = rootProject.version
+	group = rootProject.group
+
+	plugins.withId('java') {
+		base {
+			archivesName = "worldevents-${project.name}-${project.minecraft_version}"
+		}
+
+		java {
+			toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+			withSourcesJar()
+		}
+
+		sourceSets {
+			main {
+				java.srcDir(rootProject.file('common/src/main/java'))
+				resources.srcDir(rootProject.file('common/src/main/resources'))
+			}
+			test {
+				java.srcDir(rootProject.file('common/src/test/java'))
+			}
+		}
+
+		tasks.withType(JavaCompile).configureEach {
+			options.encoding = 'UTF-8'
+			options.release = javaVersion
+			options.compilerArgs += ['-Xmaxerrs', '1000']
+		}
+
+		dependencies {
+			testImplementation platform("org.junit:junit-bom:${project.junit_version}")
+			testImplementation 'org.junit.jupiter:junit-jupiter'
+			testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+		}
+
+		test {
+			useJUnitPlatform()
+		}
+
+		jar {
+			from(rootProject.file('../../LICENSE')) {
+				rename { "${it}_worldevents" }
+			}
+		}
+	}
+}
+
+// Optional resource pack for players: looks and names for the mod's items, mobs and advancements.
+def resourcePackFormat = project.resource_pack_format as int
+def modVersion = project.version
+def mcVersion = project.minecraft_version
+tasks.register("resourcePack", Zip) {
+	group = "build"
+	description = "Builds the optional resource pack and its SHA-1 for server.properties."
+	archiveFileName = "worldevents-${modVersion}+${mcVersion}-resourcepack.zip"
+	destinationDirectory = layout.buildDirectory.dir("libs")
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+	inputs.property("format", resourcePackFormat)
+	from("common/src/resourcepack") {
+		filesMatching("pack.mcmeta") {
+			expand("format": resourcePackFormat)
+		}
+	}
+	from("common/src/main/resources/assets") {
+		into("assets")
+		exclude("worldevents/icon.png")
+	}
+	from("common/src/main/resources/assets/worldevents/icon.png") {
+		rename { "pack.png" }
+	}
+	def zipFile = archiveFile
+	doLast {
+		def file = zipFile.get().asFile
+		def sha1 = java.security.MessageDigest.getInstance("SHA-1").digest(file.bytes).encodeHex().toString()
+		new File(file.path + ".sha1").text = sha1 + "\n"
+		logger.lifecycle("Resource pack: ${file.name} (sha1 ${sha1})")
+	}
+}

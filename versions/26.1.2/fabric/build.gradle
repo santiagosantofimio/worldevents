@@ -1,0 +1,27 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+fabricApi {
+	// Game tests in src/gametest. Server tests: ../gradlew :fabric:runGameTest. Client tests: :fabric:runClientGameTest.
+	configureTests {
+		createSourceSet = true
+		modId = "worldevents-test"
+		enableGameTests = true
+		enableClientGameTests = true
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+	def props = [version: project.version, minecraft_version: project.minecraft_version, loader_version: project.loader_version]
+	inputs.properties props
+	filesMatching("fabric.mod.json") {
+		expand props
+	}
+}

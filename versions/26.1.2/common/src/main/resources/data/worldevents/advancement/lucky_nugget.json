@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:gold_nugget",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:lucky_nugget"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.lucky_nugget.title",
+			"fallback": "Struck Gold"
+		},
+		"description": {
+			"translate": "advancements.worldevents.lucky_nugget.description",
+			"fallback": "Find a lucky nugget during a gold rush"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:gold_nugget",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "lucky_nugget"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

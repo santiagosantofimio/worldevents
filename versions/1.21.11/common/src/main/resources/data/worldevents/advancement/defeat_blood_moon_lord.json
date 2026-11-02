@@ -1,0 +1,24 @@
+{
+	"parent": "worldevents:survive_blood_moon",
+	"display": {
+		"icon": {
+			"id": "minecraft:wither_skeleton_skull"
+		},
+		"title": {
+			"translate": "advancements.worldevents.defeat_blood_moon_lord.title",
+			"fallback": "Lord of Nothing"
+		},
+		"description": {
+			"translate": "advancements.worldevents.defeat_blood_moon_lord.description",
+			"fallback": "Defeat the Blood Moon Lord"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

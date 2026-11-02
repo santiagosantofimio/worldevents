@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:bloody_tear",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/bloody_tear"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/ghast_tear"
+		}
+	}
+}

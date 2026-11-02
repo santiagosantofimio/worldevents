@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:storm_spirit",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/storm_spirit"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:block/white_wool"
+		}
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:defeat_magma_colossus",
+	"display": {
+		"icon": {
+			"id": "minecraft:mace",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:colossus_hammer"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.colossus_hammer.title",
+			"fallback": "Hammer Time"
+		},
+		"description": {
+			"translate": "advancements.worldevents.colossus_hammer.description",
+			"fallback": "Get the Colossus Hammer"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:mace",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "colossus_hammer"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

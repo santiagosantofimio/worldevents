@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:white_wool",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:storm_spirit"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.calm_the_storm.title",
+			"fallback": "Calm the Storm"
+		},
+		"description": {
+			"translate": "advancements.worldevents.calm_the_storm.description",
+			"fallback": "Defeat a storm spirit"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

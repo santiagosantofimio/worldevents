@@ -1,0 +1,26 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:blood_eye",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/blood_eye"
+				}
+			},
+			{
+				"when": "worldevents:storm_spirit",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/storm_spirit"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/vex_spawn_egg"
+		}
+	}
+}

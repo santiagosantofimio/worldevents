@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:event_seal",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/event_seal"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/prize_pottery_sherd"
+		}
+	}
+}

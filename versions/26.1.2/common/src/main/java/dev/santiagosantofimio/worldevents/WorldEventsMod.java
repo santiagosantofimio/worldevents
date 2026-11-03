@@ -1,7 +1,5 @@
 package dev.santiagosantofimio.worldevents;
 
-import dev.santiagosantofimio.worldevents.platform.Hooks;
-
 import dev.santiagosantofimio.worldevents.config.ModConfig;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
@@ -30,6 +28,7 @@ import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import dev.santiagosantofimio.worldevents.mob.StormSpirit;
 import dev.santiagosantofimio.worldevents.mob.VoidStalker;
+import dev.santiagosantofimio.worldevents.platform.Hooks;
 import dev.santiagosantofimio.worldevents.util.DeferredDiscard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

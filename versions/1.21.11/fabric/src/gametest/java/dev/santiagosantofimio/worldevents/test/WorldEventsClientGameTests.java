@@ -1,6 +1,5 @@
 package dev.santiagosantofimio.worldevents.test;
 
-import dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
@@ -15,12 +14,13 @@ import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
 import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
 import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
+import dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
-import net.fabricmc.fabric.api.client.itemgroup.v1.FabricCreativeInventoryScreen;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.fabricmc.fabric.api.client.itemgroup.v1.FabricCreativeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;

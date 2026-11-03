@@ -1,10 +1,9 @@
 package dev.santiagosantofimio.worldevents.item;
 
-import dev.santiagosantofimio.worldevents.platform.Hooks;
-
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.i18n.Lang;
 import dev.santiagosantofimio.worldevents.mob.Creature;
+import dev.santiagosantofimio.worldevents.platform.Hooks;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -45,8 +44,8 @@ import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.UseCooldown;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 

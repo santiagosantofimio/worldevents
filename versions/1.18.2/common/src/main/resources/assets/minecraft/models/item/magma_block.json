@@ -1,0 +1,17 @@
+{
+	"parent": "minecraft:block/magma_block",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 7347828
+			},
+			"model": "worldevents:item/magma_colossus"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 8440647
+			},
+			"model": "worldevents:item/living_meteorite"
+		}
+	]
+}

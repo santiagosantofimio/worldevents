@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/sea_lantern",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 2775224
+			},
+			"model": "worldevents:item/spectral_captain"
+		}
+	]
+}

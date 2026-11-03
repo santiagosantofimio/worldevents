@@ -1,0 +1,4 @@
+accessWidener v2 named
+# The blood moon's extra experience (BloodMoonEvent): how much a mob drops, and whether it drops any.
+accessible method net/minecraft/world/entity/LivingEntity shouldDropExperience ()Z
+accessible method net/minecraft/world/entity/LivingEntity getExperienceReward (Lnet/minecraft/world/entity/player/Player;)I

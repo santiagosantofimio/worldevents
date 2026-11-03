@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/observer",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 8407261
+			},
+			"model": "worldevents:item/blood_eye"
+		}
+	]
+}

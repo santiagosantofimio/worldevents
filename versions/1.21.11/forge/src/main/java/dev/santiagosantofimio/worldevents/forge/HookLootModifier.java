@@ -2,7 +2,6 @@ package dev.santiagosantofimio.worldevents.forge;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import dev.santiagosantofimio.worldevents.platform.Hooks;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;

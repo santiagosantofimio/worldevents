@@ -1,6 +1,5 @@
 package dev.santiagosantofimio.worldevents.test;
 
-import dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
@@ -15,6 +14,7 @@ import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
 import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
 import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
+import dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;

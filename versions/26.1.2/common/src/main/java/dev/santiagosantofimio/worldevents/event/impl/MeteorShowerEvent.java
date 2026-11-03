@@ -1,7 +1,5 @@
 package dev.santiagosantofimio.worldevents.event.impl;
 
-import dev.santiagosantofimio.worldevents.platform.Hooks;
-
 import com.google.gson.JsonObject;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.config.EventSettings;
@@ -14,6 +12,7 @@ import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.MobSpawning;
+import dev.santiagosantofimio.worldevents.platform.Hooks;
 import dev.santiagosantofimio.worldevents.util.DayCycle;
 import dev.santiagosantofimio.worldevents.util.DeferredDiscard;
 import dev.santiagosantofimio.worldevents.util.Drops;

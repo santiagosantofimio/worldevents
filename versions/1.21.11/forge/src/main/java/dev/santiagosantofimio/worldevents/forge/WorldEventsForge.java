@@ -1,7 +1,6 @@
 package dev.santiagosantofimio.worldevents.forge;
 
 import com.mojang.serialization.MapCodec;
-
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.command.WorldEventsCommand;
 import dev.santiagosantofimio.worldevents.platform.Hooks;

@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:defeat_void_stalker",
+	"display": {
+		"icon": {
+			"item": "minecraft:popped_chorus_fruit",
+			"nbt": "{CustomModelData:8044938}"
+		},
+		"title": {
+			"text": "In the Blink of an Eye"
+		},
+		"description": {
+			"text": "Get an unstable pearl from a void stalker"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:popped_chorus_fruit"
+						],
+						"nbt": "{worldevents_item:\"unstable_pearl\"}"
+					}
+				]
+			}
+		}
+	}
+}

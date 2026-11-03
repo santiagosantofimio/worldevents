@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:raw_iron",
+			"nbt": "{CustomModelData:8618416}"
+		},
+		"title": {
+			"text": "World Events"
+		},
+		"description": {
+			"text": "Strange things happen in this world"
+		},
+		"frame": "task",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+	},
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

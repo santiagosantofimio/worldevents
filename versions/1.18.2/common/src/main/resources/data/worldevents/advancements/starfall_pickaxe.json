@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:meteorite_fragment",
+	"display": {
+		"icon": {
+			"item": "minecraft:diamond_pickaxe",
+			"nbt": "{CustomModelData:1173002}"
+		},
+		"title": {
+			"text": "Forged in the Sky"
+		},
+		"description": {
+			"text": "Get the Starfall Pickaxe from a living meteorite"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:diamond_pickaxe"
+						],
+						"nbt": "{worldevents_item:\"starfall_pickaxe\"}"
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:ghast_tear",
+			"nbt": "{CustomModelData:3187027}"
+		},
+		"title": {
+			"text": "Red Dawn"
+		},
+		"description": {
+			"text": "Survive a blood moon until sunrise"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

@@ -1,5 +1,7 @@
 package dev.santiagosantofimio.worldevents.fabric;
 
+import dev.santiagosantofimio.worldevents.WorldEventsMod;
+import dev.santiagosantofimio.worldevents.platform.Platform;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -8,9 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import dev.santiagosantofimio.worldevents.WorldEventsMod;
-import dev.santiagosantofimio.worldevents.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatform implements Platform {

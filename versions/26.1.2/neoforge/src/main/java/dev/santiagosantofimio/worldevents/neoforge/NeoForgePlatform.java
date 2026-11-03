@@ -1,14 +1,13 @@
 package dev.santiagosantofimio.worldevents.neoforge;
 
+import dev.santiagosantofimio.worldevents.WorldEventsMod;
+import dev.santiagosantofimio.worldevents.platform.Platform;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-
-import dev.santiagosantofimio.worldevents.WorldEventsMod;
-import dev.santiagosantofimio.worldevents.platform.Platform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 

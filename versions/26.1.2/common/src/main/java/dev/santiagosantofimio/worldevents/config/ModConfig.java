@@ -1,7 +1,5 @@
 package dev.santiagosantofimio.worldevents.config;
 
-import dev.santiagosantofimio.worldevents.platform.Platform;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -11,6 +9,7 @@ import com.google.gson.JsonParser;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
+import dev.santiagosantofimio.worldevents.platform.Platform;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;

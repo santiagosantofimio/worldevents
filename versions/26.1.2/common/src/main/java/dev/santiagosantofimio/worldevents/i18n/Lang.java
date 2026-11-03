@@ -1,11 +1,10 @@
 package dev.santiagosantofimio.worldevents.i18n;
 
-import dev.santiagosantofimio.worldevents.platform.Platform;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
+import dev.santiagosantofimio.worldevents.platform.Platform;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

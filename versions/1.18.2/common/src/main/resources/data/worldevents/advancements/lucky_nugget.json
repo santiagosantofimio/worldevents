@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:gold_nugget",
+			"nbt": "{CustomModelData:8389884}"
+		},
+		"title": {
+			"text": "Struck Gold"
+		},
+		"description": {
+			"text": "Find a lucky nugget during a gold rush"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:gold_nugget"
+						],
+						"nbt": "{worldevents_item:\"lucky_nugget\"}"
+					}
+				]
+			}
+		}
+	}
+}

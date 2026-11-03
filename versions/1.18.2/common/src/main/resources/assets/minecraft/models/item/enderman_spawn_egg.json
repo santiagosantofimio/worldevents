@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:item/template_spawn_egg",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 7454928
+			},
+			"model": "worldevents:item/void_stalker"
+		}
+	]
+}

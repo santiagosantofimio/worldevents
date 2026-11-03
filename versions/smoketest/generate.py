@@ -1,20 +1,20 @@
-"""Writes the smoke test datapack's functions. Run with: python3 generate.py [legacy]
+"""Writes the smoke test data pack. Run with: python3 generate.py [legacy]
 
-"legacy" writes the item syntax of 1.16.5 and 1.18.2 (NBT tags instead of item components)."""
+Without arguments it writes datapack/ for 1.20.5 and later. "legacy" writes datapack-legacy/ for 1.16.5 and 1.18.2:
+plural folder names, and item NBT instead of item components."""
 import json, os, sys
 
 legacy = len(sys.argv) > 1 and sys.argv[1] == "legacy"
 here = os.path.dirname(os.path.abspath(__file__))
-folder = os.path.join(here, "datapack", "data", "smoke", "functions" if legacy else "function")
-tags = os.path.join(here, "datapack", "data", "minecraft", "tags", "functions" if legacy else "function")
-for old in ("function", "functions"):
-    for base in (os.path.join(here, "datapack", "data", "smoke", old), os.path.join(here, "datapack", "data", "minecraft", "tags", old)):
-        if os.path.isdir(base):
-            for name in os.listdir(base):
-                os.remove(os.path.join(base, name))
-            os.rmdir(base)
-os.makedirs(folder)
-os.makedirs(tags)
+pack = os.path.join(here, "datapack-legacy" if legacy else "datapack")
+folder = os.path.join(pack, "data", "smoke", "functions" if legacy else "function")
+tags = os.path.join(pack, "data", "minecraft", "tags", "functions" if legacy else "function")
+for base in (folder, tags):
+    if os.path.isdir(base):
+        for name in os.listdir(base):
+            os.remove(os.path.join(base, name))
+os.makedirs(folder, exist_ok=True)
+os.makedirs(tags, exist_ok=True)
 
 kinds = ["blood_moon_lord", "blood_eye", "mimic_sack", "living_meteorite", "storm_spirit", "harvest_spirit",
          "nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker"]

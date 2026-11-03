@@ -1,8 +1,5 @@
 package dev.santiagosantofimio.worldevents.event.impl;
 
-import dev.santiagosantofimio.worldevents.platform.Hooks;
-import dev.santiagosantofimio.worldevents.platform.Tags;
-
 import com.google.gson.JsonObject;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.config.EventSettings;
@@ -15,6 +12,8 @@ import dev.santiagosantofimio.worldevents.mob.BloodEye;
 import dev.santiagosantofimio.worldevents.mob.BloodMoonLord;
 import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.MobSpawning;
+import dev.santiagosantofimio.worldevents.platform.Hooks;
+import dev.santiagosantofimio.worldevents.platform.Tags;
 import dev.santiagosantofimio.worldevents.util.Advancements;
 import dev.santiagosantofimio.worldevents.util.DayCycle;
 import dev.santiagosantofimio.worldevents.util.DeferredDiscard;
@@ -36,8 +35,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;

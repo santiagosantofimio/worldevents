@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/crying_obsidian",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 7454928
+			},
+			"model": "worldevents:item/void_stalker"
+		}
+	]
+}

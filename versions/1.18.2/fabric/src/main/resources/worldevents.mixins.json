@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.santiagosantofimio.worldevents.fabric.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"LivingEntityMixin",
+		"LootTableMixin",
+		"ServerPlayerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

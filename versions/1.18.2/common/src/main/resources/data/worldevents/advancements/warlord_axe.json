@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:defeat_horde_warlord",
+	"display": {
+		"icon": {
+			"item": "minecraft:diamond_axe",
+			"nbt": "{CustomModelData:9893597}"
+		},
+		"title": {
+			"text": "Battle Cry"
+		},
+		"description": {
+			"text": "Get the Warlord's Axe"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:diamond_axe"
+						],
+						"nbt": "{worldevents_item:\"warlord_axe\"}"
+					}
+				]
+			}
+		}
+	}
+}

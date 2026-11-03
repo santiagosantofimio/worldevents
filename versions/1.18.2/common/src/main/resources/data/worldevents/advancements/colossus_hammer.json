@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:defeat_magma_colossus",
+	"display": {
+		"icon": {
+			"item": "minecraft:netherite_axe",
+			"nbt": "{CustomModelData:9073481}"
+		},
+		"title": {
+			"text": "Hammer Time"
+		},
+		"description": {
+			"text": "Get the Colossus Hammer"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:netherite_axe"
+						],
+						"nbt": "{worldevents_item:\"colossus_hammer\"}"
+					}
+				]
+			}
+		}
+	}
+}

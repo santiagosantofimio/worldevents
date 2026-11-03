@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:item/template_spawn_egg",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 5129415
+			},
+			"model": "worldevents:item/nomad_merchant"
+		}
+	]
+}

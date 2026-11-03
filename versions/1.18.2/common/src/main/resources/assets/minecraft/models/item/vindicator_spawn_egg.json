@@ -1,0 +1,17 @@
+{
+	"parent": "minecraft:item/template_spawn_egg",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 2775224
+			},
+			"model": "worldevents:item/spectral_captain"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 6981083
+			},
+			"model": "worldevents:item/horde_warlord"
+		}
+	]
+}

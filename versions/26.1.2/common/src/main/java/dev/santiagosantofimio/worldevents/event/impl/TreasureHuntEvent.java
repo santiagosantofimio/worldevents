@@ -1,7 +1,5 @@
 package dev.santiagosantofimio.worldevents.event.impl;
 
-import dev.santiagosantofimio.worldevents.platform.Hooks;
-
 import com.google.gson.JsonObject;
 import dev.santiagosantofimio.worldevents.config.EventSettings;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
@@ -12,6 +10,7 @@ import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.MobSpawning;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
+import dev.santiagosantofimio.worldevents.platform.Hooks;
 import dev.santiagosantofimio.worldevents.util.Advancements;
 import dev.santiagosantofimio.worldevents.util.DayCycle;
 import dev.santiagosantofimio.worldevents.util.DeferredDiscard;

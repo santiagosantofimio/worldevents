@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/white_wool",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 5189750
+			},
+			"model": "worldevents:item/storm_spirit"
+		}
+	]
+}

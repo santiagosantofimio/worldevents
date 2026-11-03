@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/raw_gold_block",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 7756409
+			},
+			"model": "worldevents:item/mimic_sack"
+		}
+	]
+}

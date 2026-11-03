@@ -1,0 +1,33 @@
+{
+	"parent": "worldevents:calm_the_storm",
+	"display": {
+		"icon": {
+			"item": "minecraft:honey_bottle",
+			"nbt": "{CustomModelData:2186010}"
+		},
+		"title": {
+			"text": "Lightning in a Bottle"
+		},
+		"description": {
+			"text": "Get bottled lightning from a storm spirit"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:honey_bottle"
+						],
+						"nbt": "{worldevents_item:\"bottled_lightning\"}"
+					}
+				]
+			}
+		}
+	}
+}

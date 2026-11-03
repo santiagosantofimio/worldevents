@@ -1,0 +1,8 @@
+{
+	"pack": {
+		"description": "World Events resources",
+		"pack_format": ${data_format},
+		"forge:resource_pack_format": ${resource_format},
+		"forge:data_pack_format": ${data_format}
+	}
+}

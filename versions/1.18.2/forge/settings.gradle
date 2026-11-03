@@ -1,0 +1,13 @@
+// Forge for 1.18.2 is a build of its own: it needs ForgeGradle 6, which runs on Gradle 8 (see gradle/wrapper).
+// It compiles the shared code in ../common and reads the shared versions from ../gradle.properties.
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		maven {
+			name = 'MinecraftForge'
+			url = 'https://maven.minecraftforge.net/'
+		}
+	}
+}
+
+rootProject.name = 'worldevents-forge-1.18.2'

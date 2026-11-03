@@ -1,0 +1,72 @@
+plugins {
+	id 'java'
+	id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+// The versions every loader of 1.18.2 shares.
+def shared = new Properties()
+file('../gradle.properties').withInputStream { shared.load(it) }
+def mcVersion = shared.minecraft_version
+def forgeVersion = shared.forge_version
+
+version = shared.version
+group = shared.group
+
+base {
+	archivesName = "worldevents-forge-${mcVersion}"
+}
+
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(shared.java_version as int)
+	withSourcesJar()
+}
+
+sourceSets.main {
+	java.srcDir('../common/src/main/java')
+	resources.srcDir('../common/src/main/resources')
+}
+
+minecraft {
+	mappings channel: 'official', version: mcVersion
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+	runs {
+		configureEach {
+			workingDirectory project.file('run')
+			mods {
+				worldevents {
+					source sourceSets.main
+				}
+			}
+		}
+		client {
+		}
+		server {
+			args '--nogui'
+		}
+	}
+}
+
+dependencies {
+	minecraft "net.minecraftforge:forge:${forgeVersion}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+processResources {
+	def props = [version: project.version, minecraft_version: mcVersion, forge_version: forgeVersion.split('-')[1],
+			data_format: shared.data_pack_format, resource_format: shared.resource_pack_format]
+	inputs.properties props
+	filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+		expand props
+	}
+}
+
+jar {
+	from('../../../LICENSE') {
+		rename { "${it}_worldevents" }
+	}
+	finalizedBy 'reobfJar'
+}

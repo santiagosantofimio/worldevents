@@ -98,6 +98,41 @@ First release: textures and 3D models for every World Omens 1.0.0 item and creat
 
 Los `.sha1` no se suben: son el hash del zip, para poner en `resource-pack-sha1` en `server.properties`.
 
+## CurseForge: changelogs en texto plano
+
+El editor de CurseForge es visual: pega estos textos tal cual (sin Markdown). Para la descripción, lo más fácil es abrir `description.md` en GitHub, copiar el texto ya formateado de la página y pegarlo en el editor: conserva las negritas y las listas.
+
+Mod (cambia 26.1.2 por 1.21.11 en las de 1.21.11; en Fabric añade la última línea):
+
+```text
+World Omens 1.0.0 for Minecraft 26.1.2
+
+First release for Minecraft 26.1.2, on Fabric, NeoForge and Forge. Same content as World Omens 1.0.0.
+
+Events
+- Ten random events: Blood Moon, Gold Rush, Meteor Shower, Thunderstorm, Blessed Harvest, Merchant Caravan, Horde, Treasure Hunt, Eruption (Nether) and Void Storm (End).
+- A warning one minute before an event starts, and a boss bar with the time left while it lasts.
+
+Creatures and items
+- Eleven creatures with their own 3D models, four of them bosses: the Blood Moon Lord, the Horde Warlord, the Spectral Captain and the Magma Colossus.
+- Thirteen items to find, among them the relics: Blood Scythe, Starfall Pickaxe, Warlord's Axe, Captain's Cutlass and Colossus Hammer.
+- Every event awards points and Event Seals, which the Nomad Merchant trades for relics.
+
+Also
+- An advancement tab, a config file (config/worldevents.json) and the /worldevents command (alias /eventos).
+- English and Spanish, in each player's own language.
+- Server-side: players can join with vanilla Minecraft. The optional resource pack adds the textures and 3D models.
+- Requires Fabric API.
+```
+
+Resource pack:
+
+```text
+World Omens Resource Pack 1.0.0 for Minecraft 26.1.2
+
+First release: textures and 3D models for every World Omens 1.0.0 item and creature, and their names in English and Spanish.
+```
+
 ## Comprobado
 
 Los seis jars se han probado en servidores dedicados reales: criaturas, los diez eventos, el botín y la entrada de un cliente vanilla (que ve las criaturas, recibe ítems y no es expulsado). En Fabric, además, pasan los 31 game tests. No se ha probado el lado del cliente con el mod instalado (la pestaña de creativo).

@@ -2,6 +2,7 @@ package dev.santiagosantofimio.worldevents.test;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.config.ModConfig;
@@ -35,6 +36,7 @@ import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import dev.santiagosantofimio.worldevents.mob.StormSpirit;
 import dev.santiagosantofimio.worldevents.mob.VoidStalker;
 import dev.santiagosantofimio.worldevents.util.Advancements;
+import io.netty.channel.embedded.EmbeddedChannel;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -55,13 +58,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -102,6 +108,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
@@ -1053,6 +1060,8 @@ public class WorldEventsGameTests {
 		player.setXRot(0.0f);
 		helper.assertTrue(UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success, "no lunge");
 		helper.assertTrue(player.getDeltaMovement().horizontalDistance() > 1.0, "the lunge did not push the player: " + player.getDeltaMovement());
+		// The player's own client moves the player: without this the push never reaches it.
+		helper.assertTrue(player.hurtMarked, "the lunge is not sent to the player's client");
 		helper.assertTrue(player.getCooldowns().isOnCooldown(cutlass), "the cutlass has no cooldown");
 
 		EventManager.stop(level);
@@ -1111,6 +1120,76 @@ public class WorldEventsGameTests {
 			restore.run();
 			remove(player);
 			helper.succeed();
+		});
+	}
+
+	@GameTest(environment = "worldevents-test:colossus", maxTicks = 100)
+	public void magmaColossusHuntsPlayersItCannotSeeAndDoesNotBurn(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		buildGround(helper);
+		// The helper's mock players are always in creative, which monsters leave alone.
+		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
+		// Takes no damage, so it stays the colossus's prey for the whole test.
+		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
+		// A wall between them, and warped fungus by the colossus, which calms a vanilla hoglin down.
+		for (int y = 4; y <= 7; y++) {
+			for (int z = 0; z <= 7; z++) {
+				helper.setBlock(new BlockPos(3, y, z), Blocks.STONE);
+			}
+		}
+		helper.setBlock(new BlockPos(7, 4, 7), Blocks.WARPED_FUNGUS);
+
+		// Summoned, as with an egg: outside an eruption, the event takes other colossi away.
+		Mob colossus = Creature.summon(MagmaColossus.KIND, level, helper.absolutePos(new BlockPos(5, 4, 5)), "en_us", null);
+		helper.assertTrue(colossus != null, "no colossus");
+		helper.assertTrue(level.noCollision(colossus), "the colossus spawned inside blocks");
+		float health = colossus.getHealth();
+		colossus.igniteForSeconds(5.0f);
+		colossus.hurtServer(level, level.damageSources().lava(), 4.0f);
+		// Every tick for over a second, as the hoglin looks for warped fungus around it once a second.
+		helper.runAfterDelay(5, () -> everyTick(helper, 30, () -> {
+			helper.assertTrue(colossus.getTarget() == player, "the colossus is not after the player behind the wall");
+			helper.assertFalse(colossus.isOnFire(), "the colossus is on fire");
+		}, () -> {
+			helper.assertTrue(colossus.getHealth() >= health, "lava hurt the colossus");
+			Creature.remove(colossus);
+			remove(player);
+			helper.succeed();
+		}));
+	}
+
+	@GameTest(environment = "worldevents-test:colossus", maxTicks = 100)
+	public void magmaColossusFindsRoomAndGetsOutOfBlocks(GameTestHelper helper) {
+		// No reset: it would take away the player of the other colossus test, which runs at the same time (tests of
+		// one environment run together; the colossus environment keeps these two apart from the eruption test's).
+		ServerLevel level = helper.getLevel();
+		buildGround(helper);
+		// A hill over most of the floor, with a lane along one side.
+		for (int x = 0; x < 8; x++) {
+			for (int y = 4; y < 8; y++) {
+				for (int z = 0; z < 5; z++) {
+					helper.setBlock(x, y, z, Blocks.STONE);
+				}
+			}
+		}
+
+		// Summoned inside the hill, as a command can.
+		Mob colossus = Creature.summon(MagmaColossus.KIND, level, helper.absolutePos(new BlockPos(3, 4, 1)), "en_us", null);
+		helper.assertTrue(colossus != null, "no colossus");
+		helper.runAfterDelay(1, () -> {
+			helper.assertTrue(level.noCollision(colossus), "the colossus is inside the hill");
+			// Walled in where it stands, it gets out within a second.
+			BlockPos at = colossus.blockPosition();
+			for (BlockPos pos : BlockPos.betweenClosed(at.offset(-1, 0, -1), at.offset(1, 2, 1))) {
+				level.setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
+			}
+			helper.assertFalse(level.noCollision(colossus), "the colossus is not walled in");
+			helper.runAfterDelay(25, () -> {
+				helper.assertTrue(level.noCollision(colossus), "the colossus is still stuck in the blocks");
+				Creature.remove(colossus);
+				helper.succeed();
+			});
 		});
 	}
 
@@ -1205,6 +1284,30 @@ public class WorldEventsGameTests {
 		BlockPos pos = helper.absolutePos(relative);
 		player.teleportTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		setLanguage(player, language);
+		return player;
+	}
+
+	/** Runs {@code check} now and on each of the next {@code ticks} ticks, then {@code then}. */
+	private static void everyTick(GameTestHelper helper, int ticks, Runnable check, Runnable then) {
+		check.run();
+		if (ticks <= 0) {
+			then.run();
+		} else {
+			helper.runAfterDelay(1, () -> everyTick(helper, ticks - 1, check, then));
+		}
+	}
+
+	/** A player in survival, put in the level like a real one (the helper's mock players are always in creative). */
+	private static ServerPlayer survivalPlayer(GameTestHelper helper, BlockPos relative) {
+		ServerLevel level = helper.getLevel();
+		CommonListenerCookie cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), MOCK_PLAYER_NAME), false);
+		ServerPlayer player = new ServerPlayer(level.getServer(), level, cookie.gameProfile(), cookie.clientInformation());
+		Connection connection = new Connection(PacketFlow.SERVERBOUND);
+		new EmbeddedChannel(connection);
+		level.getServer().getPlayerList().placeNewPlayer(connection, player, cookie);
+		player.setGameMode(GameType.SURVIVAL);
+		BlockPos pos = helper.absolutePos(relative);
+		player.teleportTo(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, Set.of(), 0.0f, 0.0f, true);
 		return player;
 	}
 

@@ -6,8 +6,11 @@ Una carpeta por versión de Minecraft, con el jar de cada loader y el resource p
 ./gradlew -p versions/<versión> dist
 ```
 
+(26.3, con `./gradlew dist` en la raíz.)
+
 | Versión | Fabric | NeoForge | Forge | Java |
 |---|---|---|---|---|
+| 26.3 | Loader 0.19.5+ y Fabric API | (no hay versión) | (no hay versión) | 25 |
 | 26.1.2 | Loader 0.19.5+ y Fabric API | 26.1.2.126+ | 64.1.5+ | 25 |
 | 1.21.11 | Loader 0.19.5+ y Fabric API | 21.11.48+ | 61.2.4+ | 21 |
 | 1.18.2 | Loader 0.19.5+ y Fabric API | (no existe) | 40.3.12+ | 17 |

@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.ChatVisiblity;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Visual check on a real client, run with {@code ./gradlew runClientGameTest} (not part of the build: it opens a
@@ -56,11 +57,12 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			// Let the advancement toasts for the new items go away.
 			context.waitTicks(220);
 
+			// A weapon comes up as its attack recharges: wait until it is all the way up.
 			context.getInput().pressKey(options -> options.keyHotbarSlots[3]);
-			context.waitTicks(10);
+			context.waitTicks(30);
 			context.takeScreenshot("worldevents_hotbar_scythe");
 			context.getInput().pressKey(options -> options.keyHotbarSlots[4]);
-			context.waitTicks(10);
+			context.waitTicks(30);
 			context.takeScreenshot("worldevents_hand_pickaxe");
 			context.getInput().pressKey(options -> options.keyHotbarSlots[7]);
 			// A slow weapon comes up as its attack recharges: a full second for this axe.
@@ -78,6 +80,17 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			context.waitTicks(30);
 			context.takeScreenshot("worldevents_third_person_warlord_axe");
 			context.getInput().pressKey(options -> options.keyTogglePerspective);
+
+			// The cutlass's lunge: the client moves its player, so the push has to reach it.
+			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
+			context.waitTicks(30);
+			Vec3 before = context.computeOnClient(client -> client.player.position());
+			context.getInput().pressKey(options -> options.keyUse);
+			context.waitTicks(10);
+			Vec3 after = context.computeOnClient(client -> client.player.position());
+			if (after.subtract(before).horizontalDistance() < 2.0) {
+				throw new AssertionError("the cutlass's lunge did not move the player: " + before + " -> " + after);
+			}
 
 			// Event creatures only exist while their event runs, so each one gets its own event.
 			showMob(context, singleplayer, BloodMoonEvent.ID, "worldevents_creature_lord", 4,

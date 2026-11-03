@@ -153,7 +153,8 @@ public final class EruptionEvent implements WorldEvent {
 			target.hurtServer(level, level.damageSources().hotFloor(), damage);
 			target.igniteForSeconds(3.0f);
 			target.push(0.0, 0.9, 0.0);
-			target.needsSync = true;
+			// A player moves on their own client, which only feels the push if the velocity is sent to it.
+			target.hurtMarked = true;
 		}
 	}
 

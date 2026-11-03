@@ -77,7 +77,7 @@ En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña
 
 El mercader nómada vende algunos de estos ítems por esmeraldas, otras rarezas vanilla y, por sellos de evento, dos reliquias al azar: Guadaña de sangre, Pico estelar, Hacha del caudillo, Sable del capitán o Martillo del coloso.
 
-Son ítems vanilla con nombre, descripción y efectos propios: funcionan en cualquier cliente. Con el resource pack opcional tienen además su propio aspecto: un icono 2D en el inventario y, las armas y herramientas, un modelo 3D en la mano.
+Son ítems vanilla con nombre, descripción y efectos propios: funcionan en cualquier cliente. Con el resource pack opcional tienen además su propio aspecto: su propio icono, que las armas y herramientas también muestran en la mano, como las vanilla.
 
 ## Logros
 
@@ -141,7 +141,7 @@ El código de 26.3 está en `src/`. El de las demás versiones está en `version
 ./gradlew -p versions/<versión> dist
 ```
 
-Deja los jars y el resource pack de esa versión en `dist/<versión>/` (26.3 se compila con `./gradlew build` en la raíz). Gradle tiene que correr con Java 25, y los JDK 8, 17 y 21 tienen que estar instalados también: Gradle los busca solo. El Forge de 1.18.2 es un build aparte con ForgeGradle 6 (Gradle 8.8) y el de 1.16.5 usa Architectury Loom; `dist` los lanza.
+Deja los jars y el resource pack de esa versión en `dist/<versión>/`. Para 26.3, `./gradlew dist` en la raíz (y `./gradlew build` pasa además los game tests). Gradle tiene que correr con Java 25, y los JDK 8, 17 y 21 tienen que estar instalados también: Gradle los busca solo. El Forge de 1.18.2 es un build aparte con ForgeGradle 6 (Gradle 8.8) y el de 1.16.5 usa Architectury Loom; `dist` los lanza.
 
 - `tools/legacy_resources.py` genera los recursos de 1.18.2 y 1.16.5 a partir de los de `src/main/resources`.
 - `versions/smoketest/` es una prueba de humo para un servidor dedicado: invoca todas las criaturas, mina con el pico estelar y empieza y para cada evento (`run.sh`).

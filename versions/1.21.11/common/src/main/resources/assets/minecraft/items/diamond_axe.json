@@ -6,26 +6,8 @@
 			{
 				"when": "worldevents:warlord_axe",
 				"model": {
-					"type": "minecraft:select",
-					"property": "minecraft:display_context",
-					"cases": [
-						{
-							"when": [
-								"gui",
-								"ground",
-								"fixed",
-								"on_shelf"
-							],
-							"model": {
-								"type": "minecraft:model",
-								"model": "worldevents:item/warlord_axe"
-							}
-						}
-					],
-					"fallback": {
-						"type": "minecraft:model",
-						"model": "worldevents:item/warlord_axe_3d"
-					}
+					"type": "minecraft:model",
+					"model": "worldevents:item/warlord_axe"
 				}
 			}
 		],

@@ -101,7 +101,8 @@ tasks.register("dist", Sync) {
 		}
 	}
 	from(layout.buildDirectory.dir("libs")) {
-		include("*-resourcepack.zip", "*-resourcepack.zip.sha1")
+		// Only this version's pack: build/libs keeps the packs of earlier versions of the mod.
+		include("worldevents-${distModVersion}+${distVersion}-resourcepack.zip", "worldevents-${distModVersion}+${distVersion}-resourcepack.zip.sha1")
 	}
 	into(rootProject.file("../../dist/${distVersion}"))
 }

@@ -4,7 +4,7 @@ Valores para el formulario de Modrinth o CurseForge, en inglés como la página 
 
 - **Release channel / Release type:** Release
 - **Environment:** server (required), client (optional). El mod va solo en el servidor; los clientes vanilla pueden entrar. En CurseForge, marca *Server* y *Client*.
-- **Changelog:** el texto de abajo, según la versión.
+- **Changelog:** el de abajo, según la versión de Minecraft.
 
 ## 26.1.2
 
@@ -14,9 +14,29 @@ Valores para el formulario de Modrinth o CurseForge, en inglés como la página 
 | `26.1.2/worldevents-neoforge-26.1.2-1.0.0.jar` | World Omens 1.0.0 for NeoForge 26.1.2 | `1.0.0+26.1.2-neoforge` | NeoForge | 26.1.2 | 25 | NeoForge 26.1.2.126+ |
 | `26.1.2/worldevents-forge-26.1.2-1.0.0.jar` | World Omens 1.0.0 for Forge 26.1.2 | `1.0.0+26.1.2-forge` | Forge | 26.1.2 | 25 | Forge 64.1.5+ |
 
-Changelog:
+**Changelog** (el mismo para Fabric, NeoForge y Forge; en Fabric añade al final la línea de Fabric API):
 
-> First release for Minecraft 26.1.2. Same content as World Omens 1.0.0: ten random events, eleven creatures with four bosses, event relics, Event Seals and the advancement tab. Server-side: players can join with vanilla Minecraft.
+```markdown
+## World Omens 1.0.0 for Minecraft 26.1.2
+
+First release for Minecraft 26.1.2, on Fabric, NeoForge and Forge. Same content as World Omens 1.0.0.
+
+### Events
+- Ten random events: Blood Moon, Gold Rush, Meteor Shower, Thunderstorm, Blessed Harvest, Merchant Caravan, Horde, Treasure Hunt, Eruption (Nether) and Void Storm (End).
+- A warning one minute before an event starts, and a boss bar with the time left while it lasts.
+
+### Creatures and items
+- Eleven creatures with their own 3D models, four of them bosses: the Blood Moon Lord, the Horde Warlord, the Spectral Captain and the Magma Colossus.
+- Thirteen items to find, among them the relics: Blood Scythe, Starfall Pickaxe, Warlord's Axe, Captain's Cutlass and Colossus Hammer.
+- Every event awards points and Event Seals, which the Nomad Merchant trades for relics.
+
+### Also
+- An advancement tab, a config file (`config/worldevents.json`) and the `/worldevents` command (alias `/eventos`).
+- English and Spanish, in each player's own language.
+- Server-side: players can join with vanilla Minecraft. The optional resource pack adds the textures and 3D models.
+```
+
+Solo en Fabric, al final: `- Requires Fabric API.`
 
 ## 1.21.11
 
@@ -26,9 +46,29 @@ Changelog:
 | `1.21.11/worldevents-neoforge-1.21.11-1.0.0.jar` | World Omens 1.0.0 for NeoForge 1.21.11 | `1.0.0+1.21.11-neoforge` | NeoForge | 1.21.11 | 21 | NeoForge 21.11.48+ |
 | `1.21.11/worldevents-forge-1.21.11-1.0.0.jar` | World Omens 1.0.0 for Forge 1.21.11 | `1.0.0+1.21.11-forge` | Forge | 1.21.11 | 21 | Forge 61.2.4+ |
 
-Changelog:
+**Changelog** (el mismo para Fabric, NeoForge y Forge; en Fabric añade al final la línea de Fabric API):
 
-> First release for Minecraft 1.21.11. Same content as World Omens 1.0.0: ten random events, eleven creatures with four bosses, event relics, Event Seals and the advancement tab. Server-side: players can join with vanilla Minecraft.
+```markdown
+## World Omens 1.0.0 for Minecraft 1.21.11
+
+First release for Minecraft 1.21.11, on Fabric, NeoForge and Forge. Same content as World Omens 1.0.0.
+
+### Events
+- Ten random events: Blood Moon, Gold Rush, Meteor Shower, Thunderstorm, Blessed Harvest, Merchant Caravan, Horde, Treasure Hunt, Eruption (Nether) and Void Storm (End).
+- A warning one minute before an event starts, and a boss bar with the time left while it lasts.
+
+### Creatures and items
+- Eleven creatures with their own 3D models, four of them bosses: the Blood Moon Lord, the Horde Warlord, the Spectral Captain and the Magma Colossus.
+- Thirteen items to find, among them the relics: Blood Scythe, Starfall Pickaxe, Warlord's Axe, Captain's Cutlass and Colossus Hammer.
+- Every event awards points and Event Seals, which the Nomad Merchant trades for relics.
+
+### Also
+- An advancement tab, a config file (`config/worldevents.json`) and the `/worldevents` command (alias `/eventos`).
+- English and Spanish, in each player's own language.
+- Server-side: players can join with vanilla Minecraft. The optional resource pack adds the textures and 3D models.
+```
+
+Solo en Fabric, al final: `- Requires Fabric API.`
 
 ## Resource packs (los .zip)
 
@@ -43,7 +83,13 @@ Son opcionales: dan a los ítems y criaturas sus texturas y modelos 3D. Hay dos 
 | `1.21.11/worldevents-1.0.0+1.21.11-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 1.21.11 | `1.0.0+1.21.11` | Minecraft (resource pack) | 1.21.11 |
 
 - **Release channel:** Release
-- **Changelog:** First release: textures and 3D models for the items and creatures of World Omens 1.0.0 on Minecraft 26.1.2. (o 1.21.11)
+- **Changelog** (cambia 26.1.2 por 1.21.11 en el otro):
+
+```markdown
+## World Omens Resource Pack 1.0.0 for Minecraft 26.1.2
+
+First release: textures and 3D models for every World Omens 1.0.0 item and creature, and their names in English and Spanish.
+```
 - **Descripción del proyecto:**
 
 > Optional resource pack for World Omens. It gives the mod's items and creatures their own textures and 3D models, and names them in each player's language. Without it, everything still works: items look like their vanilla base item and creatures show up as a floating block with their name.

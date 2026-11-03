@@ -95,7 +95,7 @@ Una pestaña propia, «Eventos del mundo»: sobrevivir a una luna de sangre, der
 
 ## Instalación
 
-1. Servidor con Fabric Loader y Fabric API para la versión de Minecraft del mod.
+1. Servidor con Fabric (y Fabric API), NeoForge o Forge, en una de las [versiones de Minecraft](#versiones-de-minecraft) del mod.
 2. Copia el `.jar` en la carpeta `mods/` del servidor.
 3. Arranca el servidor: se crea `config/worldevents.json`.
 
@@ -113,6 +113,38 @@ Da a los ítems y criaturas su aspecto propio (texturas, modelos 3D) y traduce s
   ```
   Al entrar, a cada jugador se le pregunta si quiere descargarlo.
 - **Un jugador**: no hace falta; el mod carga el aspecto él solo.
+
+## Versiones de Minecraft
+
+| Minecraft | Fabric | NeoForge | Forge | Java |
+|---|---|---|---|---|
+| 26.3 | ✓ | | | 25 |
+| 26.1.2 | ✓ | ✓ | ✓ | 25 |
+| 1.21.11 | ✓ | ✓ | ✓ | 21 |
+| 1.18.2 | ✓ | — | ✓ | 17 |
+| 1.16.5 | ✓ | — | ✓ | 8 |
+
+En Fabric hace falta Fabric API. NeoForge empezó en 1.20, así que no hay versión de NeoForge para 1.18.2 ni 1.16.5.
+
+El código de 26.3 está en `src/`. El de las demás versiones está en `versions/<versión>/`: `common/` con el código del mod y una carpeta por loader con lo que lo engancha a ese loader. Los archivos terminados de cada versión (un jar por loader y el resource pack) están en `dist/<versión>/`, y `dist/UPLOAD.md` tiene los datos para publicarlos.
+
+1.18.2 y 1.16.5 no tienen entidades de visualización ni componentes de ítems, así que en ellas:
+
+- Las criaturas son soportes de armadura invisibles que siguen al mob y llevan el modelo en la cabeza. Tienen el tamaño del mob de base, así que a las más grandes se les pega más abajo.
+- Los ítems guardan su nombre y su descripción en el NBT, en el idioma de quien los recibe, y los logros están en inglés.
+- El espíritu de la cosecha es un loro (no existe el allay), la comida se come al momento con clic derecho y la espera de las habilidades se ve en todos los ítems del mismo tipo.
+- En 1.16.5 no hay minerales en bruto ni cobre: los meteoritos dejan lingotes y carbón, y el pico estelar funde mineral de hierro, de oro y escombros ancestrales. Sus jars funcionan con Java 8.
+
+### Compilar
+
+```bash
+./gradlew -p versions/<versión> dist
+```
+
+Deja los jars y el resource pack de esa versión en `dist/<versión>/` (26.3 se compila con `./gradlew build` en la raíz). Gradle tiene que correr con Java 25, y los JDK 8, 17 y 21 tienen que estar instalados también: Gradle los busca solo. El Forge de 1.18.2 es un build aparte con ForgeGradle 6 (Gradle 8.8) y el de 1.16.5 usa Architectury Loom; `dist` los lanza.
+
+- `tools/legacy_resources.py` genera los recursos de 1.18.2 y 1.16.5 a partir de los de `src/main/resources`.
+- `versions/smoketest/` es una prueba de humo para un servidor dedicado: invoca todas las criaturas, mina con el pico estelar y empieza y para cada evento (`run.sh`).
 
 ## Comandos
 
@@ -183,7 +215,7 @@ Español e inglés. Cada jugador ve los textos en el idioma de su juego (si no e
 
 ## English
 
-Random world events for Minecraft servers (Fabric): blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions and End void storms, with their own creatures and bosses.
+Random world events for Minecraft servers (Fabric, NeoForge and Forge): blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions and End void storms, with their own creatures and bosses.
 
 **Server-side only.** Install it on the server; players join with vanilla Minecraft and see everything (boss bars, titles, vanilla particles and sounds). Singleplayer works too.
 
@@ -206,7 +238,9 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Items:** Meteorite Fragment (Haste II and Night Vision), Lucky Nugget (Luck and Haste), Bloody Tear (summons a blood moon at night), Blood Scythe (heavy weapon with lifesteal), Starfall Pickaxe (smelts ores as you mine), Bottled Lightning (calls a lightning bolt where you look), Golden Seed (ripens all the crops around at once), Warlord's Axe (heavy axe whose war cry gives you and nearby players Strength and Speed), Captain's Cutlass (quick sword that lunges forward), Magma Heart (Fire Resistance and Strength), Colossus Hammer (heavy mace that sets its target on fire), Unstable Pearl (blinks you forward) and Event Seal (currency for relics). They are vanilla items with their own name, description and effects, so they work on any client. There is also an advancement tab for the events.
 
-**Install:** Fabric Loader and Fabric API on the server, drop the `.jar` into `mods/`. Players install nothing.
+**Install:** Fabric (with Fabric API), NeoForge or Forge on the server, drop the `.jar` into `mods/`. Players install nothing.
+
+**Versions:** Minecraft 26.3 (Fabric), 26.1.2 and 1.21.11 (Fabric, NeoForge and Forge), 1.18.2 and 1.16.5 (Fabric and Forge; NeoForge does not exist there). The 26.3 code is in `src/`, the other versions are in `versions/<version>/`, and the finished jars and resource packs are in `dist/<version>/`; build one with `./gradlew -p versions/<version> dist`. On 1.18.2 and 1.16.5 creatures are invisible armor stands that wear the model, item names are in the language of whoever gets them, advancements are in English, and a few items work slightly differently (see `dist/UPLOAD.md`). The 1.16.5 jars run on Java 8.
 
 **Optional resource pack:** gives the items and mobs their own textures and 3D models and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
 

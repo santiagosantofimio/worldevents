@@ -30,18 +30,27 @@ Changelog:
 
 > First release for Minecraft 1.21.11. Same content as World Omens 1.0.0: ten random events, eleven creatures with four bosses, event relics, Event Seals and the advancement tab. Server-side: players can join with vanilla Minecraft.
 
-## Resource packs
+## Resource packs (los .zip)
 
-Súbelos como archivo adicional de cada versión del mod (en Modrinth, *Additional files*), o como proyecto aparte de tipo *Resource Pack*:
+Son opcionales: dan a los ítems y criaturas sus texturas y modelos 3D. Hay dos formas de subirlos:
 
-| Archivo | Nombre | Game version |
-|---|---|---|
-| `26.1.2/worldevents-1.0.0+26.1.2-resourcepack.zip` | World Omens Resource Pack 1.0.0 (26.1.2) | 26.1.2 |
-| `1.21.11/worldevents-1.0.0+1.21.11-resourcepack.zip` | World Omens Resource Pack 1.0.0 (1.21.11) | 1.21.11 |
+- **Modrinth, lo más sencillo:** como *Additional file* en cada versión del mod de la misma versión de Minecraft (el zip de 26.1.2 en las tres versiones del mod para 26.1.2, y lo mismo con 1.21.11). No pide más datos.
+- **Como proyecto aparte** de tipo *Resource Pack* (en CurseForge es la única opción), con estos datos:
 
-Descripción del resource pack:
+| Archivo | Version name | Version number | Loader | Game version |
+|---|---|---|---|---|
+| `26.1.2/worldevents-1.0.0+26.1.2-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 26.1.2 | `1.0.0+26.1.2` | Minecraft (resource pack) | 26.1.2 |
+| `1.21.11/worldevents-1.0.0+1.21.11-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 1.21.11 | `1.0.0+1.21.11` | Minecraft (resource pack) | 1.21.11 |
 
-> Optional resource pack for World Omens: gives the mod's items and creatures their own textures and 3D models, and their names in each player's language. Servers can send it to players through `resource-pack` in `server.properties` (its SHA-1 is in the `.sha1` file next to it).
+- **Release channel:** Release
+- **Changelog:** First release: textures and 3D models for the items and creatures of World Omens 1.0.0 on Minecraft 26.1.2. (o 1.21.11)
+- **Descripción del proyecto:**
+
+> Optional resource pack for World Omens. It gives the mod's items and creatures their own textures and 3D models, and names them in each player's language. Without it, everything still works: items look like their vanilla base item and creatures show up as a floating block with their name.
+>
+> Server owners can send it to every player: upload the zip somewhere with a direct download link and set `resource-pack` (and `resource-pack-sha1`) in `server.properties`. In singleplayer you don't need it: the mod loads it by itself.
+
+Los `.sha1` no se suben: son el hash del zip, para poner en `resource-pack-sha1` en `server.properties`.
 
 ## Comprobado
 

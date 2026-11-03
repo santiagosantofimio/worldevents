@@ -85,3 +85,23 @@ tasks.register("resourcePack", Zip) {
 		logger.lifecycle("Resource pack: ${file.name} (sha1 ${sha1})")
 	}
 }
+
+// The finished files, ready to upload: every loader's jar and the resource pack, in dist/<minecraft version>/ at the
+// top of the repository. Run with: ./gradlew -p versions/<minecraft version> dist
+def distVersion = project.minecraft_version
+def distModVersion = project.version
+tasks.register("dist", Sync) {
+	group = "build"
+	description = "Builds every loader's jar and the resource pack into dist/${distVersion}."
+	dependsOn("resourcePack")
+	subprojects.each { sub ->
+		dependsOn("${sub.path}:assemble")
+		from(sub.layout.buildDirectory.dir("libs")) {
+			include("worldevents-${sub.name}-${distVersion}-${distModVersion}.jar")
+		}
+	}
+	from(layout.buildDirectory.dir("libs")) {
+		include("*-resourcepack.zip", "*-resourcepack.zip.sha1")
+	}
+	into(rootProject.file("../../dist/${distVersion}"))
+}

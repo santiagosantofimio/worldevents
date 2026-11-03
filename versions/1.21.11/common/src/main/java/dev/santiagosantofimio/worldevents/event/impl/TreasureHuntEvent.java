@@ -365,7 +365,8 @@ public final class TreasureHuntEvent implements WorldEvent {
 			}
 			Vec3 look = player.getLookAngle();
 			player.setDeltaMovement(look.x * LUNGE_STRENGTH, Math.max(look.y * LUNGE_STRENGTH / 2.0, 0.3), look.z * LUNGE_STRENGTH);
-			player.needsSync = true;
+			// A player moves on their own client, which only feels the push if the velocity is sent to it.
+			player.hurtMarked = true;
 			level.sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 0.5, player.getZ(), 10, 0.3, 0.2, 0.3, 0.02);
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0f, 1.2f);
 			player.getCooldowns().addCooldown(EventItems.LUNGE, LUNGE_COOLDOWN_SECONDS * 20);

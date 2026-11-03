@@ -99,6 +99,24 @@ tasks.named("assemble") {
 	dependsOn(resourcePack)
 }
 
+// The finished files, ready to upload, named like the other Minecraft versions' (versions/): dist/26.3/ at the top
+// of the repository. Run with: ./gradlew dist
+def distVersion = project.minecraft_version
+tasks.register("dist", Sync) {
+	group = "build"
+	description = "Builds the jar and the resource pack into dist/${distVersion}."
+	dependsOn("assemble")
+	from(layout.buildDirectory.dir("libs")) {
+		include("worldevents-${modVersion}.jar")
+		rename { "worldevents-fabric-${distVersion}-${modVersion}.jar" }
+	}
+	from(layout.buildDirectory.dir("libs")) {
+		include("worldevents-${modVersion}-resourcepack.zip", "worldevents-${modVersion}-resourcepack.zip.sha1")
+		rename { name -> name.replace("worldevents-${modVersion}-", "worldevents-${modVersion}+${distVersion}-") }
+	}
+	into(file("dist/${distVersion}"))
+}
+
 jar {
 	def projectName = project.name
 	inputs.property "projectName", projectName

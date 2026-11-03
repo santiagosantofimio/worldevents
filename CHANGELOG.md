@@ -4,6 +4,29 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-11-03
+
+Fixes from players' feedback.
+
+### Fixed
+
+- **Captain's Cutlass**: its lunge now moves the player. The push only happened on the server and
+  never reached the player's game, so the lunge did nothing but start its cooldown. The same went
+  for the Magma Colossus's slam and the eruption's geysers, which now also throw players.
+  (26.3, 26.1.2 and 1.21.11; 1.18.2 and 1.16.5 were fine.)
+- **Magma Colossus**: it attacks. It now always goes after the nearest player within 32 blocks,
+  even one it can't see, and no longer calms down and lets go of its prey near nether portals,
+  respawn anchors or warped fungus, as a vanilla hoglin does.
+- **Magma Colossus**: it no longer burns or takes damage from fire and lava (hidden, permanent fire
+  resistance; colossi from 1.0.0 get it too).
+- **Magma Colossus**: it no longer spawns stuck half inside the ground on uneven terrain or inside a
+  hill. Twice a hoglin's size, it now looks for a spot with room for it, up to 10 blocks away, and
+  gets out by itself if it ever ends up inside blocks.
+- **Magma Colossus** (1.18.2 and 1.16.5): its ground slam never went off; now it does.
+- Relic weapons (Blood Scythe, Starfall Pickaxe, Warlord's Axe, Captain's Cutlass and Colossus
+  Hammer) show their own sprite in hand, like vanilla tools, instead of 3D models that were too big
+  and blocky in first person and odd in other players' hands. 1.18.2 and 1.16.5 already did.
+
 ## [1.0.0] - 2026-11-01
 
 First public release.

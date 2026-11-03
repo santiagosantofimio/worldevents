@@ -1,0 +1,17 @@
+{
+	"parent": "minecraft:item/template_spawn_egg",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 5189750
+			},
+			"model": "worldevents:item/storm_spirit"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 8407261
+			},
+			"model": "worldevents:item/blood_eye"
+		}
+	]
+}

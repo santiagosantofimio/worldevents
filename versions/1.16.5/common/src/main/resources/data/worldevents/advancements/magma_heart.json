@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:magma_cream",
+			"nbt": "{CustomModelData:3312799}"
+		},
+		"title": {
+			"text": "Heart of Fire"
+		},
+		"description": {
+			"text": "Get a magma heart during an eruption"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:magma_cream",
+						"nbt": "{worldevents_item:\"magma_heart\"}"
+					}
+				]
+			}
+		}
+	}
+}

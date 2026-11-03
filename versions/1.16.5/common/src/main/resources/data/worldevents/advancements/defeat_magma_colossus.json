@@ -1,0 +1,23 @@
+{
+	"parent": "worldevents:magma_heart",
+	"display": {
+		"icon": {
+			"item": "minecraft:magma_block",
+			"nbt": "{CustomModelData:7347828}"
+		},
+		"title": {
+			"text": "Cooled Down"
+		},
+		"description": {
+			"text": "Defeat the Magma Colossus"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

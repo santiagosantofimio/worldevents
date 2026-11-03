@@ -79,7 +79,7 @@ Solo en Fabric, al final: `- Requires Fabric API.`
 
 NeoForge no existe para 1.18.2.
 
-**Changelog** (Markdown, para Modrinth; en CurseForge, el mismo texto sin los `#`, `-` y comillas invertidas, como en la sección de CurseForge):
+**Changelog** (Markdown, para Modrinth; en CurseForge, la versión en texto plano de la sección de CurseForge):
 
 ```markdown
 ## World Omens 1.0.0 for Minecraft 1.18.2
@@ -97,6 +97,52 @@ First release for Minecraft 1.18.2, on Fabric and Forge. The same ten events, el
 
 Solo en Fabric, al final: `- Requires Fabric API.`
 
+## 1.16.5
+
+| Archivo | Version name | Version number | Loader | Game version | Java | Dependencias |
+|---|---|---|---|---|---|---|
+| `1.16.5/worldevents-fabric-1.16.5-1.0.0.jar` | World Omens 1.0.0 for Fabric 1.16.5 | `1.0.0+1.16.5-fabric` | Fabric | 1.16.5 | 8 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `1.16.5/worldevents-forge-1.16.5-1.0.0.jar` | World Omens 1.0.0 for Forge 1.16.5 | `1.0.0+1.16.5-forge` | Forge | 1.16.5 | 8 | Forge 36.2.42+ |
+
+NeoForge no existe para 1.16.5. Los dos jars funcionan con Java 8 (y con versiones más nuevas).
+
+**Changelog** (Markdown, para Modrinth; en CurseForge, la versión en texto plano de abajo):
+
+```markdown
+## World Omens 1.0.0 for Minecraft 1.16.5
+
+First release for Minecraft 1.16.5, on Fabric and Forge. The same ten events, eleven creatures and relics as World Omens 1.0.0, with a few differences, as 1.16.5 lacks some of what the mod uses on newer versions:
+
+- Creatures show their 3D models through invisible armor stands. They keep the size of the vanilla mob underneath, so the biggest ones are easier to hit low.
+- The Harvest Spirit is a parrot underneath, since 1.16.5 has no allay.
+- Item and creature names are in the language of the player who gets them, and advancements are in English.
+- Food items (Meteorite Fragment, Lucky Nugget, Magma Heart) are eaten at once with a right-click.
+- The war cry, lunge and blink cooldowns show on every item of the same kind (every diamond axe, for the war cry).
+- There are no raw ores or copper in 1.16.5: meteors drop iron and gold ingots and coal, the Starfall Pickaxe smelts iron and gold ore and ancient debris, and the Meteorite Fragment is an iron nugget underneath.
+- The Colossus Hammer is a netherite axe and Event Seals are nautilus shells underneath.
+- Server-side: players can join with vanilla Minecraft 1.16.5. The optional resource pack adds the textures and 3D models.
+```
+
+Solo en Fabric, al final: `- Requires Fabric API.`
+
+En CurseForge (texto plano; en Fabric añade la última línea):
+
+```text
+World Omens 1.0.0 for Minecraft 1.16.5
+
+First release for Minecraft 1.16.5, on Fabric and Forge. The same ten events, eleven creatures and relics as World Omens 1.0.0, with a few differences, as 1.16.5 lacks some of what the mod uses on newer versions:
+
+- Creatures show their 3D models through invisible armor stands. They keep the size of the vanilla mob underneath, so the biggest ones are easier to hit low.
+- The Harvest Spirit is a parrot underneath, since 1.16.5 has no allay.
+- Item and creature names are in the language of the player who gets them, and advancements are in English.
+- Food items (Meteorite Fragment, Lucky Nugget, Magma Heart) are eaten at once with a right-click.
+- The war cry, lunge and blink cooldowns show on every item of the same kind (every diamond axe, for the war cry).
+- There are no raw ores or copper in 1.16.5: meteors drop iron and gold ingots and coal, the Starfall Pickaxe smelts iron and gold ore and ancient debris, and the Meteorite Fragment is an iron nugget underneath.
+- The Colossus Hammer is a netherite axe and Event Seals are nautilus shells underneath.
+- Server-side: players can join with vanilla Minecraft 1.16.5. The optional resource pack adds the textures and 3D models.
+- Requires Fabric API.
+```
+
 ## Resource packs (los .zip)
 
 Son opcionales: dan a los ítems y criaturas sus texturas y modelos 3D. Hay dos formas de subirlos:
@@ -109,9 +155,10 @@ Son opcionales: dan a los ítems y criaturas sus texturas y modelos 3D. Hay dos 
 | `26.1.2/worldevents-1.0.0+26.1.2-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 26.1.2 | `1.0.0+26.1.2` | Minecraft (resource pack) | 26.1.2 |
 | `1.21.11/worldevents-1.0.0+1.21.11-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 1.21.11 | `1.0.0+1.21.11` | Minecraft (resource pack) | 1.21.11 |
 | `1.18.2/worldevents-1.0.0+1.18.2-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 1.18.2 | `1.0.0+1.18.2` | Minecraft (resource pack) | 1.18.2 |
+| `1.16.5/worldevents-1.0.0+1.16.5-resourcepack.zip` | World Omens Resource Pack 1.0.0 for 1.16.5 | `1.0.0+1.16.5` | Minecraft (resource pack) | 1.16.5 |
 
 - **Release channel:** Release
-- **Changelog** (cambia 26.1.2 por 1.21.11 en el otro):
+- **Changelog** (cambia 26.1.2 por la versión de cada zip):
 
 ```markdown
 ## World Omens Resource Pack 1.0.0 for Minecraft 26.1.2
@@ -180,4 +227,4 @@ First release: textures and 3D models for every World Omens 1.0.0 item and creat
 
 ## Comprobado
 
-Todos los jars se han probado en servidores dedicados reales: criaturas, los diez eventos, el botín y la entrada de un cliente vanilla (que ve las criaturas, recibe ítems y no es expulsado). En Fabric 26.1.2 y 1.21.11, además, pasan los 31 game tests. No se ha probado el lado del cliente con el mod instalado (la pestaña de creativo).
+Todos los jars se han probado en servidores dedicados reales (los de 1.16.5, con Java 8): criaturas, los diez eventos, el botín y la entrada de un cliente vanilla (que ve las criaturas, recibe ítems y no es expulsado). En Fabric 26.1.2 y 1.21.11, además, pasan los 31 game tests. No se ha probado el lado del cliente con el mod instalado (la pestaña de creativo).

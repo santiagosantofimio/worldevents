@@ -1,0 +1,23 @@
+{
+	"parent": "worldevents:lucky_nugget",
+	"display": {
+		"icon": {
+			"item": "minecraft:gold_block",
+			"nbt": "{CustomModelData:7756409}"
+		},
+		"title": {
+			"text": "Pop Goes the Sack"
+		},
+		"description": {
+			"text": "Catch a mimic sack before it escapes"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

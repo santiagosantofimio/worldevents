@@ -14,3 +14,4 @@ Una carpeta por versión de Minecraft, con el jar de cada loader y el resource p
 - `worldevents-<loader>-<versión>-<versión del mod>.jar`: el mod. En Fabric hay que marcar **Fabric API** como dependencia; NeoForge y Forge no necesitan nada más.
 - `worldevents-<versión del mod>+<versión>-resourcepack.zip`: el resource pack opcional (modelos y texturas), con su SHA-1 en el `.sha1` para `server.properties`.
 - `description.md`: la descripción para la página del mod.
+- `UPLOAD.md`: nombre, número de versión, changelog y dependencias de cada archivo, para el formulario de subida.

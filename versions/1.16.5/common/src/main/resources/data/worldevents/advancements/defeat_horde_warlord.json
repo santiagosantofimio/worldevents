@@ -1,0 +1,23 @@
+{
+	"parent": "worldevents:survive_horde",
+	"display": {
+		"icon": {
+			"item": "minecraft:chiseled_polished_blackstone",
+			"nbt": "{CustomModelData:6981083}"
+		},
+		"title": {
+			"text": "Fallen Warlord"
+		},
+		"description": {
+			"text": "Defeat the Horde Warlord"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

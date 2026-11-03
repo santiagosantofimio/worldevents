@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:iron_nugget",
+			"nbt": "{CustomModelData:8618416}"
+		},
+		"title": {
+			"text": "Stardust"
+		},
+		"description": {
+			"text": "Pick up a meteorite fragment"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:iron_nugget",
+						"nbt": "{worldevents_item:\"meteorite_fragment\"}"
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,30 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+	id 'xyz.wagyourtail.jvmdowngrader' version "${jvmdg_version}"
+}
+
+// 1.16.5 runs on Java 8: the code is compiled with Java 17, its classes are turned into Java 8 ones (with the Java
+// library parts they use copied in), and only then remapped to the names Minecraft has at runtime.
+jvmdg.downgradeTo = JavaVersion.VERSION_1_8
+remapJar {
+	inputFile = tasks.named('shadeDowngradedApi').flatMap { it.archiveFile }
+}
+
+loom {
+	accessWidenerPath = file('src/main/resources/worldevents.accesswidener')
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+	def props = [version: project.version, minecraft_version: project.minecraft_version, loader_version: project.loader_version, java_version: project.java_runtime_version]
+	inputs.properties props
+	filesMatching("fabric.mod.json") {
+		expand props
+	}
+}

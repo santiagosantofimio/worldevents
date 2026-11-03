@@ -1,0 +1,77 @@
+plugins {
+	id 'dev.architectury.loom' version '1.17.493'
+	id 'xyz.wagyourtail.jvmdowngrader' version '2.0.1'
+}
+
+// The versions every loader of 1.16.5 shares.
+def shared = new Properties()
+file('../gradle.properties').withInputStream { shared.load(it) }
+def mcVersion = shared.minecraft_version
+def forgeVersion = shared.forge_version
+def javaVersion = shared.java_version as int
+
+version = shared.version
+group = shared.group
+
+base {
+	archivesName = "worldevents-forge-${mcVersion}"
+}
+
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+}
+
+sourceSets.main {
+	java.srcDir('../common/src/main/java')
+	resources.srcDir('../common/src/main/resources')
+}
+
+loom {
+	silentMojangMappingsLicense()
+	accessWidenerPath = file('src/main/resources/worldevents.accesswidener')
+	forge {
+		// Forge reads access transformers: the access widener is turned into one, with Forge's runtime names.
+		convertAccessWideners = true
+		extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+	}
+}
+
+repositories {
+	maven {
+		name = 'MinecraftForge'
+		url = 'https://maven.minecraftforge.net/'
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${mcVersion}"
+	mappings loom.officialMojangMappings()
+	forge "net.minecraftforge:forge:${forgeVersion}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release = javaVersion
+}
+
+processResources {
+	def props = [version: project.version, minecraft_version: mcVersion, forge_version: forgeVersion.split('-')[1],
+			data_format: shared.data_pack_format, resource_format: shared.resource_pack_format]
+	inputs.properties props
+	filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+		expand props
+	}
+}
+
+jar {
+	from('../../../LICENSE') {
+		rename { "${it}_worldevents" }
+	}
+}
+
+// 1.16.5 runs on Java 8: the code is compiled with Java 17, its classes are turned into Java 8 ones (with the Java
+// library parts they use copied in), and only then remapped to the names Forge has at runtime.
+jvmdg.downgradeTo = JavaVersion.VERSION_1_8
+remapJar {
+	inputFile = tasks.named('shadeDowngradedApi').flatMap { it.archiveFile }
+}

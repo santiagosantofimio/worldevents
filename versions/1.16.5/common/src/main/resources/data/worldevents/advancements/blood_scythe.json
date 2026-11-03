@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:defeat_blood_moon_lord",
+	"display": {
+		"icon": {
+			"item": "minecraft:diamond_sword",
+			"nbt": "{CustomModelData:1970236}"
+		},
+		"title": {
+			"text": "Reaper"
+		},
+		"description": {
+			"text": "Get the Blood Scythe"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:diamond_sword",
+						"nbt": "{worldevents_item:\"blood_scythe\"}"
+					}
+				]
+			}
+		}
+	}
+}

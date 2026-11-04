@@ -9,7 +9,7 @@ file = "META-INF/accesstransformer.cfg"
 [[mods]]
 modId = "worldevents"
 version = "${version}"
-displayName = "World Events"
+displayName = "World Omens"
 authors = "Santiago Santofimio"
 displayURL = "https://github.com/santiagosantofimio/worldevents"
 logoFile = "assets/worldevents/icon.png"

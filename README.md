@@ -1,6 +1,6 @@
-# World Events
+# World Omens
 
-*Nombre de trabajo.* · [English below](#english)
+[English below](#english)
 
 Eventos aleatorios que dan vida a tu servidor de Minecraft: lunas de sangre, fiebres del oro, lluvias de meteoritos, tormentas eléctricas, cosechas benditas, caravanas de mercaderes, hordas, cazas del tesoro, erupciones en el Nether y tormentas del vacío en el End, con criaturas y jefes propios.
 
@@ -55,7 +55,7 @@ Ids: `blood_moon_lord`, `blood_eye`, `mimic_sack`, `living_meteorite`, `storm_sp
 
 ### Pestaña de creativo
 
-En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña **Eventos del mundo** en el inventario de creativo, con todos los ítems y los huevos. Un cliente vanilla no la ve, porque es parte de la interfaz del cliente; en un servidor, lo mismo se consigue con `/worldevents give` y `/worldevents summon`.
+En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña **World Omens** en el inventario de creativo, con todos los ítems y los huevos. Un cliente vanilla no la ve, porque es parte de la interfaz del cliente; en un servidor, lo mismo se consigue con `/worldevents give` y `/worldevents summon`.
 
 ## Ítems
 
@@ -81,7 +81,7 @@ Son ítems vanilla con nombre, descripción y efectos propios: funcionan en cual
 
 ## Logros
 
-Una pestaña propia, «Eventos del mundo»: sobrevivir a una luna de sangre, derrotar al Señor, conseguir la guadaña, recoger un fragmento de meteorito, conseguir el Pico estelar, encontrar una pepita de la suerte, atrapar un saco mimético, derrotar a un espíritu de la tormenta, conseguir un rayo embotellado, conseguir una semilla dorada, comerciar con un mercader nómada, vencer a una horda, derrotar al Caudillo y conseguir su hacha, encontrar el tesoro, derrotar al Capitán y conseguir su sable, conseguir un corazón de magma, derrotar al Coloso y conseguir su martillo, y derrotar a un acechador y conseguir una perla inestable.
+Una pestaña propia, «World Omens»: sobrevivir a una luna de sangre, derrotar al Señor, conseguir la guadaña, recoger un fragmento de meteorito, conseguir el Pico estelar, encontrar una pepita de la suerte, atrapar un saco mimético, derrotar a un espíritu de la tormenta, conseguir un rayo embotellado, conseguir una semilla dorada, comerciar con un mercader nómada, vencer a una horda, derrotar al Caudillo y conseguir su hacha, encontrar el tesoro, derrotar al Capitán y conseguir su sable, conseguir un corazón de magma, derrotar al Coloso y conseguir su martillo, y derrotar a un acechador y conseguir una perla inestable.
 
 ## Sin destrozos
 
@@ -244,7 +244,7 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Optional resource pack:** gives the items and mobs their own textures and 3D models and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
 
-**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Events** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
+**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
 
 **Commands** (`/worldevents`, alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only).
 

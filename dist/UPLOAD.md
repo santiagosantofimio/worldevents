@@ -38,6 +38,7 @@ Fixes from players' feedback.
 - The Magma Colossus no longer burns or takes damage from fire and lava.
 - The Magma Colossus no longer spawns stuck in the ground on uneven terrain, and gets itself out if it ever ends up inside blocks.
 - Relic weapons show their own sprite in hand, like vanilla tools, instead of 3D models that were too big in first person. Update the resource pack to see it.
+- The mod is now called World Omens in game too (mod list, creative tab and advancement tab), as on this page.
 ```
 
 Solo en Fabric, al final: `- Requires Fabric API.`
@@ -54,6 +55,7 @@ Fixes from players' feedback.
 - The Magma Colossus no longer burns or takes damage from fire and lava.
 - The Magma Colossus no longer spawns stuck in the ground on uneven terrain, and gets itself out if it ever ends up inside blocks.
 - Relic weapons show their own sprite in hand, like vanilla tools, instead of 3D models that were too big in first person. Update the resource pack to see it.
+- The mod is now called World Omens in game too (mod list, creative tab and advancement tab), as on this page.
 - Requires Fabric API.
 ```
 
@@ -72,6 +74,7 @@ Fixes from players' feedback.
 - The Magma Colossus's ground slam now works.
 - The Magma Colossus no longer burns or takes damage from fire and lava.
 - The Magma Colossus no longer spawns stuck in a hill when summoned there, and gets itself out if it ever ends up inside blocks.
+- The mod is now called World Omens in game too (mod list, creative tab and advancement tab), as on this page.
 ```
 
 Solo en Fabric, al final: `- Requires Fabric API.`
@@ -87,12 +90,13 @@ Fixes from players' feedback.
 - The Magma Colossus's ground slam now works.
 - The Magma Colossus no longer burns or takes damage from fire and lava.
 - The Magma Colossus no longer spawns stuck in a hill when summoned there, and gets itself out if it ever ends up inside blocks.
+- The mod is now called World Omens in game too (mod list, creative tab and advancement tab), as on this page.
 - Requires Fabric API.
 ```
 
 ## Resource packs (los .zip)
 
-Los de 26.3, 26.1.2 y 1.21.11 cambian (las armas en la mano). Los de 1.18.2 y 1.16.5 se ven igual que los de 1.0.0: subirlos es opcional.
+Los de 26.3, 26.1.2 y 1.21.11 cambian (las armas en la mano). Los de 1.18.2 y 1.16.5 se ven igual que los de 1.0.0 (solo cambia la descripción del pack, que ahora dice World Omens): subirlos es opcional.
 
 - **Modrinth:** como *Additional file* en cada versión del mod de la misma versión de Minecraft.
 - **Proyecto aparte** de tipo *Resource Pack* (en CurseForge es la única opción):

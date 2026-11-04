@@ -72,6 +72,6 @@ public final class WorldEventsMod {
 		Hooks.PLAYER_CHANGED_LEVEL.register(EventManager::onPlayerEnteredLevel);
 		// Commands are registered by the loader module, with WorldEventsCommand.register.
 
-		LOGGER.info("World Events loaded with {} events", EventRegistry.all().size());
+		LOGGER.info("World Omens loaded with {} events", EventRegistry.all().size());
 	}
 }

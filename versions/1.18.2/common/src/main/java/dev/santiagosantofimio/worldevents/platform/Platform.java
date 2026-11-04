@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 /** What the common code needs from the mod loader. Each loader module provides one through {@link ServiceLoader}. */
 public interface Platform {
 	Platform INSTANCE = ServiceLoader.load(Platform.class, Platform.class.getClassLoader()).findFirst()
-			.orElseThrow(() -> new IllegalStateException("No World Events platform found"));
+			.orElseThrow(() -> new IllegalStateException("No World Omens platform found"));
 
 	/** The loader's config folder. */
 	Path configDir();

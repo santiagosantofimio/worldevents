@@ -26,7 +26,7 @@ public class WorldEventsClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAB, FabricCreativeModeTab.builder()
-				.title(Component.translatableWithFallback("itemGroup." + WorldEventsMod.MOD_ID, "World Events"))
+				.title(Component.translatableWithFallback("itemGroup." + WorldEventsMod.MOD_ID, "World Omens"))
 				.icon(() -> EventItems.BLOOD_SCYTHE.create(language(), 1))
 				.displayItems((parameters, output) -> {
 					String language = language();

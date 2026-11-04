@@ -23,7 +23,7 @@ public class WorldEventsNeoForgeClient {
 
 	static {
 		TABS.register("items", () -> CreativeModeTab.builder()
-				.title(Component.translatableWithFallback("itemGroup." + WorldEventsMod.MOD_ID, "World Events"))
+				.title(Component.translatableWithFallback("itemGroup." + WorldEventsMod.MOD_ID, "World Omens"))
 				.icon(() -> EventItems.BLOOD_SCYTHE.create(language(), 1))
 				.displayItems((parameters, output) -> {
 					String language = language();

@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "worldevents",
 	"version": "${version}",
-	"name": "World Events",
+	"name": "World Omens",
 	"description": "Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.",
 	"authors": [
 		"Santiago Santofimio"

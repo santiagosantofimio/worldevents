@@ -76,6 +76,6 @@ public class WorldEventsMod implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
 				WorldEventsCommand.register(dispatcher));
 
-		LOGGER.info("World Events loaded with {} events", EventRegistry.all().size());
+		LOGGER.info("World Omens loaded with {} events", EventRegistry.all().size());
 	}
 }

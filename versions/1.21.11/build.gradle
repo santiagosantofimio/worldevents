@@ -1,4 +1,4 @@
-// World Events for Minecraft 26.1.2: one subproject per loader. The game code lives in common/ and every loader
+// World Omens for Minecraft 1.21.11: one subproject per loader. The game code lives in common/ and every loader
 // compiles it together with its own entry point and platform glue.
 def javaVersion = project.java_version as int
 

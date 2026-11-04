@@ -1,6 +1,6 @@
 {
 	"pack": {
-		"description": "World Events resources",
+		"description": "World Omens resources",
 		"min_format": ${data_format},
 		"max_format": ${data_format}
 	}

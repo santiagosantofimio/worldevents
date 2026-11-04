@@ -12,7 +12,7 @@
 		},
 		"title": {
 			"translate": "advancements.worldevents.root.title",
-			"fallback": "World Events"
+			"fallback": "World Omens"
 		},
 		"description": {
 			"translate": "advancements.worldevents.root.description",

@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 Fixes from players' feedback.
 
+### Changed
+
+- The mod is called **World Omens** in game too, as on its pages: in the mod list, the creative tab,
+  the advancement tab and the resource pack (also in Spanish). Its id (`worldevents`), the
+  `/worldevents` command and `config/worldevents.json` stay the same, so worlds and configs carry on.
+
 ### Fixed
 
 - **Captain's Cutlass**: its lunge now moves the player. The push only happened on the server and

@@ -15,7 +15,9 @@ import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
 import dev.santiagosantofimio.worldevents.event.impl.ThunderstormEvent;
 import dev.santiagosantofimio.worldevents.event.impl.TreasureHuntEvent;
 import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
+import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
+import dev.santiagosantofimio.worldevents.mob.MagmaColossus;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
@@ -116,6 +118,12 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			showMob(context, singleplayer, VoidStormEvent.ID, "worldevents_creature_void_stalker", 4,
 					(event, level, active, pos) -> ((VoidStormEvent) event).spawnStalker(level, active, pos, "es_es"));
 
+			// The biggest creature on its own, no event around it: from the front and three quarters. In creative, so
+			// it leaves the player alone.
+			singleplayer.getServer().runCommand("gamemode creative @a");
+			showSummoned(context, singleplayer, MagmaColossus.KIND, "worldevents_showcase_colossus_front", 9, 180.0f);
+			showSummoned(context, singleplayer, MagmaColossus.KIND, "worldevents_showcase_colossus_side", 9, 135.0f);
+
 			// The creative tab, with the special items and the creature eggs.
 			singleplayer.getServer().runCommand("gamemode creative @a");
 			context.waitTicks(5);
@@ -127,6 +135,32 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			context.takeScreenshot("worldevents_creative_tab");
 			context.setScreen(() -> null);
 		}
+	}
+
+	/** A summoned creature, still, {@code distance} blocks in front of the player and turned to {@code yaw}. */
+	private static void showSummoned(ClientGameTestContext context, TestSingleplayerContext singleplayer, Creature.Kind kind, String screenshot,
+			int distance, float yaw) {
+		singleplayer.getServer().runOnServer(server -> {
+			ServerPlayer player = server.getPlayerList().getPlayers().get(0);
+			player.clearFire();
+			Mob mob = Creature.summon(kind, player.level(), player.blockPosition().offset(0, 0, distance), "es_es", null);
+			if (mob != null) {
+				mob.setNoAi(true);
+				mob.setYRot(yaw);
+				mob.setYHeadRot(yaw);
+				mob.setYBodyRot(yaw);
+			}
+		});
+		context.getInput().lookAt(0.0f, 12.0f);
+		context.waitTicks(40);
+		context.takeScreenshot(screenshot);
+		singleplayer.getServer().runOnServer(server -> {
+			for (Mob mob : server.getPlayerList().getPlayers().get(0).level().getEntitiesOfClass(Mob.class,
+					server.getPlayerList().getPlayers().get(0).getBoundingBox().inflate(32.0), kind::is)) {
+				Creature.remove(mob);
+			}
+		});
+		context.waitTicks(5);
 	}
 
 	private static void showMob(ClientGameTestContext context, TestSingleplayerContext singleplayer, String eventId, String screenshot,

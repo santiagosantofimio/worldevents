@@ -258,6 +258,32 @@ def meteorite_fragment():
     return s.render({'rock': ((34, 30, 34), (64, 58, 60), (96, 88, 88))})
 
 
+@icon
+def eclipse_shard():
+    s = Sprite()
+    s.add('shard', poly([(5, 14.5), (2.5, 9), (6, 3), (10.5, 1), (13.5, 5), (11, 11)]))
+    s.paint([(8, 4), (7, 5), (9, 4)], (210, 170, 255))
+    s.paint([(9, 7), (8, 8), (7, 9), (8, 9)], (255, 200, 80))
+    s.paint([(8, 8)], (255, 240, 170))
+    return s.render({'shard': ((22, 10, 40), (52, 24, 86), (96, 56, 150))})
+
+
+@icon
+def frostfang():
+    s = Sprite()
+    s.add('grip', line(1, 14, 3, 12))
+    s.add('grip', line(2, 14, 4, 12))
+    s.add('guard', [(2, 10), (3, 11), (5, 12), (6, 13), (4, 11), (5, 11)])
+    blade = set()
+    for x, y in line(5, 10, 14, 1):
+        blade.update({(x, y), (x + 1, y), (x, y + 1)})
+    s.add('ice', blade)
+    s.paint([(7, 8), (9, 6), (11, 4), (13, 2)], (245, 252, 255))
+    s.paint([(8, 9), (12, 5)], (90, 160, 210))
+    return s.render({'grip': ((30, 40, 70), (50, 66, 108), (74, 94, 140)), 'guard': ((90, 150, 200), (140, 200, 240), (200, 236, 255)),
+                     'ice': ((80, 150, 200), (150, 214, 244), (214, 244, 255))})
+
+
 def main():
     args = sys.argv[1:]
     preview = None

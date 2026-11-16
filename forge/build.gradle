@@ -1,0 +1,43 @@
+plugins {
+	id 'multiloader-loader'
+	id 'net.minecraftforge.gradle' version "${forgegradle_version}"
+}
+
+minecraft {
+	accessTransformers = files(project(':common').file('src/main/resources/META-INF/accesstransformer.cfg'))
+
+	runs {
+		configureEach {
+			workingDir = layout.projectDirectory.dir('run')
+			systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+		}
+		register('client') {
+			// macOS only lets the first thread open a window. The launcher does this for players.
+			if (System.getProperty('os.name').toLowerCase().contains('mac')) {
+				jvmArgs '-XstartOnFirstThread'
+			}
+		}
+		register('server') {
+			args '--nogui'
+		}
+		register('gameTestServer')
+	}
+}
+
+repositories {
+	minecraft.mavenizer(it)
+	maven fg.forgeMaven
+	maven fg.minecraftLibsMaven
+	mavenCentral()
+}
+
+dependencies {
+	implementation minecraft.dependency("net.minecraftforge:forge:${forge_version}")
+	annotationProcessor "net.minecraftforge:eventbus-validator:${eventbus_validator_version}"
+}
+
+// The shared loader test (see LoaderBridgeTests). Only with -Pgametests, so it can never reach a published jar.
+if (providers.gradleProperty('gametests').isPresent()) {
+	sourceSets.main.java.srcDirs(project(':common').file('src/gametest/java'), 'src/gametest/java')
+	sourceSets.main.resources.srcDir(project(':common').file('src/gametest/resources'))
+}

@@ -1,0 +1,53 @@
+plugins {
+	id 'multiloader-loader'
+	id 'net.neoforged.moddev'
+}
+
+neoForge {
+	version = neoforge_version
+	accessTransformers.from(project(':common').file('src/main/resources/META-INF/accesstransformer.cfg'))
+
+	runs {
+		client {
+			client()
+		}
+		server {
+			server()
+			programArgument('--nogui')
+		}
+		gameTest {
+			type = 'gameTestServer'
+		}
+	}
+
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+// The shared loader test (see LoaderBridgeTests). Only with -Pgametests, so it can never reach a published jar.
+if (providers.gradleProperty('gametests').isPresent()) {
+	sourceSets.main.java.srcDirs(project(':common').file('src/gametest/java'), 'src/gametest/java')
+	sourceSets.main.resources.srcDir(project(':common').file('src/gametest/resources'))
+}
+
+// So this module's classpaths pick its own variant of :common's dependencies (see multiloader-loader).
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+	configurations.named(variant) {
+		attributes {
+			attribute(loaderAttribute, 'neoforge')
+		}
+	}
+}
+sourceSets.configureEach {
+	[it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+		configurations.named(variant) {
+			attributes {
+				attribute(loaderAttribute, 'neoforge')
+			}
+		}
+	}
+}

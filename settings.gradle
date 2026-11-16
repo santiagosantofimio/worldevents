@@ -4,9 +4,21 @@ pluginManagement {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
+		maven {
+			name = 'MinecraftForge'
+			url = 'https://maven.minecraftforge.net/'
+		}
 		mavenCentral()
 		gradlePluginPortal()
 	}
 }
 
+plugins {
+	// Lets Gradle fetch the JDK the mod is built with (java_version) if this machine doesn't have it.
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 rootProject.name = 'worldevents'
+
+includeBuild('build-logic')
+include('common', 'fabric', 'neoforge', 'forge')

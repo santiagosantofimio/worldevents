@@ -10,6 +10,7 @@ First public release.
 
 ### Added
 
+- Builds for Fabric, NeoForge and Forge, with the same content on all three.
 - Event system: one event at a time per dimension. After a global cooldown, the next
   event is drawn by weight among those available in the dimension and waits for its
   moment (night, enough players) before starting. Per-event cooldowns stop repeats.
@@ -20,7 +21,7 @@ First public release.
 - `config/worldevents.json`: `enabled`, `weight`, `cooldown` and `duration` per event
   (times in seconds), plus each event's own values. Missing keys are added on load
   without touching existing ones; a broken file is never overwritten.
-- `/worldevents` (alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`,
+- `/worldevents` (aliases `/omens` and `/eventos`, permission level 2): `list`, `start <id>`, `stop`,
   `status`, `reload`. `start` refuses events that cannot happen in the current dimension.
 - Server-side translations for `en_us` and `es_es`; vanilla clients see translated text.
 - **Blood Moon** (`blood_moon`): a night with extra hostile mobs around players. Hostile
@@ -62,12 +63,13 @@ First public release.
   they stay until defeated, with their abilities, boss bar and loot.
 - A creative tab with every item and egg, for games with the mod on the client (singleplayer).
   Vanilla clients don't see it; `/worldevents give` hands out the same items and eggs.
-- Optional resource pack (`./gradlew resourcePack`) with 2D item icons, 3D models for the
+- Optional resource pack for players on servers (`./gradlew :common:resourcePack`) with 2D item icons, 3D models for the
   scythe and pickaxe in hand and for every creature, and the names of items, creatures and
   advancements in each player's language. Without it everything works with the vanilla look.
-- Game tests (`./gradlew runGameTest`, also part of `./gradlew build`) that run the events,
-  items and mobs on a real test server, and a client test (`./gradlew runClientGameTest`)
-  that saves screenshots of the items and mobs.
+- Game tests (`./gradlew :fabric:runGameTest`, also part of `./gradlew build`) that run the
+  events, items and mobs on a real test server, a shared test that proves NeoForge and Forge feed
+  every game event, and a client test (`./gradlew :fabric:runClientGameTest`) that saves
+  screenshots of the items and mobs.
 - **Event ranking**: players score points during events (kills, ores, crops, trades, bosses).
   When an event ends, the best three are announced and everyone who took part earns
   **Event Seals**, with extra seals for the winner.

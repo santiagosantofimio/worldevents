@@ -1,10 +1,10 @@
-# World Events
+# World Omens
 
-*Nombre de trabajo.* · [English below](#english)
+[English below](#english)
 
-Eventos aleatorios que dan vida a tu servidor de Minecraft: lunas de sangre, fiebres del oro, lluvias de meteoritos, tormentas eléctricas, cosechas benditas, caravanas de mercaderes, hordas, cazas del tesoro, erupciones en el Nether y tormentas del vacío en el End, con criaturas y jefes propios.
+Eventos aleatorios para tus mundos de Minecraft: lunas de sangre, fiebres del oro, lluvias de meteoritos, tormentas eléctricas, cosechas benditas, caravanas de mercaderes, hordas, cazas del tesoro, erupciones en el Nether y tormentas del vacío en el End, con criaturas y jefes propios.
 
-**Solo servidor.** Se instala únicamente en el servidor: los jugadores entran con Minecraft vanilla, sin instalar nada, y lo ven todo (boss bar, títulos, partículas y sonidos vanilla). También funciona en un jugador.
+**Para Fabric, NeoForge y Forge.** Se instala como cualquier mod y funciona en tus mundos de un jugador: texturas y modelos vienen incluidos.
 
 ## Eventos
 
@@ -55,7 +55,7 @@ Ids: `blood_moon_lord`, `blood_eye`, `mimic_sack`, `living_meteorite`, `storm_sp
 
 ### Pestaña de creativo
 
-En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña **Eventos del mundo** en el inventario de creativo, con todos los ítems y los huevos. Un cliente vanilla no la ve, porque es parte de la interfaz del cliente; en un servidor, lo mismo se consigue con `/worldevents give` y `/worldevents summon`.
+Con el mod instalado aparece la pestaña **World Omens** en el inventario de creativo, con todos los ítems y los huevos. En un servidor sin el mod en el cliente, lo mismo se consigue con `/worldevents give` y `/worldevents summon`.
 
 ## Ítems
 
@@ -81,7 +81,7 @@ Son ítems vanilla con nombre, descripción y efectos propios: funcionan en cual
 
 ## Logros
 
-Una pestaña propia, «Eventos del mundo»: sobrevivir a una luna de sangre, derrotar al Señor, conseguir la guadaña, recoger un fragmento de meteorito, conseguir el Pico estelar, encontrar una pepita de la suerte, atrapar un saco mimético, derrotar a un espíritu de la tormenta, conseguir un rayo embotellado, conseguir una semilla dorada, comerciar con un mercader nómada, vencer a una horda, derrotar al Caudillo y conseguir su hacha, encontrar el tesoro, derrotar al Capitán y conseguir su sable, conseguir un corazón de magma, derrotar al Coloso y conseguir su martillo, y derrotar a un acechador y conseguir una perla inestable.
+Una pestaña propia, «World Omens»: sobrevivir a una luna de sangre, derrotar al Señor, conseguir la guadaña, recoger un fragmento de meteorito, conseguir el Pico estelar, encontrar una pepita de la suerte, atrapar un saco mimético, derrotar a un espíritu de la tormenta, conseguir un rayo embotellado, conseguir una semilla dorada, comerciar con un mercader nómada, vencer a una horda, derrotar al Caudillo y conseguir su hacha, encontrar el tesoro, derrotar al Capitán y conseguir su sable, conseguir un corazón de magma, derrotar al Coloso y conseguir su martillo, y derrotar a un acechador y conseguir una perla inestable.
 
 ## Sin destrozos
 
@@ -95,28 +95,30 @@ Una pestaña propia, «Eventos del mundo»: sobrevivir a una luna de sangre, der
 
 ## Instalación
 
-1. Servidor con Fabric Loader y Fabric API para la versión de Minecraft del mod.
-2. Copia el `.jar` en la carpeta `mods/` del servidor.
-3. Arranca el servidor: se crea `config/worldevents.json`.
+1. Instala Minecraft 26.3 con Fabric, NeoForge o Forge.
+2. En Fabric, instala también Fabric API.
+3. Copia el `.jar` de tu loader en la carpeta `mods/`.
+4. Entra en un mundo: se crea `config/worldevents.json`.
 
-Los jugadores no necesitan instalar nada.
+No hace falta nada más: el mod carga sus texturas y modelos él solo.
 
-### Resource pack opcional
+### Servidores
 
-Da a los ítems y criaturas su aspecto propio (texturas, modelos 3D) y traduce sus nombres al idioma de cada jugador. Sin él todo funciona igual: los ítems se ven como su ítem vanilla de base y las criaturas como un bloque flotando con su nombre.
+El mod también funciona en un servidor. En Fabric, los jugadores pueden entrar sin instalar nada: ven los ítems como su ítem vanilla de base y las criaturas como un bloque flotando con su nombre. El resource pack opcional les da el aspecto completo:
 
-- **Servidor**: sube `worldevents-<versión>-resourcepack.zip` a una web con enlace directo de descarga y añade en `server.properties`:
-  ```properties
-  resource-pack=https://tu-web/worldevents-<versión>-resourcepack.zip
-  resource-pack-sha1=<contenido del archivo .sha1>
-  require-resource-pack=false
-  ```
-  Al entrar, a cada jugador se le pregunta si quiere descargarlo.
-- **Un jugador**: no hace falta; el mod carga el aspecto él solo.
+1. Sube `world-omens-resourcepack-<mc>-<versión>.zip` a una web con enlace directo de descarga.
+2. Añade en `server.properties`:
+   ```properties
+   resource-pack=https://tu-web/world-omens-resourcepack-<mc>-<versión>.zip
+   resource-pack-sha1=<contenido del archivo .sha1>
+   require-resource-pack=false
+   ```
+
+Al entrar, a cada jugador se le pregunta si quiere descargarlo.
 
 ## Comandos
 
-`/worldevents` (alias `/eventos`), para operadores (nivel de permiso 2):
+`/worldevents` (alias `/omens` y `/eventos`), con trucos activados o nivel de permiso 2:
 
 | Comando | Qué hace |
 |---|---|
@@ -183,9 +185,9 @@ Español e inglés. Cada jugador ve los textos en el idioma de su juego (si no e
 
 ## English
 
-Random world events for Minecraft servers (Fabric): blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions and End void storms, with their own creatures and bosses.
+Random events for your Minecraft worlds: blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions and End void storms, with their own creatures and bosses.
 
-**Server-side only.** Install it on the server; players join with vanilla Minecraft and see everything (boss bars, titles, vanilla particles and sounds). Singleplayer works too.
+**For Fabric, NeoForge and Forge.** Install it like any other mod and it works in your singleplayer worlds: textures and models are included.
 
 - **Blood Moon**: a night with extra hostile mobs around players. Hostiles get 1.5× health and 1.3× damage and drop double loot and XP when killed by a player. Darker sky, red mist, no sleeping. Ends at dawn.
 - **Gold Rush**: for 5 minutes, ores mined by players drop double, with a golden sparkle. Silk touch is not doubled.
@@ -206,13 +208,13 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Items:** Meteorite Fragment (Haste II and Night Vision), Lucky Nugget (Luck and Haste), Bloody Tear (summons a blood moon at night), Blood Scythe (heavy weapon with lifesteal), Starfall Pickaxe (smelts ores as you mine), Bottled Lightning (calls a lightning bolt where you look), Golden Seed (ripens all the crops around at once), Warlord's Axe (heavy axe whose war cry gives you and nearby players Strength and Speed), Captain's Cutlass (quick sword that lunges forward), Magma Heart (Fire Resistance and Strength), Colossus Hammer (heavy mace that sets its target on fire), Unstable Pearl (blinks you forward) and Event Seal (currency for relics). They are vanilla items with their own name, description and effects, so they work on any client. There is also an advancement tab for the events.
 
-**Install:** Fabric Loader and Fabric API on the server, drop the `.jar` into `mods/`. Players install nothing.
+**Install:** Minecraft 26.3 with Fabric (plus Fabric API), NeoForge or Forge, then drop the `.jar` for your loader into `mods/`.
 
-**Optional resource pack:** gives the items and mobs their own textures and 3D models and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
+**Servers:** the mod also runs on a server. On Fabric, players can join without installing anything; they see the vanilla base items, and creatures as floating blocks. The optional resource pack gives them the full look: host `world-omens-resourcepack-<mc>-<version>.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`.
 
-**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Events** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
+**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod installed, a **World Omens** creative tab holds every item and egg. On a server without the mod on the client, use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
 
-**Commands** (`/worldevents`, alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only).
+**Commands** (`/worldevents`, aliases `/omens` and `/eventos`, cheats on or permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only).
 
 **Config:** `config/worldevents.json`, times in seconds; see the tables above for every key. Missing keys are added on startup without touching yours; `/worldevents reload` applies changes.
 

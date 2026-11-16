@@ -1,0 +1,101 @@
+// The mod itself: vanilla code only, compiled against plain Minecraft. Every loader builds these sources into its jar.
+plugins {
+	id 'multiloader-common'
+	id 'net.neoforged.moddev'
+}
+
+neoForge {
+	neoFormVersion = neo_form_version
+	accessTransformers.from('src/main/resources/META-INF/accesstransformer.cfg')
+	addModdingDependenciesTo(sourceSets.test)
+}
+
+dependencies {
+	testImplementation platform("org.junit:junit-bom:${junit_version}")
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+configurations {
+	commonJava {
+		canBeResolved = false
+		canBeConsumed = true
+	}
+	commonResources {
+		canBeResolved = false
+		canBeConsumed = true
+	}
+}
+
+artifacts {
+	commonJava sourceSets.main.java.sourceDirectories.singleFile
+	commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+// So loaders can tell these classes from their own (see multiloader-loader).
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+	configurations.named(variant) {
+		attributes {
+			attribute(loaderAttribute, 'common')
+		}
+	}
+}
+sourceSets.configureEach {
+	[it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+		configurations.named(variant) {
+			attributes {
+				attribute(loaderAttribute, 'common')
+			}
+		}
+	}
+}
+
+// Optional resource pack for players without the mod on their client: looks and names for the mod's items, mobs and
+// advancements. Built from the mod's own assets, which it loads by itself when it is on the client.
+def resourcePackFormat = resource_pack_format as int
+def modVersion = version
+def resourcePack = tasks.register('resourcePack', Zip) {
+	group = 'build'
+	description = 'Builds the optional resource pack and its SHA-1 for server.properties.'
+	archiveFileName = "${archives_name}-resourcepack-${minecraft_version}-${modVersion}.zip"
+	destinationDirectory = layout.buildDirectory.dir('libs')
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+	inputs.property('format', resourcePackFormat)
+	from('src/resourcepack') {
+		filesMatching('pack.mcmeta') {
+			expand('format': resourcePackFormat)
+		}
+	}
+	from('src/main/resources/assets') {
+		into('assets')
+		exclude('worldevents/icon.png')
+	}
+	from('src/main/resources/assets/worldevents/icon.png') {
+		rename { 'pack.png' }
+	}
+	def zipFile = archiveFile
+	doLast {
+		def file = zipFile.get().asFile
+		def digest = java.security.MessageDigest.getInstance('SHA-1')
+		file.withInputStream { stream ->
+			byte[] buffer = new byte[8192]
+			int read
+			while ((read = stream.read(buffer)) > 0) {
+				digest.update(buffer, 0, read)
+			}
+		}
+		def sha1 = digest.digest().encodeHex().toString()
+		new File(file.path + '.sha1').text = sha1 + '\n'
+		logger.lifecycle("Resource pack: ${file.name} (sha1 ${sha1})")
+	}
+}
+
+tasks.named('assemble') {
+	dependsOn(resourcePack)
+}

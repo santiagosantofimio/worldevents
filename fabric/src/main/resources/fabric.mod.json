@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "worldevents",
+	"version": "${version}",
+	"name": "${mod_name}",
+	"description": "${description}",
+	"authors": [
+		"Santiago Santofimio"
+	],
+	"contact": {
+		"sources": "https://github.com/santiagosantofimio/worldevents",
+		"issues": "https://github.com/santiagosantofimio/worldevents/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/worldevents/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.santiagosantofimio.worldevents.fabric.WorldEventsFabric"
+		],
+		"client": [
+			"dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${fabric_loader_version}",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

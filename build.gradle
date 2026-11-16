@@ -1,117 +1,15 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
-	id 'maven-publish'
+	id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
+	id 'net.neoforged.moddev' version "${moddev_version}" apply false
 }
 
-base {
-	archivesName = project.name
-}
-
-fabricApi {
-	// Game tests in src/gametest. Server tests: ./gradlew runGameTest (also part of ./gradlew build).
-	// Client tests: ./gradlew runClientGameTest (opens a window and saves screenshots; not part of the build).
-	configureTests {
-		createSourceSet = true
-		modId = "worldevents-test"
-		enableGameTests = true
-		enableClientGameTests = true
-	}
-}
-
-dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
-	testImplementation platform("org.junit:junit-bom:${project.junit_version}")
-	testImplementation "org.junit.jupiter:junit-jupiter"
-	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-}
-
-processResources {
-	def version = project.version
-	inputs.property "version", version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": version
-	}
-}
-
-def javaVersion = project.java_version as int
-
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = javaVersion
-}
-
-java {
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.toVersion(javaVersion)
-	targetCompatibility = JavaVersion.toVersion(javaVersion)
-}
-
-test {
-	useJUnitPlatform()
-}
-
-// Optional resource pack for players: looks and names for the mod's items, mobs and advancements.
-// Built from src/main/resources/assets, which the mod also loads by itself in singleplayer.
-def resourcePackFormat = project.resource_pack_format as int
-def modVersion = project.version
-def resourcePack = tasks.register("resourcePack", Zip) {
-	group = "build"
-	description = "Builds the optional resource pack and its SHA-1 for server.properties."
-	archiveFileName = "worldevents-${modVersion}-resourcepack.zip"
-	destinationDirectory = layout.buildDirectory.dir("libs")
-	preserveFileTimestamps = false
-	reproducibleFileOrder = true
-	inputs.property("format", resourcePackFormat)
-	from("src/resourcepack") {
-		filesMatching("pack.mcmeta") {
-			expand("format": resourcePackFormat)
-		}
-	}
-	from("src/main/resources/assets") {
-		into("assets")
-		exclude("worldevents/icon.png")
-	}
-	from("src/main/resources/assets/worldevents/icon.png") {
-		rename { "pack.png" }
-	}
-	def zipFile = archiveFile
-	doLast {
-		def file = zipFile.get().asFile
-		def digest = java.security.MessageDigest.getInstance("SHA-1")
-		file.withInputStream { stream ->
-			byte[] buffer = new byte[8192]
-			int read
-			while ((read = stream.read(buffer)) > 0) {
-				digest.update(buffer, 0, read)
-			}
-		}
-		def sha1 = digest.digest().encodeHex().toString()
-		new File(file.path + ".sha1").text = sha1 + "\n"
-		logger.lifecycle("Resource pack: ${file.name} (sha1 ${sha1})")
-	}
-}
-
-tasks.named("assemble") {
-	dependsOn(resourcePack)
-}
-
-jar {
-	def projectName = project.name
-	inputs.property "projectName", projectName
-
-	from("LICENSE") {
-		rename { "${it}_$projectName" }
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			from components.java
-		}
-	}
+// Everything to upload for a release: the mod for each loader and the resource pack, in build/dist.
+tasks.register('dist', Sync) {
+	group = 'build'
+	description = 'Collects the jars for every mod loader and the resource pack in build/dist.'
+	from(project(':fabric').tasks.named('jar'))
+	from(project(':neoforge').tasks.named('jar'))
+	from(project(':forge').tasks.named('jar'))
+	from(project(':common').tasks.named('resourcePack'))
+	into(layout.buildDirectory.dir('dist'))
 }

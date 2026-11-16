@@ -155,6 +155,21 @@ public final class EventItems {
 	public static final EventItem UNSTABLE_PEARL = register(new EventItem("unstable_pearl", Items.POPPED_CHORUS_FRUIT, Rarity.RARE, true, stack -> {
 	}));
 
+	/** Cooldown group of the eclipse shard's reveal. */
+	public static final Identifier REVEAL = Identifier.fromNamespaceAndPath(WorldEventsMod.MOD_ID, "reveal");
+	public static final int REVEAL_COOLDOWN_SECONDS = 60;
+
+	/** Night vision for its holder, and every monster around glows; see {@code EclipseEvent}. */
+	public static final EventItem ECLIPSE_SHARD = register(new EventItem("eclipse_shard", Items.ECHO_SHARD, Rarity.EPIC, true,
+			stack -> stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(REVEAL))));
+
+	/** A blade of ice whose hits chill and slow; see {@code BlizzardEvent}. */
+	public static final EventItem FROSTFANG = register(new EventItem("frostfang", Items.DIAMOND_SWORD, Rarity.EPIC, false,
+			stack -> stack.set(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+					.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 7.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.build())));
+
 	/** Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. */
 	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, true, stack -> {
 	}));

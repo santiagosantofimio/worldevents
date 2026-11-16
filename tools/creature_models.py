@@ -50,6 +50,10 @@ STYLES = {
     'void': ([(16, 8, 26), (26, 14, 40), (38, 20, 56), (52, 28, 74)], [0.25, 0.4, 0.25, 0.1]),
     'claw': ([(196, 190, 210), (220, 216, 232), (240, 238, 248)], [0.3, 0.45, 0.25]),
     'core': ([(255, 112, 20), (255, 160, 40), (255, 214, 70)], [0.3, 0.3, 0.4]),
+    'corona': ([(255, 150, 30), (255, 196, 60), (255, 232, 130), (255, 250, 210)], [0.25, 0.35, 0.3, 0.1]),
+    'fur': ([(196, 206, 218), (214, 224, 234), (230, 238, 246), (244, 248, 252)], [0.2, 0.4, 0.3, 0.1]),
+    'yeti_skin': ([(84, 118, 150), (100, 138, 172), (120, 158, 190)], [0.3, 0.45, 0.25]),
+    'ice': ([(120, 190, 230), (150, 212, 244), (190, 234, 252), (230, 248, 255)], [0.2, 0.35, 0.3, 0.15]),
 }
 
 LAVA_EDGE = (150, 38, 8)
@@ -137,6 +141,14 @@ def pattern(face, style, side):
             for x in range(w):
                 if rng.random() < 0.04:
                     face.put(x, y, WHITE)
+    elif style == 'fur' and side not in ('up', 'down'):
+        for x in range(0, w, 2):
+            for y in range(h):
+                if rng.random() < 0.3:
+                    face.put(x, y, (176, 188, 204))
+    elif style == 'ice':
+        for i in range(min(w, h)):
+            face.put(i, i, (250, 254, 255))
     elif style == 'void':
         for _ in range(max(1, w * h // 70)):
             face.put(rng.randrange(w), rng.randrange(h), (170, 90, 230))
@@ -316,6 +328,24 @@ def deco(face, name):
             for x in range(w):
                 if face.rng.random() < y / max(1, h) * 0.8:
                     face.put(x, y, (90, 180, 172))
+    elif name == 'wraith_face':
+        ey = int(h * 0.4)
+        for i in range(4):
+            face.put(mx - 6 + i, ey + i // 2, (240, 240, 255))
+            face.put(mx + 5 - i, ey + i // 2, (240, 240, 255))
+        face.put(mx - 4, ey + 2, (200, 140, 255))
+        face.put(mx + 3, ey + 2, (200, 140, 255))
+    elif name == 'yeti_face':
+        ey = int(h * 0.3)
+        for ex in (int(mx - 4), int(mx + 2)):
+            face.rect(ex, ey, 2, 2, (20, 30, 50))
+            face.put(ex + 1, ey, (150, 230, 255))
+        my = int(h * 0.65)
+        face.rect(mx - 4, my, 8, 2, (40, 20, 30))
+        face.put(mx - 3, my + 2, WHITE)
+        face.put(mx + 2, my + 2, WHITE)
+        face.put(mx - 3, my + 3, WHITE)
+        face.put(mx + 2, my + 3, WHITE)
     else:
         raise ValueError(name)
 
@@ -451,6 +481,42 @@ C['void_stalker'] = dict(tpu=1, boxes=[
     ((12, -2, 7), (14, 15, 9), 'void', {}),
     ((1.5, -5, 6.5), (4.5, -2, 9.5), 'claw', {}),
     ((11.5, -5, 6.5), (14.5, -2, 9.5), 'claw', {}),
+])
+
+# The shadow of the eclipsed sun: a dark core in a ring of light, with wings of shadow.
+C['eclipse_wraith'] = dict(tpu=2, boxes=[
+    ((3, 3, 4), (13, 13, 12), 'void', {'north': 'wraith_face'}),
+    ((4, 13, 5), (12, 15, 7), 'corona', {}),
+    ((4, 1, 5), (12, 3, 7), 'corona', {}),
+    ((1, 4, 5), (3, 12, 7), 'corona', {}),
+    ((13, 4, 5), (15, 12, 7), 'corona', {}),
+    ((2, 12, 5), (4, 14, 7), 'corona', {}),
+    ((12, 12, 5), (14, 14, 7), 'corona', {}),
+    ((2, 2, 5), (4, 4, 7), 'corona', {}),
+    ((12, 2, 5), (14, 4, 7), 'corona', {}),
+    ((-6, 7.5, 6), (3, 8.5, 13), 'void', {}),
+    ((13, 7.5, 6), (22, 8.5, 13), 'void', {}),
+    ((6, 6, 12), (10, 10, 17), 'void', {}),
+])
+
+# A shaggy white giant with a blue face and horns of ice: the colossus's frame, in fur.
+C['frost_yeti'] = dict(tpu=2, boxes=[
+    ((2, -3, 8), (7, 8, 14), 'fur', {}),
+    ((9, -3, 8), (14, 8, 14), 'fur', {}),
+    ((1, 6, 1), (15, 15, 14), 'fur', {}),
+    ((-1, 9, -5), (17, 21, 5), 'fur', {}),
+    ((4.5, 14, -10), (11.5, 21, -4), 'yeti_skin', {'north': 'yeti_face'}),
+    ((4, 19, -10.5), (12, 21.5, -6), 'fur', {}),
+    ((3, 20, -8), (5, 25, -6), 'ice', {}),
+    ((11, 20, -8), (13, 25, -6), 'ice', {}),
+    ((-5, 1, -6), (0, 19, 0), 'fur', {}),
+    ((16, 1, -6), (21, 19, 0), 'fur', {}),
+    ((-6, -3, -8), (1, 3, 1), 'yeti_skin', {}),
+    ((15, -3, -8), (22, 3, 1), 'yeti_skin', {}),
+    ((-6, 17, -7), (2, 23, 2), 'fur', {}),
+    ((14, 17, -7), (22, 23, 2), 'fur', {}),
+    ((5, 21, -2), (9, 24, 2), 'ice', {}),
+    ((7, 15, 4), (10, 18, 7), 'ice', {}),
 ])
 
 # ---------------------------------------------------------------------------------------------------------------

@@ -1266,7 +1266,7 @@ public class WorldEventsGameTests {
 		BlizzardEvent blizzard = (BlizzardEvent) event(BlizzardEvent.ID);
 		helper.assertTrue(blizzard.isAvailable(level), "no blizzards in the overworld");
 		EventManager.start(level, blizzard);
-		helper.assertTrue(level.isRaining(), "no snow in the blizzard");
+		helper.assertTrue(level.getServer().getWeatherData().isRaining(), "no snow in the blizzard");
 		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
 		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
 
@@ -1283,7 +1283,7 @@ public class WorldEventsGameTests {
 		EventManager.stop(level);
 		helper.runAfterDelay(2, () -> {
 			helper.assertTrue(yeti.isRemoved(), "the yeti stayed after the blizzard");
-			helper.assertFalse(level.isRaining(), "the blizzard left the snow");
+			helper.assertFalse(level.getServer().getWeatherData().isRaining(), "the blizzard left the snow");
 			zombie.discard();
 			remove(player);
 			helper.succeed();

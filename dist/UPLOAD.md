@@ -57,7 +57,7 @@ Two new events, convergences, and a new look for every creature and item.
 
 ## Changelog: 1.18.2 y 1.16.5
 
-En 1.18.2 el Eclipse Shard es un fragmento de amatista y en 1.16.5 uno de prismarina (no hay fragmentos de eco). En 1.16.5 no existe la congelación: el frío de la ventisca ralentiza y hace un poco de daño.
+En 1.18.2 el Eclipse Shard es un fragmento de amatista y en 1.16.5 uno de prismarina (no hay fragmentos de eco). En 1.16.5 no existe la congelación: el frío de la ventisca ralentiza y hace un poco de daño. En ambas, el Eclipse Wraith (un vex invisible bajo el modelo) conserva el tamaño de caja de golpes de un vex, mucho menor que su modelo, porque esas versiones no tienen el atributo de escala.
 
 Markdown, para Modrinth (en Fabric añade al final la línea de Fabric API):
 
@@ -126,10 +126,8 @@ En CurseForge, el mismo texto sin la línea del título con `##`.
 ## Comprobado
 
 - Game tests de Fabric en 26.3, 26.1.2 y 1.21.11: pasan los 36 (tres nuevos: convergencia, eclipse y ventisca). 1.18.2 y 1.16.5 no tienen game tests.
-- Prueba de humo (`versions/smoketest`: invoca las 13 criaturas, mina con el pico estelar y arranca y para los 12 eventos) en un servidor dedicado de desarrollo (`runServer`, el mismo código que los jars, no los jars de esta carpeta en un servidor instalado), sin errores en el log:
-  - 26.1.2: Fabric, NeoForge y Forge.
-  - 1.21.11: Fabric, NeoForge y Forge.
-  - 1.18.2: Fabric y Forge.
-  - 1.16.5: Fabric y Forge.
+- Prueba de humo (`versions/smoketest`: invoca las 13 criaturas, mina con el pico estelar y arranca y para los 12 eventos) en un servidor dedicado de desarrollo (`runServer`, el mismo código que los jars, no los jars de esta carpeta en un servidor instalado), sin errores en el log, en todos los loaders de todas las versiones: 26.3 (Fabric), 26.1.2 y 1.21.11 (Fabric, NeoForge y Forge), 1.18.2 y 1.16.5 (Fabric y Forge).
+- Cliente real con el mod (26.3, `runClientGameTest`, con capturas): las criaturas nuevas y la pestaña creativa. Salió un defecto: el Eclipse Wraith, sobre un phantom, mostraba los ojos brillantes verdes de este por debajo del modelo. Ahora es un vex, y la captura ya no los muestra. El Frost Yeti se ve bien.
+- Los jars y resource packs de esta carpeta, revisados por dentro: versión 1.1.0, con los modelos nuevos, y los `.sha1` coinciden con los zips.
 - Alcance de la prueba de humo: arranca y para cada evento e invoca cada criatura; no usa los ítems ni mide el efecto de las habilidades. Eso solo lo cubren los game tests, así que en 1.18.2 y 1.16.5 (Eclipse Shard, Frostfang, frío de la ventisca) no está comprobado.
-- No comprobado: 26.3 en un servidor dedicado (solo sus game tests); los jars de esta carpeta en servidores reales con un cliente vanilla; el aspecto de las criaturas y los ítems nuevos en un cliente.
+- No comprobado: los jars de esta carpeta en servidores reales con un cliente vanilla; el aspecto de las criaturas y los ítems nuevos en un cliente de 26.1.2, 1.21.11, 1.18.2 y 1.16.5 (solo se vio el de 26.3).

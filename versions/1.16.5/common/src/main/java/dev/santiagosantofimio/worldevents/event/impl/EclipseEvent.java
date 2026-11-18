@@ -36,6 +36,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -238,8 +239,8 @@ public final class EclipseEvent implements WorldEvent {
 	}
 
 	/** Spawns the wraith at {@code pos} now, for tests and admins. */
-	public Phantom spawnWraith(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
-		Phantom wraith = EclipseWraith.spawn(level, pos, language, settings().getDouble("wraithHealth"));
+	public Vex spawnWraith(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
+		Vex wraith = EclipseWraith.spawn(level, pos, language, settings().getDouble("wraithHealth"));
 		if (wraith != null) {
 			active.state(EclipseState::new).wraith = wraith;
 			active.data().putBoolean(WRAITH_SPAWNED, true);
@@ -264,7 +265,7 @@ public final class EclipseEvent implements WorldEvent {
 	@Override
 	public void registerHooks() {
 		Hooks.ENTITY_LOAD.register((entity, level) -> {
-			if (!(entity instanceof Phantom wraith) || !EclipseWraith.is(wraith) || Creature.isSummoned(wraith)) {
+			if (!(entity instanceof Vex wraith) || !EclipseWraith.is(wraith) || Creature.isSummoned(wraith)) {
 				return;
 			}
 			ActiveEvent active = EventManager.active(level);
@@ -315,6 +316,6 @@ public final class EclipseEvent implements WorldEvent {
 
 	private static final class EclipseState {
 		private final List<Mob> shaded = new ArrayList<>();
-		private Phantom wraith;
+		private Vex wraith;
 	}
 }

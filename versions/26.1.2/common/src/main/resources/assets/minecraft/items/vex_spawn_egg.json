@@ -11,6 +11,13 @@
 				}
 			},
 			{
+				"when": "worldevents:eclipse_wraith",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/eclipse_wraith"
+				}
+			},
+			{
 				"when": "worldevents:storm_spirit",
 				"model": {
 					"type": "minecraft:model",

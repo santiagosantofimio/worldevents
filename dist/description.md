@@ -1,6 +1,6 @@
 # World Omens
 
-World Omens brings ten random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
+World Omens brings twelve random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
 
 ## Events
 
@@ -13,11 +13,15 @@ World Omens brings ten random events to your Minecraft world, each with its own 
 - **Horde:** Survive three growing waves of monsters. The Horde Warlord leads the last one.
 - **Treasure Hunt:** A loot chest appears not far away. Your action bar tells you when you're getting warmer and a beam of light marks the spot, but the Spectral Captain keeps it shut until he falls.
 - **Eruption (Nether):** Fire geysers burst from the ground around you while the Magma Colossus rises to hunt you.
+- **Eclipse:** In the daytime the sky goes dark and monsters walk in the sun without burning. Phantoms dive at you, and the Eclipse Wraith blinds you with pulses of darkness.
+- **Blizzard:** Snow and wind in snowy biomes. Stay under a roof, by a fire or in leather, or you freeze. The Frost Yeti's roar chills everyone near it.
 - **Void Storm (End):** Void Stalkers blink in behind you and blind you, while void pulses lift you into the air and let you drift back down.
+
+Now and then an event comes as a **Convergence**: half as long again, with double points and seals. It says so on the boss bar.
 
 ## Creatures and rewards
 
-Meet eleven creatures with their own 3D models, four of them bosses. Defeat them to earn unique gear:
+Meet thirteen creatures with their own 3D models, six of them bosses. Defeat them to earn unique gear:
 
 - **Blood Scythe:** Heals you as you hit.
 - **Starfall Pickaxe:** Smelts ores as you mine them.
@@ -25,6 +29,8 @@ Meet eleven creatures with their own 3D models, four of them bosses. Defeat them
 - **Captain's Cutlass:** Lunges you forward.
 - **Colossus Hammer:** Sets whatever it hits on fire.
 - **Bottled Lightning:** Calls a bolt wherever you look.
+- **Eclipse Shard:** Night vision, and every monster around glows for a while.
+- **Frostfang:** A blade of ice whose hits chill and slow.
 - **Unstable Pearl:** Blinks you forward, then lets you float down.
 - **Golden Seed:** Ripens the crops around it at once.
 

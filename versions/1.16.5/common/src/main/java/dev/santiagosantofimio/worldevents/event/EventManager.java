@@ -33,6 +33,7 @@ import net.minecraft.world.item.ItemStack;
 public final class EventManager {
 	/** Active events tick once per second rather than every tick. */
 	public static final int ACTIVE_TICK_INTERVAL = 20;
+	private static final String CONVERGENCE = "convergence";
 	/** A planned event that has not started after this long (two in-game days) is dropped and drawn again. */
 	private static final long PLAN_TIMEOUT_TICKS = 48000;
 	private static final int RANKING_LINES = 3;
@@ -86,7 +87,7 @@ public final class EventManager {
 				WorldEventsMod.LOGGER.debug("Dropped plan {} in {}", plan.eventId(), level.dimension().location());
 			} else if (enoughPlayers && event.canStart(level)) {
 				if (plan.warned() && now - plan.warnedAt() >= config.warningTicks() || config.warningTicks() == 0) {
-					start(level, event);
+					start(level, event, level.getRandom().nextDouble() < config.convergenceChance());
 				} else if (!plan.warned()) {
 					data.setPlan(plan.warnedAt(now));
 					warn(level, event, config.warningTicks() / 20);
@@ -162,18 +163,36 @@ public final class EventManager {
 
 	/** Starts {@code event} now, ignoring cooldowns and conditions. Returns false if another event is running. */
 	public static boolean start(ServerLevel level, WorldEvent event) {
+		return start(level, event, false);
+	}
+
+	/**
+	 * Starts {@code event} now; a convergence lasts half as long again and doubles points and seals. Returns false if
+	 * another event is running.
+	 */
+	public static boolean start(ServerLevel level, WorldEvent event, boolean convergence) {
 		WorldEventsData data = WorldEventsData.get(level);
 		if (data.active() != null) {
 			return false;
 		}
 		int duration = Math.max(ACTIVE_TICK_INTERVAL, event.initialDuration(level));
-		ActiveEvent active = new ActiveEvent(event, duration, duration, new CompoundTag());
+		if (convergence) {
+			duration = duration * 3 / 2;
+		}
+		CompoundTag eventData = new CompoundTag();
+		if (convergence) {
+			eventData.putBoolean(CONVERGENCE, true);
+		}
+		ActiveEvent active = new ActiveEvent(event, duration, duration, eventData);
 		active.setBossBar(new EventBossBar(event));
 		data.setPlan(null);
 		data.setActive(active);
 		event.start(level, active);
 		for (ServerPlayer player : level.players()) {
 			announceStart(player, event, true);
+			if (convergence) {
+				player.sendMessage(Lang.component(player, "event.convergence.chat").withStyle(ChatFormatting.LIGHT_PURPLE), net.minecraft.Util.NIL_UUID);
+			}
 		}
 		active.bossBar().update(level, active);
 		WorldEventsMod.LOGGER.info("Started {} in {} for {} ticks", event.id(), level.dimension().location(), duration);
@@ -212,11 +231,16 @@ public final class EventManager {
 		}
 	}
 
+	/** Whether {@code active} is a convergence: longer, with double points and seals. */
+	public static boolean isConvergence(ActiveEvent active) {
+		return active.data().getBoolean(CONVERGENCE);
+	}
+
 	/** Credits {@code player} for something done during {@code eventId}, if it is running in their dimension. */
 	public static void score(ServerPlayer player, String eventId, int points) {
 		ActiveEvent active = active(player.getLevel());
 		if (active != null && active.event().id().equals(eventId)) {
-			EventScores.add(active, player, points);
+			EventScores.add(active, player, isConvergence(active) ? points * 2 : points);
 		}
 	}
 
@@ -240,6 +264,9 @@ public final class EventManager {
 				continue;
 			}
 			int seals = config.sealsPerEvent() + (entry == ranking.get(0) ? config.sealsForWinner() : 0);
+			if (isConvergence(active)) {
+				seals *= 2;
+			}
 			if (seals > 0) {
 				ItemStack stack = EventItems.EVENT_SEAL.create(Lang.language(player), seals);
 				if (!player.inventory.add(stack)) {

@@ -13,7 +13,9 @@ import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.EventScores;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
+import dev.santiagosantofimio.worldevents.event.impl.BlizzardEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
@@ -26,6 +28,8 @@ import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.BloodEye;
 import dev.santiagosantofimio.worldevents.mob.BloodMoonLord;
 import dev.santiagosantofimio.worldevents.mob.Creature;
+import dev.santiagosantofimio.worldevents.mob.EclipseWraith;
+import dev.santiagosantofimio.worldevents.mob.FrostYeti;
 import dev.santiagosantofimio.worldevents.mob.HarvestSpirit;
 import dev.santiagosantofimio.worldevents.mob.HordeWarlord;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
@@ -88,6 +92,8 @@ import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
@@ -1190,6 +1196,98 @@ public class WorldEventsGameTests {
 				Creature.remove(colossus);
 				helper.succeed();
 			});
+		});
+	}
+
+	@GameTest(environment = "worldevents-test:convergence", maxTicks = 40)
+	public void aConvergenceLastsLongerAndDoublesPointsAndSeals(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		ServerPlayer player = player(helper, new BlockPos(1, 1, 1), "en_us");
+		WorldEvent rush = event(GoldRushEvent.ID);
+		helper.assertTrue(EventManager.start(level, rush, true), "the convergence did not start");
+		ActiveEvent active = EventManager.active(level);
+		helper.assertTrue(EventManager.isConvergence(active), "not a convergence");
+		helper.assertValueEqual(active.totalTicks(), rush.settings().durationTicks() * 3 / 2, "convergence length");
+		EventManager.score(player, GoldRushEvent.ID, 3);
+		helper.assertValueEqual(EventScores.ranking(active).get(0).points(), 6, "points in a convergence");
+		EventManager.stop(level);
+		ModConfig config = ModConfig.get();
+		int seals = 0;
+		for (ItemStack stack : player.getInventory()) {
+			if (EventItems.EVENT_SEAL.is(stack)) {
+				seals += stack.getCount();
+			}
+		}
+		helper.assertValueEqual(seals, (config.sealsPerEvent() + config.sealsForWinner()) * 2, "seals from a convergence");
+		remove(player);
+		helper.succeed();
+	}
+
+	@GameTest(environment = "worldevents-test:eclipse", maxTicks = 100)
+	public void eclipseWraithDarkensPlayersAndTheShardRevealsMonsters(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		buildGround(helper);
+		EclipseEvent eclipse = (EclipseEvent) event(EclipseEvent.ID);
+		helper.assertTrue(eclipse.isAvailable(level), "no eclipses in the overworld");
+		helper.assertFalse(eclipse.isAvailable(level.getServer().getLevel(Level.NETHER)), "an eclipse in the Nether");
+		EventManager.start(level, eclipse);
+		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
+		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
+
+		Phantom wraith = eclipse.spawnWraith(level, EventManager.active(level), helper.absolutePos(new BlockPos(4, 8, 4)), "en_us");
+		helper.assertTrue(wraith != null && EclipseWraith.is(wraith), "no wraith");
+		assertCreature(helper, wraith, "eclipse_wraith");
+		helper.assertTrue(wraith.hasEffect(MobEffects.FIRE_RESISTANCE), "the wraith would burn in the sun");
+		helper.assertTrue(EclipseWraith.pulse(level, wraith) >= 1 && player.hasEffect(MobEffects.DARKNESS), "the pulse did not darken the player");
+
+		Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(5, 4, 1));
+		EclipseEvent.shadeFromSun(zombie);
+		zombie.igniteForSeconds(5.0f);
+		EclipseEvent.keepShaded(zombie);
+		helper.assertFalse(zombie.isOnFire(), "a shaded monster still burns");
+		helper.assertTrue(EclipseEvent.useShard(level, player) >= 1 && zombie.hasEffect(MobEffects.GLOWING), "the shard revealed nothing");
+		helper.assertTrue(player.hasEffect(MobEffects.NIGHT_VISION), "no night vision from the shard");
+
+		EventManager.stop(level);
+		helper.runAfterDelay(2, () -> {
+			helper.assertTrue(wraith.isRemoved(), "the wraith stayed after the eclipse");
+			zombie.discard();
+			remove(player);
+			helper.succeed();
+		});
+	}
+
+	@GameTest(environment = "worldevents-test:blizzard", maxTicks = 100)
+	public void blizzardYetiChillsAndFrostfangFreezes(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		buildGround(helper);
+		BlizzardEvent blizzard = (BlizzardEvent) event(BlizzardEvent.ID);
+		helper.assertTrue(blizzard.isAvailable(level), "no blizzards in the overworld");
+		EventManager.start(level, blizzard);
+		helper.assertTrue(level.getServer().getWeatherData().isRaining(), "no snow in the blizzard");
+		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
+		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
+
+		Ravager yeti = blizzard.spawnYeti(level, EventManager.active(level), helper.absolutePos(new BlockPos(4, 4, 4)), "en_us");
+		helper.assertTrue(yeti != null && FrostYeti.is(yeti), "no yeti");
+		assertCreature(helper, yeti, "frost_yeti");
+		helper.assertTrue(FrostYeti.roar(level, yeti) >= 1, "the roar reached nobody");
+		helper.assertTrue(player.getTicksFrozen() >= 100 && player.hasEffect(MobEffects.SLOWNESS), "the roar did not chill the player");
+
+		Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(6, 4, 1));
+		BlizzardEvent.frostbite(zombie);
+		helper.assertTrue(zombie.getTicksFrozen() > 0 && zombie.hasEffect(MobEffects.SLOWNESS), "Frostfang did not chill");
+
+		EventManager.stop(level);
+		helper.runAfterDelay(2, () -> {
+			helper.assertTrue(yeti.isRemoved(), "the yeti stayed after the blizzard");
+			helper.assertFalse(level.getServer().getWeatherData().isRaining(), "the blizzard left the snow");
+			zombie.discard();
+			remove(player);
+			helper.succeed();
 		});
 	}
 

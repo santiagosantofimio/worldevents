@@ -87,6 +87,7 @@ public final class ModConfig {
 		root.addProperty("sealsPerEvent", 1);
 		root.addProperty("sealsForWinner", 2);
 		root.addProperty("minScoreForSeal", 3);
+		root.addProperty("convergenceChance", 0.08);
 		JsonObject events = new JsonObject();
 		for (WorldEvent event : EventRegistry.all()) {
 			events.add(event.id(), event.defaultSettings());
@@ -158,6 +159,11 @@ public final class ModConfig {
 	/** Points that count as taking part in an event. */
 	public int minScoreForSeal() {
 		return Math.max(1, root().getInt("minScoreForSeal"));
+	}
+
+	/** Chance that a drawn event comes as a convergence: longer, with double points and seals. */
+	public double convergenceChance() {
+		return Math.max(0.0, Math.min(1.0, root().getDouble("convergenceChance")));
 	}
 
 	public EventSettings event(String id) {

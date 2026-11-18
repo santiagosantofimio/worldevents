@@ -5,7 +5,9 @@ import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
+import dev.santiagosantofimio.worldevents.event.impl.BlizzardEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
@@ -19,6 +21,8 @@ import dev.santiagosantofimio.worldevents.item.EventItems;
 import dev.santiagosantofimio.worldevents.mob.BloodEye;
 import dev.santiagosantofimio.worldevents.mob.BloodMoonLord;
 import dev.santiagosantofimio.worldevents.mob.Creature;
+import dev.santiagosantofimio.worldevents.mob.EclipseWraith;
+import dev.santiagosantofimio.worldevents.mob.FrostYeti;
 import dev.santiagosantofimio.worldevents.mob.HarvestSpirit;
 import dev.santiagosantofimio.worldevents.mob.HordeWarlord;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
@@ -52,9 +56,12 @@ public final class WorldEventsMod {
 		EventRegistry.register(new TreasureHuntEvent());
 		EventRegistry.register(new EruptionEvent());
 		EventRegistry.register(new VoidStormEvent());
+		EventRegistry.register(new EclipseEvent());
+		EventRegistry.register(new BlizzardEvent());
 
 		Creature.registerKinds(BloodMoonLord.KIND, BloodEye.KIND, MimicSack.KIND, LivingMeteorite.KIND, StormSpirit.KIND,
-				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND, VoidStalker.KIND);
+				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND, VoidStalker.KIND,
+				EclipseWraith.KIND, FrostYeti.KIND);
 
 		ModConfig.load();
 		Lang.load();

@@ -85,5 +85,19 @@
 	"advancements.worldevents.defeat_void_stalker.title": "Cazasombras",
 	"advancements.worldevents.defeat_void_stalker.description": "Derrota a un acechador del vacío",
 	"advancements.worldevents.unstable_pearl.title": "En un parpadeo",
-	"advancements.worldevents.unstable_pearl.description": "Consigue una perla inestable de un acechador del vacío"
+	"advancements.worldevents.unstable_pearl.description": "Consigue una perla inestable de un acechador del vacío",
+	"item.worldevents.eclipse_shard": "Fragmento de eclipse",
+	"item.worldevents.eclipse_shard.lore": "Clic derecho: visión nocturna, y todos los monstruos cercanos brillan (espera de 60 s)",
+	"item.worldevents.frostfang": "Colmillo de escarcha",
+	"item.worldevents.frostfang.lore": "Una hoja de hielo cuyos golpes congelan y ralentizan",
+	"entity.worldevents.eclipse_wraith": "Espectro del eclipse",
+	"entity.worldevents.frost_yeti": "Yeti de escarcha",
+	"advancements.worldevents.defeat_eclipse_wraith.title": "Hágase la luz",
+	"advancements.worldevents.defeat_eclipse_wraith.description": "Derrota al Espectro del eclipse",
+	"advancements.worldevents.eclipse_shard.title": "Un pedazo de oscuridad",
+	"advancements.worldevents.eclipse_shard.description": "Consigue un fragmento de eclipse",
+	"advancements.worldevents.defeat_frost_yeti.title": "Cuanto más grande, más dura la caída",
+	"advancements.worldevents.defeat_frost_yeti.description": "Derrota al Yeti de escarcha",
+	"advancements.worldevents.frostfang.title": "Acero frío",
+	"advancements.worldevents.frostfang.description": "Consigue el Colmillo de escarcha"
 }

@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:eclipse_shard",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/eclipse_shard"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/echo_shard"
+		}
+	}
+}

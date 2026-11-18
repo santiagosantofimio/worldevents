@@ -17,10 +17,12 @@ os.makedirs(folder, exist_ok=True)
 os.makedirs(tags, exist_ok=True)
 
 kinds = ["blood_moon_lord", "blood_eye", "mimic_sack", "living_meteorite", "storm_spirit", "harvest_spirit",
-         "nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker"]
+         "nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker",
+         "eclipse_wraith", "frost_yeti"]
 events = [("blood_moon", "overworld"), ("gold_rush", "overworld"), ("meteor_shower", "overworld"),
           ("thunderstorm", "overworld"), ("blessed_harvest", "overworld"), ("merchant_caravan", "overworld"),
-          ("horde", "overworld"), ("treasure_hunt", "overworld"), ("eruption", "the_nether"), ("void_storm", "the_end")]
+          ("horde", "overworld"), ("treasure_hunt", "overworld"), ("eruption", "the_nether"), ("void_storm", "the_end"),
+          ("eclipse", "overworld"), ("blizzard", "overworld")]
 if legacy:
     pickaxe = 'minecraft:diamond_pickaxe{worldevents_item:"starfall_pickaxe"}'
 else:

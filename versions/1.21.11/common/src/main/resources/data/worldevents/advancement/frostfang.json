@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:defeat_frost_yeti",
+	"display": {
+		"icon": {
+			"id": "minecraft:diamond_sword",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:frostfang"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.frostfang.title",
+			"fallback": "Cold Steel"
+		},
+		"description": {
+			"translate": "advancements.worldevents.frostfang.description",
+			"fallback": "Get Frostfang"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:diamond_sword",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "frostfang"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

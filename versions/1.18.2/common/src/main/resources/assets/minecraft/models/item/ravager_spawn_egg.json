@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:item/template_spawn_egg",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 8764235
+			},
+			"model": "worldevents:item/frost_yeti"
+		}
+	]
+}

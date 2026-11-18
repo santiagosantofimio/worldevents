@@ -157,10 +157,10 @@ Deja los jars y el resource pack de esa versión en `dist/<versión>/`. Para 26.
 | `/worldevents stop` | Termina el evento de tu dimensión. |
 | `/worldevents status` | Estado de cada dimensión: evento activo, próximo evento o tiempo de espera. |
 | `/worldevents reload` | Recarga la configuración sin reiniciar. |
-| `/worldevents give <jugadores> <ítem> [cantidad]` | Da ítems del mod: `meteorite_fragment`, `lucky_nugget`, `bloody_tear`, `blood_scythe`, `starfall_pickaxe`, `bottled_lightning`, `golden_seed`, `warlord_axe`, `captains_cutlass`, `magma_heart`, `colossus_hammer`, `unstable_pearl`, `event_seal`, y los huevos `<criatura>_spawn_egg`. |
+| `/worldevents give <jugadores> <ítem> [cantidad]` | Da ítems del mod: `meteorite_fragment`, `lucky_nugget`, `bloody_tear`, `blood_scythe`, `starfall_pickaxe`, `bottled_lightning`, `golden_seed`, `warlord_axe`, `captains_cutlass`, `magma_heart`, `colossus_hammer`, `unstable_pearl`, `eclipse_shard`, `frostfang`, `event_seal`, y los huevos `<criatura>_spawn_egg`. |
 | `/worldevents summon <criatura> [posición]` | Invoca una criatura donde estás (o en la posición), fuera de su evento. |
 
-Ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (solo en el Nether), `void_storm` (solo en el End). Para probar la luna de sangre, la horda o los meteoritos, usa antes `/time set night`.
+Ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (solo en el Nether), `void_storm` (solo en el End), `eclipse`, `blizzard` (solo si hay un jugador en un bioma nevado). Para probar la luna de sangre, la horda o los meteoritos, usa antes `/time set night`.
 
 ## Cómo se eligen los eventos
 
@@ -184,6 +184,7 @@ En cada dimensión, cuando termina la espera global, se sortea el próximo event
 | `sealsPerEvent` | `1` | Sellos para quien participa. |
 | `sealsForWinner` | `2` | Sellos extra para el primero. |
 | `minScoreForSeal` | `3` | Puntos que cuentan como participar. |
+| `convergenceChance` | `0.08` | Probabilidad de que un evento sorteado sea una convergencia: dura la mitad más y da el doble de puntos y de sellos. `0` la desactiva. |
 
 **En todos los eventos:** `enabled`, `weight` (peso en el sorteo), `cooldown` (espera antes de que se repita) y `duration`.
 
@@ -205,6 +206,10 @@ En cada dimensión, cuando termina la espera global, se sortea el próximo event
 
 **Tormenta del vacío** (`void_storm`): `stalkersPerPlayer` 2 · `maxStalkers` 8 · `pulseInterval` 12 · `pearlChance` 0.35.
 
+**Eclipse** (`eclipse`): `spawnInterval` 15 · `monstersPerPlayer` 2 · `phantomInterval` 30 · `wraith` true · `wraithDelay` 60 · `wraithHealth` 150 · `shardChance` 0.5.
+
+**Ventisca** (`blizzard`): `freezing` true · `strayInterval` 15 · `straysPerPlayer` 2 · `yeti` true · `yetiDelay` 60 · `yetiHealth` 180 · `fangChance` 0.35.
+
 **Horda** (`horde`): `mobsPerPlayer` 4 (monstruos por jugador en la primera oleada) · `extraMobsPerWave` 2 · `maxMobs` 30 · `waveBreak` 10 (segundos entre oleadas) · `waveTimeout` 150 (tras este tiempo llega la siguiente oleada aunque queden monstruos) · `warlord` true · `warlordHealth` 150 · `axeChance` 0.35 · `rewardXp` 50. La duración es un máximo: termina al amanecer.
 
 ## Idiomas
@@ -215,7 +220,7 @@ Español e inglés. Cada jugador ve los textos en el idioma de su juego (si no e
 
 ## English
 
-Random world events for Minecraft servers (Fabric, NeoForge and Forge): blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions and End void storms, with their own creatures and bosses.
+Random world events for Minecraft servers (Fabric, NeoForge and Forge): blood moons, gold rushes, meteor showers, thunderstorms, blessed harvests, merchant caravans, hordes, treasure hunts, Nether eruptions, End void storms, daytime eclipses and blizzards, with their own creatures and bosses.
 
 **Server-side only.** Install it on the server; players join with vanilla Minecraft and see everything (boss bars, titles, vanilla particles and sounds). Singleplayer works too.
 
@@ -229,14 +234,17 @@ Random world events for Minecraft servers (Fabric, NeoForge and Forge): blood mo
 - **Treasure Hunt**: a chest full of loot appears on the surface near players, and the action bar tells each one how warm they are. The first to open it wins, but the Spectral Captain guards it and keeps it shut until it falls.
 - **Eruption** (Nether): geysers of fire burst around players after a moment's warning, and the Magma Colossus comes up to hunt them. Nothing touches a block.
 - **Void Storm** (End): void stalkers blink out of nowhere to hunt players, and pulses of the void lift them off the ground and let them float back down.
+- **Eclipse**: in the daytime the sky goes dark and monsters walk in the sun without burning; phantoms dive at players and the Eclipse Wraith swoops down, blinding them with pulses of darkness.
+- **Blizzard** (snowy biomes): snow and wind, strays out in the storm, and players in the open freeze little by little unless they shelter, stand by a fire or wear leather. The Frost Yeti's roar chills everyone near it.
+- **Convergence**: any event can come as a convergence (8% by default): half as long again, with double points and seals.
 
 **Ranking:** players score points during events. When one ends, the best three are announced and everyone who took part earns Event Seals, which nomad merchants take for relics, the strongest event items. Drawn events warn players a minute before they start.
 
 Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never building blocks, containers, liquids or spawn protection. Hordes bring no creepers, their zombies never break doors, and they only come out of dark places, never inside a lit base. Set `"blockDamage": false` (or `"craters": false`) and meteors only drop their ores. Events only act in loaded chunks near players and never force chunks to load. By default there is at most one event every three in-game days per dimension.
 
-**Creatures**, with their own 3D models: the **Blood Moon Lord** (a crowned blood-red moon with an angry face, the boss of the blood moon), the **Blood Eye** (a giant eyeball that charges through walls), the **Mimic Sack** (a living sack of gold that hops away; one hit and it bursts into gold), the **Living Meteorite** (a burning rock with eyes that climbs out of craters), the **Storm Spirit** (a thundercloud that calls lightning down on players), the **Harvest Spirit** (a friendly sprite of woven straw that leaves golden seeds), the **Nomad Merchant** (a hooded traveller under a towering pack; right-click to trade) the **Horde Warlord** (an armoured, horned brute with its own boss bar who leads the last wave of a horde), the **Spectral Captain** (a ghost pirate who calls cannon fire), the **Magma Colossus** (a beast of black rock and lava whose slams burn and throw everything around it) and the **Void Stalker** (a thin shadow that blinks behind its prey). An invisible vanilla mob does the moving and fighting and an item display riding it shows the model from the resource pack; without the pack, players see a floating block with the creature's name.
+**Creatures**, with their own 3D models: the **Blood Moon Lord** (a crowned blood-red moon with an angry face, the boss of the blood moon), the **Blood Eye** (a giant eyeball that charges through walls), the **Mimic Sack** (a living sack of gold that hops away; one hit and it bursts into gold), the **Living Meteorite** (a burning rock with eyes that climbs out of craters), the **Storm Spirit** (a thundercloud that calls lightning down on players), the **Harvest Spirit** (a friendly sprite of woven straw that leaves golden seeds), the **Nomad Merchant** (a hooded traveller under a towering pack; right-click to trade) the **Horde Warlord** (an armoured, horned brute with its own boss bar who leads the last wave of a horde), the **Spectral Captain** (a ghost pirate who calls cannon fire), the **Magma Colossus** (a beast of black rock and lava whose slams burn and throw everything around it) the **Void Stalker** (a thin shadow that blinks behind its prey), the **Eclipse Wraith** (a giant shadow of the dark sun) and the **Frost Yeti** (a roaring snow beast). An invisible vanilla mob does the moving and fighting and an item display riding it shows the model from the resource pack; without the pack, players see a floating block with the creature's name.
 
-**Items:** Meteorite Fragment (Haste II and Night Vision), Lucky Nugget (Luck and Haste), Bloody Tear (summons a blood moon at night), Blood Scythe (heavy weapon with lifesteal), Starfall Pickaxe (smelts ores as you mine), Bottled Lightning (calls a lightning bolt where you look), Golden Seed (ripens all the crops around at once), Warlord's Axe (heavy axe whose war cry gives you and nearby players Strength and Speed), Captain's Cutlass (quick sword that lunges forward), Magma Heart (Fire Resistance and Strength), Colossus Hammer (heavy mace that sets its target on fire), Unstable Pearl (blinks you forward) and Event Seal (currency for relics). They are vanilla items with their own name, description and effects, so they work on any client. There is also an advancement tab for the events.
+**Items:** Meteorite Fragment (Haste II and Night Vision), Lucky Nugget (Luck and Haste), Bloody Tear (summons a blood moon at night), Blood Scythe (heavy weapon with lifesteal), Starfall Pickaxe (smelts ores as you mine), Bottled Lightning (calls a lightning bolt where you look), Golden Seed (ripens all the crops around at once), Warlord's Axe (heavy axe whose war cry gives you and nearby players Strength and Speed), Captain's Cutlass (quick sword that lunges forward), Magma Heart (Fire Resistance and Strength), Colossus Hammer (heavy mace that sets its target on fire), Unstable Pearl (blinks you forward), Eclipse Shard (night vision, and every monster around glows), Frostfang (a blade of ice that chills and slows) and Event Seal (currency for relics). They are vanilla items with their own name, description and effects, so they work on any client. There is also an advancement tab for the events.
 
 **Install:** Fabric (with Fabric API), NeoForge or Forge on the server, drop the `.jar` into `mods/`. Players install nothing.
 
@@ -246,7 +254,7 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
 
-**Commands** (`/worldevents`, alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only).
+**Commands** (`/worldevents`, alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only), `eclipse`, `blizzard` (only when a player is somewhere snowy).
 
 **Config:** `config/worldevents.json`, times in seconds; see the tables above for every key. Missing keys are added on startup without touching yours; `/worldevents reload` applies changes.
 

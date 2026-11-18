@@ -6,7 +6,9 @@ import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
+import dev.santiagosantofimio.worldevents.event.impl.BlizzardEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
@@ -117,6 +119,10 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 					(event, level, active, pos) -> ((EruptionEvent) event).spawnColossus(level, active, pos, "es_es"));
 			showMob(context, singleplayer, VoidStormEvent.ID, "worldevents_creature_void_stalker", 4,
 					(event, level, active, pos) -> ((VoidStormEvent) event).spawnStalker(level, active, pos, "es_es"));
+			showMob(context, singleplayer, EclipseEvent.ID, "worldevents_creature_eclipse_wraith", 12,
+					(event, level, active, pos) -> ((EclipseEvent) event).spawnWraith(level, active, pos.above(2), "es_es"));
+			showMob(context, singleplayer, BlizzardEvent.ID, "worldevents_creature_frost_yeti", 6,
+					(event, level, active, pos) -> ((BlizzardEvent) event).spawnYeti(level, active, pos, "es_es"));
 
 			// The biggest creature on its own, no event around it: from the front and three quarters. In creative, so
 			// it leaves the player alone.

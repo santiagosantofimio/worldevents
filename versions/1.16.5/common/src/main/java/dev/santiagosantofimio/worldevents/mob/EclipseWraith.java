@@ -18,20 +18,22 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 /**
  * The eclipse wraith: a shadow of the darkened sun that circles the sky and swoops at players, the boss of an
  * eclipse. Every few seconds it pulses darkness over the players below and calls phantoms. It does not burn in the
- * daylight. Flies like a phantom (the invisible mob under the model), three times as big.
+ * daylight. Flies like a vex (the invisible mob under the model: a phantom's glowing eyes would show through), three times as big.
  */
 public final class EclipseWraith {
-	public static final Creature.Kind KIND = Creature.kind("eclipse_wraith", Items.PHANTOM_SPAWN_EGG,
+	public static final Creature.Kind KIND = Creature.kind("eclipse_wraith", Items.VEX_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
 			.acting(EclipseWraith::act)
 			.boss(BossEvent.BossBarColor.PURPLE, ChatFormatting.DARK_PURPLE);
@@ -46,15 +48,16 @@ public final class EclipseWraith {
 	private EclipseWraith() {
 	}
 
-	public static Phantom spawn(ServerLevel level, BlockPos pos, String language, double health) {
-		Phantom wraith = EntityType.PHANTOM.create(level);
+	public static Vex spawn(ServerLevel level, BlockPos pos, String language, double health) {
+		Vex wraith = EntityType.VEX.create(level);
 		if (wraith == null) {
 			return null;
 		}
 		wraith.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		wraith.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
-		// A big phantom (the 26.3 version scales it 3x): 1.18 has no scale attribute.
-		wraith.setPhantomSize(12);
+		// No scale attribute in this version: the vex keeps its own small size under the big model.
+		// A vex spawns with a sword, which would float next to the wraith.
+		wraith.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(wraith, Attributes.MAX_HEALTH, health);
 		MobSpawning.setBase(wraith, Attributes.ATTACK_DAMAGE, 8.0);
 		wraith.setHealth(wraith.getMaxHealth());

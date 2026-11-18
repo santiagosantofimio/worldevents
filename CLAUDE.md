@@ -44,17 +44,17 @@ answer in Spanish. Work branch: `claude/focused-gates-zo6ikh`.
 - **1.0.1**: Captain's Cutlass lunge fix, Magma Colossus fixes, 2D weapons in hand, name changed to World Omens.
 - **1.1.0** (in `dist/`, built, not uploaded yet): new creature models and 16x16 icons, Convergence, Eclipse and
   Blizzard in all five versions. Verified: 36 game tests on 26.3, 26.1.2 and 1.21.11, and the smoke test
-  (`versions/smoketest/run.sh`) on every loader of 26.1.2, 1.21.11, 1.18.2 and 1.16.5. Not verified: the jars on
-  real servers with a vanilla client, the new creatures in a client, 26.3 on a dedicated server. Details in
-  `dist/UPLOAD.md`.
+  (`versions/smoketest/run.sh`) on every loader of 26.1.2, 1.21.11, 1.18.2 and 1.16.5. Smoke test also on 26.3. Seen in a client (26.3 only): the new creatures and the
+  creative tab. Not verified: the jars on real servers with a vanilla client, a client on the other versions, the
+  Eclipse Shard/Frostfang/cold on 1.18.2 and 1.16.5. Details in `dist/UPLOAD.md`.
+- The Eclipse Wraith is a vex underneath, not a phantom: a phantom's glowing eyes show through the invisible mob.
 
 ## Roadmap for 1.1 (the author asked for "do them all")
 
 1. [done, commit 3450ba9] 11 creatures redone in vanilla style, in every version.
 2. [done, commit 8998524] 16x16 icons in every version.
-3. [done, 1.1.0] Phase 3a: Convergence, Eclipse and Blizzard in every version. Still to check in a client:
-   `runClientGameTest` shots of the Eclipse Wraith and the Frost Yeti (the yeti may float slightly: consider
-   `.above(-0.15f)` on its Part). 1.18.2 uses an amethyst shard and 1.16.5 a prismarine shard for the Eclipse
+3. [done, 1.1.0] Phase 3a: Convergence, Eclipse and Blizzard in every version (client shots of the Wraith and the
+   Yeti checked on 26.3: fine). 1.18.2 uses an amethyst shard and 1.16.5 a prismarine shard for the Eclipse
    Shard, and 1.16.5 has no freezing (slowness and a little damage).
 4. Phase 3b: Village Siege, Tide of the Drowned (coasts), Piglin Warband (Nether). Each with a boss (model in
    `creature_models.py`), a reward item (icon in `item_icons.py`), advancements, translations and tests.

@@ -12,6 +12,12 @@
 				"custom_model_data": 8407261
 			},
 			"model": "worldevents:item/blood_eye"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 8850782
+			},
+			"model": "worldevents:item/eclipse_wraith"
 		}
 	]
 }

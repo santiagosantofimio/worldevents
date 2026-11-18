@@ -18,20 +18,22 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 /**
  * The eclipse wraith: a shadow of the darkened sun that circles the sky and swoops at players, the boss of an
  * eclipse. Every few seconds it pulses darkness over the players below and calls phantoms. It does not burn in the
- * daylight. Flies like a phantom (the invisible mob under the model), three times as big.
+ * daylight. Flies like a vex (the invisible mob under the model: a phantom's glowing eyes would show through), three times as big.
  */
 public final class EclipseWraith {
-	public static final Creature.Kind KIND = Creature.kind("eclipse_wraith", Items.PHANTOM_SPAWN_EGG,
+	public static final Creature.Kind KIND = Creature.kind("eclipse_wraith", Items.VEX_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
 			.acting(EclipseWraith::act)
 			.boss(BossEvent.BossBarColor.PURPLE, ChatFormatting.DARK_PURPLE);
@@ -46,13 +48,15 @@ public final class EclipseWraith {
 	private EclipseWraith() {
 	}
 
-	public static Phantom spawn(ServerLevel level, BlockPos pos, String language, double health) {
-		Phantom wraith = EntityTypes.PHANTOM.create(level, EntitySpawnReason.EVENT);
+	public static Vex spawn(ServerLevel level, BlockPos pos, String language, double health) {
+		Vex wraith = EntityTypes.VEX.create(level, EntitySpawnReason.EVENT);
 		if (wraith == null) {
 			return null;
 		}
 		wraith.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		wraith.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
+		// A vex spawns with a sword, which would float next to the wraith.
+		wraith.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(wraith, Attributes.SCALE, 3.0);
 		MobSpawning.setBase(wraith, Attributes.MAX_HEALTH, health);
 		MobSpawning.setBase(wraith, Attributes.ATTACK_DAMAGE, 8.0);

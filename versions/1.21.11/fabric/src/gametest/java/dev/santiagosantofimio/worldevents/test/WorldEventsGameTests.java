@@ -92,7 +92,6 @@ import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Vex;
@@ -1236,7 +1235,7 @@ public class WorldEventsGameTests {
 		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
 		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
 
-		Phantom wraith = eclipse.spawnWraith(level, EventManager.active(level), helper.absolutePos(new BlockPos(4, 8, 4)), "en_us");
+		Vex wraith = eclipse.spawnWraith(level, EventManager.active(level), helper.absolutePos(new BlockPos(4, 8, 4)), "en_us");
 		helper.assertTrue(wraith != null && EclipseWraith.is(wraith), "no wraith");
 		assertCreature(helper, wraith, "eclipse_wraith");
 		helper.assertTrue(wraith.hasEffect(MobEffects.FIRE_RESISTANCE), "the wraith would burn in the sun");

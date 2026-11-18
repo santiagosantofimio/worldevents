@@ -129,6 +129,20 @@ public final class EventItems {
 	}));
 
 	/**
+	 * Cooldown of the eclipse shard's reveal. In this version cooldowns belong to an item type, so while it lasts every
+	 * prismarine shard of the player shows it.
+	 */
+	public static final int REVEAL_COOLDOWN_SECONDS = 60;
+
+	/** Night vision for its holder, and every monster around glows; see {@code EclipseEvent}. A prismarine shard: this version has no echo shards. */
+	public static final EventItem ECLIPSE_SHARD = register(new EventItem("eclipse_shard", Items.PRISMARINE_SHARD, Rarity.EPIC, true, stack -> {
+	}));
+
+	/** A blade of ice whose hits chill and slow; see {@code BlizzardEvent}. */
+	public static final EventItem FROSTFANG = register(new EventItem("frostfang", Items.DIAMOND_SWORD, Rarity.EPIC, false,
+			stack -> weapon(stack, 7.0, -2.4)));
+
+	/**
 	 * Earned by taking part in events and spent at the nomad merchant. Plain currency: it does nothing by itself. A
 	 * nautilus shell: 1.18 has no pottery sherds.
 	 */

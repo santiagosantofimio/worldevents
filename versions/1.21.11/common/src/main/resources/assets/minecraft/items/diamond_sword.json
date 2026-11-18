@@ -9,6 +9,13 @@
 					"type": "minecraft:model",
 					"model": "worldevents:item/blood_scythe"
 				}
+			},
+			{
+				"when": "worldevents:frostfang",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/frostfang"
+				}
 			}
 		],
 		"fallback": {

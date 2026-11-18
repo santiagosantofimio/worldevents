@@ -14,6 +14,8 @@ worldevents summon horde_warlord ~9 ~3 ~3
 worldevents summon spectral_captain ~0 ~3 ~6
 worldevents summon magma_colossus ~3 ~3 ~6
 worldevents summon void_stalker ~6 ~3 ~6
+worldevents summon eclipse_wraith ~9 ~3 ~6
+worldevents summon frost_yeti ~0 ~3 ~9
 setblock ~ ~20 ~ minecraft:iron_ore
 loot spawn ~ ~22 ~ mine ~ ~20 ~ minecraft:diamond_pickaxe[minecraft:custom_data={worldevents_item:"starfall_pickaxe"}]
 schedule function smoke:step1 40t

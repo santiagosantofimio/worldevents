@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:frost_yeti",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/frost_yeti"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/ravager_spawn_egg"
+		}
+	}
+}

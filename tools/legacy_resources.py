@@ -37,6 +37,8 @@ PART_SCALES = {
     "spectral_captain": 1.05,
     "magma_colossus": 2.0,
     "void_stalker": 1.05,
+    "eclipse_wraith": 1.6,
+    "frost_yeti": 1.4,
 }
 # A worn head item is drawn at 0.625 of its model's size.
 HEAD_ITEM_SCALE = 0.625
@@ -46,6 +48,7 @@ ITEM_SWAPS = {
         "mace": "netherite_axe",
         "prize_pottery_sherd": "nautilus_shell",
         "allay_spawn_egg": "parrot_spawn_egg",
+        "echo_shard": "amethyst_shard",
     },
     "1.16": {
         "mace": "netherite_axe",
@@ -53,6 +56,7 @@ ITEM_SWAPS = {
         "allay_spawn_egg": "parrot_spawn_egg",
         "raw_iron": "iron_nugget",
         "raw_gold_block": "gold_block",
+        "echo_shard": "prismarine_shard",
     },
 }
 

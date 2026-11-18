@@ -85,5 +85,19 @@
 	"advancements.worldevents.defeat_void_stalker.title": "Shadow Slayer",
 	"advancements.worldevents.defeat_void_stalker.description": "Defeat a void stalker",
 	"advancements.worldevents.unstable_pearl.title": "In the Blink of an Eye",
-	"advancements.worldevents.unstable_pearl.description": "Get an unstable pearl from a void stalker"
+	"advancements.worldevents.unstable_pearl.description": "Get an unstable pearl from a void stalker",
+	"item.worldevents.eclipse_shard": "Eclipse Shard",
+	"item.worldevents.eclipse_shard.lore": "Right-click: night vision, and every monster around glows (60 s cooldown)",
+	"item.worldevents.frostfang": "Frostfang",
+	"item.worldevents.frostfang.lore": "A blade of ice whose hits chill and slow",
+	"entity.worldevents.eclipse_wraith": "Eclipse Wraith",
+	"entity.worldevents.frost_yeti": "Frost Yeti",
+	"advancements.worldevents.defeat_eclipse_wraith.title": "Let There Be Light",
+	"advancements.worldevents.defeat_eclipse_wraith.description": "Defeat the Eclipse Wraith",
+	"advancements.worldevents.eclipse_shard.title": "Piece of the Dark",
+	"advancements.worldevents.eclipse_shard.description": "Get an Eclipse Shard",
+	"advancements.worldevents.defeat_frost_yeti.title": "Big Foot, Bigger Fall",
+	"advancements.worldevents.defeat_frost_yeti.description": "Defeat the Frost Yeti",
+	"advancements.worldevents.frostfang.title": "Cold Steel",
+	"advancements.worldevents.frostfang.description": "Get Frostfang"
 }

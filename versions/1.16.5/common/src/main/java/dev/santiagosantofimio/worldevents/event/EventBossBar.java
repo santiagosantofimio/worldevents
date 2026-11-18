@@ -23,6 +23,9 @@ final class EventBossBar {
 		String time = DropMath.formatTicks(active.remainingTicks());
 		bar.update(level.players(), language -> {
 			String name = Lang.text(language, "event." + event.id() + ".name");
+			if (EventManager.isConvergence(active)) {
+				name = Lang.text(language, "event.convergence.name", name);
+			}
 			String detail = event.barDetail(active, language);
 			if (detail != null) {
 				name = Lang.text(language, "bossbar.title", name, detail);

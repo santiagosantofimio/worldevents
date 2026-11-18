@@ -4,6 +4,37 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-11-16
+
+Two new events, convergences, and a new look for every creature and item.
+
+### Added
+
+- **Eclipse** (`eclipse`, overworld, daytime): the sky goes dark for 5 minutes and the monsters it
+  brings walk in the sun without burning. Phantoms dive at players, and after a minute the **Eclipse
+  Wraith** (boss) arrives: it swoops at players, blinds those below with darkness pulses and calls
+  more phantoms. It can drop the **Eclipse Shard**: right-click for night vision and every monster
+  around glows for a while (60 s cooldown). When the sun comes back, what the eclipse brought burns
+  again.
+- **Blizzard** (`blizzard`, overworld, only when a player is in a snowy biome): snow and wind for
+  5 minutes, with strays coming out of the storm. Players out in the open freeze little by little,
+  unless they are under a roof, near a fire or wearing leather. After a minute the **Frost Yeti**
+  (boss) arrives and its roar chills and slows everyone near it. It can drop **Frostfang**: a sword
+  whose hits chill and slow. No block is touched.
+- **Convergence**: an event can come as a convergence (8% by default, `convergenceChance` in the
+  config; `0` turns it off). It lasts half as long again and gives double points and double seals. The
+  boss bar says so.
+- New advancements for the two bosses and the two new items, with translations in English and Spanish.
+
+### Changed
+
+- Every creature has a new model in a vanilla style, made of a few blocks with Minecraft-like
+  textures, in every version of the mod. The Living Meteorite is unchanged.
+- New 16x16 icons for the mod's items, with vanilla-style lighting.
+- 1.18.2: the Eclipse Shard is an amethyst shard (there are no echo shards); 1.16.5: a prismarine
+  shard. In 1.16.5 there is no freezing, so the blizzard's cold slows players and bites now and
+  then instead.
+
 ## [1.0.1] - 2026-11-03
 
 Fixes from players' feedback.

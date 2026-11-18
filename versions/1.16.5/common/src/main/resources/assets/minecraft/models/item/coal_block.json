@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/coal_block",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 8850782
+			},
+			"model": "worldevents:item/eclipse_wraith"
+		}
+	]
+}

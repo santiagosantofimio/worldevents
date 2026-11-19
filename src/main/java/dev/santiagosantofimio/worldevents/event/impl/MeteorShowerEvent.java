@@ -71,12 +71,12 @@ public final class MeteorShowerEvent implements WorldEvent {
 
 	private static final long LATEST_START = 18000;
 
-	private static final int MAX_FALLING = 8;
-	private static final int MAX_STREAKS = 12;
+	private static final int MAX_FALLING = 12;
+	private static final int MAX_STREAKS = 16;
 	private static final int MIN_IMPACT_DISTANCE = 12;
 	private static final int MAX_IMPACT_DISTANCE = 40;
 	private static final double MIN_PLAYER_CLEARANCE = 8.0;
-	private static final double FALL_HEIGHT = 50.0;
+	private static final double FALL_HEIGHT = 65.0;
 	private static final double NOTIFY_DISTANCE = 48.0;
 	private static final double MIN_CRATER_RADIUS = 1.5;
 	private static final double MAX_CRATER_RADIUS = 4.0;
@@ -120,9 +120,9 @@ public final class MeteorShowerEvent implements WorldEvent {
 	public JsonObject defaultSettings() {
 		// At most once every 4 in-game days; lasts 3 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 180);
-		json.addProperty("shootingStarInterval", 2);
-		json.addProperty("impactChance", 0.04);
-		json.addProperty("impactsPerPlayer", 3);
+		json.addProperty("shootingStarInterval", 1);
+		json.addProperty("impactChance", 0.03);
+		json.addProperty("impactsPerPlayer", 4);
 		json.addProperty("craters", true);
 		json.addProperty("craterRadius", 2.5);
 		json.addProperty("oreChance", 0.35);
@@ -207,9 +207,17 @@ public final class MeteorShowerEvent implements WorldEvent {
 				continue;
 			}
 			Vec3 pos = entity.position();
-			level.sendParticles(ParticleTypes.FLAME, true, false, pos.x, pos.y + 0.5, pos.z, 4, 0.25, 0.25, 0.25, 0.01);
-			level.sendParticles(ParticleTypes.LARGE_SMOKE, true, false, pos.x, pos.y + 0.5, pos.z, 2, 0.2, 0.2, 0.2, 0.01);
-			level.sendParticles(ParticleTypes.LAVA, true, false, pos.x, pos.y + 0.5, pos.z, 1, 0.2, 0.2, 0.2, 0.0);
+			// A long fiery tail behind the rock, so it reads as a comet from far away, and a roar as it falls.
+			Vec3 tail = entity.getDeltaMovement().scale(-1.0);
+			for (int i = 0; i < 4; i++) {
+				Vec3 at = pos.add(tail.scale(i * 0.9));
+				level.sendParticles(ParticleTypes.FLAME, true, false, at.x, at.y + 0.5, at.z, 3, 0.3, 0.3, 0.3, 0.01);
+				level.sendParticles(ParticleTypes.LARGE_SMOKE, true, false, at.x, at.y + 0.5, at.z, 1, 0.25, 0.25, 0.25, 0.01);
+			}
+			level.sendParticles(ParticleTypes.LAVA, true, false, pos.x, pos.y + 0.5, pos.z, 2, 0.3, 0.3, 0.3, 0.0);
+			if (entity.tickCount % 6 == 0) {
+				level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.WEATHER, 5.0f, 0.5f);
+			}
 
 			// Where the falling block will be next tick (gravity is applied before it moves).
 			Vec3 next = pos.add(entity.getDeltaMovement().add(0.0, -0.04, 0.0).scale(1.5));
@@ -379,6 +387,14 @@ public final class MeteorShowerEvent implements WorldEvent {
 		level.sendParticles(ParticleTypes.LAVA, true, false, center.x, center.y, center.z, 20, 1.2, 0.6, 1.2, 0.0);
 		level.sendParticles(ParticleTypes.LARGE_SMOKE, true, false, center.x, center.y, center.z, 30, 1.5, 1.0, 1.5, 0.02);
 		level.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0f, 0.7f);
+		// A crack of thunder carries much farther than the blast, and a ring of flame and dust marks the spot.
+		level.playSound(null, center.x, center.y, center.z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 6.0f, 1.3f);
+		level.sendParticles(ParticleTypes.FLAME, true, false, center.x, center.y, center.z, 60, 1.0, 1.5, 1.0, 0.15);
+		for (int i = 0; i < 24; i++) {
+			double angle = i * Math.PI / 12;
+			level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, false, center.x + Math.cos(angle) * 1.5, center.y, center.z + Math.sin(angle) * 1.5,
+					0, Math.cos(angle), 0.05, Math.sin(angle), 0.35);
+		}
 
 		EventSettings settings = settings();
 		boolean craters = ModConfig.get().blockDamage() && settings.getBoolean("craters");
@@ -560,19 +576,26 @@ public final class MeteorShowerEvent implements WorldEvent {
 
 		private static Streak near(ServerPlayer player, ServerLevel level, RandomSource random) {
 			double angle = random.nextDouble() * Math.PI * 2;
-			double offset = Mth.nextDouble(random, 0, 40);
-			double y = Math.max(player.getY(), level.getSeaLevel()) + Mth.nextDouble(random, 45, 70);
+			double offset = Mth.nextDouble(random, 10, 50);
+			double y = Math.max(player.getY(), level.getSeaLevel()) + Mth.nextDouble(random, 25, 50);
 			Vec3 start = new Vec3(player.getX() + Math.cos(angle) * offset, y, player.getZ() + Math.sin(angle) * offset);
 			double heading = random.nextDouble() * Math.PI * 2;
-			double speed = Mth.nextDouble(random, 2.0, 3.5);
-			Vec3 step = new Vec3(Math.cos(heading) * speed, -Mth.nextDouble(random, 0.3, 0.9), Math.sin(heading) * speed);
-			return new Streak(start, step, Mth.nextInt(random, 12, 20));
+			double speed = Mth.nextDouble(random, 1.4, 2.4);
+			Vec3 step = new Vec3(Math.cos(heading) * speed, -Mth.nextDouble(random, 0.2, 0.6), Math.sin(heading) * speed);
+			level.playSound(null, start.x, start.y, start.z, SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.WEATHER, 1.5f, Mth.nextFloat(random, 1.5f, 2.0f));
+			return new Streak(start, step, Mth.nextInt(random, 14, 24));
 		}
 
 		private void render(ServerLevel level) {
-			Vec3 mid = pos.add(step.scale(0.5));
-			level.sendParticles(ParticleTypes.END_ROD, true, false, pos.x, pos.y, pos.z, 1, 0.0, 0.0, 0.0, 0.0);
-			level.sendParticles(ParticleTypes.FIREWORK, true, false, mid.x, mid.y, mid.z, 1, 0.05, 0.05, 0.05, 0.01);
+			// A thick glowing line, not dots: a white core with a flame around it every third of a block along this
+			// tick's step, and sparks at the head. Thin dots all but vanish at this height.
+			int points = Math.max(3, (int) Math.ceil(step.length() / 0.35));
+			for (int i = 0; i < points; i++) {
+				Vec3 at = pos.add(step.scale(i / (double) points));
+				level.sendParticles(ParticleTypes.END_ROD, true, false, at.x, at.y, at.z, 2, 0.08, 0.08, 0.08, 0.0);
+				level.sendParticles(ParticleTypes.FLAME, true, false, at.x, at.y, at.z, 1, 0.12, 0.12, 0.12, 0.0);
+			}
+			level.sendParticles(ParticleTypes.FIREWORK, true, false, pos.x, pos.y, pos.z, 4, 0.15, 0.15, 0.15, 0.03);
 		}
 
 		/** Moves the star forward; returns true once it has burnt out. */

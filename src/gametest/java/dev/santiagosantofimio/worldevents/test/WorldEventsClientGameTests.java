@@ -1,6 +1,9 @@
 package dev.santiagosantofimio.worldevents.test;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dev.santiagosantofimio.worldevents.WorldEventsClient;
+import dev.santiagosantofimio.worldevents.config.ModConfig;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
@@ -21,6 +24,11 @@ import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.MagmaColossus;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -130,6 +138,22 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			showSummoned(context, singleplayer, MagmaColossus.KIND, "worldevents_showcase_colossus_front", 9, 180.0f);
 			showSummoned(context, singleplayer, MagmaColossus.KIND, "worldevents_showcase_colossus_side", 9, 135.0f);
 
+			// A meteor shower at night, looking up: the shooting stars and the meteors coming down. The shower is sped up
+			// so a few frames are enough.
+			Runnable restoreConfig = fastMeteors();
+			singleplayer.getServer().runCommand("time set midnight");
+			singleplayer.getServer().runOnServer(server -> EventManager.start(server.getPlayerList().getPlayers().get(0).level(),
+					EventRegistry.get(MeteorShowerEvent.ID)));
+			context.getInput().lookAt(0.0f, -30.0f);
+			for (int frame = 0; frame < 4; frame++) {
+				context.waitTicks(60);
+				context.takeScreenshot("worldevents_meteor_shower_" + frame);
+			}
+			singleplayer.getServer().runOnServer(server -> EventManager.stop(server.getPlayerList().getPlayers().get(0).level()));
+			restoreConfig.run();
+			singleplayer.getServer().runCommand("time set noon");
+			context.getInput().lookAt(0.0f, 12.0f);
+
 			// The creative tab, with the special items and the creature eggs.
 			singleplayer.getServer().runCommand("gamemode creative @a");
 			context.waitTicks(5);
@@ -140,6 +164,31 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			context.waitTicks(10);
 			context.takeScreenshot("worldevents_creative_tab");
 			context.setScreen(() -> null);
+		}
+	}
+
+	/** Makes the meteor shower fast and frequent for a screenshot; the result puts the config back. */
+	private static Runnable fastMeteors() {
+		Path path = ModConfig.path();
+		try {
+			String original = Files.readString(path, StandardCharsets.UTF_8);
+			JsonObject json = JsonParser.parseString(original).getAsJsonObject();
+			JsonObject section = json.getAsJsonObject("events").getAsJsonObject(MeteorShowerEvent.ID);
+			section.addProperty("shootingStarInterval", 1);
+			section.addProperty("impactChance", 0.25);
+			section.addProperty("impactsPerPlayer", 4);
+			Files.writeString(path, json.toString(), StandardCharsets.UTF_8);
+			ModConfig.load();
+			return () -> {
+				try {
+					Files.writeString(path, original, StandardCharsets.UTF_8);
+				} catch (IOException e) {
+					throw new UncheckedIOException(e);
+				}
+				ModConfig.load();
+			};
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
 		}
 	}
 

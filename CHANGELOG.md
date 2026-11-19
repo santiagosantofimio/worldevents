@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] - 2026-11-19
+
+The meteor shower is much easier to notice.
+
+### Changed
+
+- **Meteor Shower**: shooting stars are now thick, glowing lines with a white core and a flame around
+  it, lower and closer to the players, twice as frequent and with a whoosh, instead of faint dots high in
+  the sky. Meteors fall from higher up with a long fiery tail and a roar, and every impact brings a crack
+  of thunder that carries far, more flames and a ring of smoke. Up to 4 meteors per player (was 3).
+  The new defaults are `shootingStarInterval` 1, `impactChance` 0.03 and `impactsPerPlayer` 4. A
+  `config/worldevents.json` that already exists keeps its old values: delete the `meteor_shower` section
+  (or set those three keys) to get the new ones.
+
 ## [1.1.0] - 2026-11-16
 
 Two new events, convergences, and a new look for every creature and item.

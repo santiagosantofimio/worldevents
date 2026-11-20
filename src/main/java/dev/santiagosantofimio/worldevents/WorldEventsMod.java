@@ -11,6 +11,7 @@ import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
+import dev.santiagosantofimio.worldevents.event.impl.FireflyNightEvent;
 import dev.santiagosantofimio.worldevents.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldevents.event.impl.MeteorShowerEvent;
@@ -60,6 +61,7 @@ public class WorldEventsMod implements ModInitializer {
 		EventRegistry.register(new VoidStormEvent());
 		EventRegistry.register(new EclipseEvent());
 		EventRegistry.register(new BlizzardEvent());
+		EventRegistry.register(new FireflyNightEvent());
 
 		Creature.registerKinds(BloodMoonLord.KIND, BloodEye.KIND, MimicSack.KIND, LivingMeteorite.KIND, StormSpirit.KIND,
 				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND, VoidStalker.KIND,
@@ -73,7 +75,6 @@ public class WorldEventsMod implements ModInitializer {
 		for (WorldEvent event : EventRegistry.all()) {
 			event.registerHooks();
 		}
-		// After the events, so the starfall pickaxe smelts drops the gold rush has already doubled.
 		EventItems.registerHooks();
 		ServerTickEvents.END_LEVEL_TICK.register(EventManager::onLevelTick);
 		ServerPlayerEvents.JOIN.register(EventManager::onPlayerEnteredLevel);

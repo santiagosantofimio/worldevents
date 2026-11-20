@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - Unreleased
+
+### Added
+
+- **Firefly Night** (`firefly_night`, Minecraft 26.3 Fabric only so far): a five-minute
+  nighttime search in the overworld, including Peaceful difficulty. Follow personal green
+  lights on nearby open ground with direction, distance and progress hints in English or
+  Spanish. Each find grants 5 XP and 2 event points; finding all five grants an advancement.
+  Progress survives restarts, and each player has their own lights and reward limit.
+  The event ends at dawn and never changes blocks or creates creatures. Vanilla nighttime
+  dangers still apply. Config defaults: `lightsPerPlayer` 5 (limited to 1–20) and
+  `experiencePerLight` 5 (limited to 0–100), weight 10, cooldown 4800 s, duration 300 s.
+  Existing config files receive the new section automatically.
+
 ## [1.1.1] - 2026-11-19
 
 The meteor shower is much easier to notice.

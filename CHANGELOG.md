@@ -8,7 +8,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- **Firefly Night** (`firefly_night`, Minecraft 26.3 Fabric only so far): a five-minute
+- **Firefly Night** (`firefly_night`, on all supported Minecraft versions): a five-minute
   nighttime search in the overworld, including Peaceful difficulty. Follow personal green
   lights on nearby open ground with direction, distance and progress hints in English or
   Spanish. Each find grants 5 XP and 2 event points; finding all five grants an advancement.
@@ -17,6 +17,9 @@ All notable changes to this project are documented here. The format follows
   dangers still apply. Config defaults: `lightsPerPlayer` 5 (limited to 1–20) and
   `experiencePerLight` 5 (limited to 0–100), weight 10, cooldown 4800 s, duration 300 s.
   Existing config files receive the new section automatically.
+- Added `/worldevents help [id]` and `/eventos help [id]` in English and Spanish.
+  With no id, it describes the active event in the current dimension. With an id, it
+  explains that event’s objective, reward and conditions without changing world state.
 
 ## [1.1.1] - 2026-11-19
 

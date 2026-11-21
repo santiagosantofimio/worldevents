@@ -15,6 +15,7 @@ import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlizzardEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldevents.event.impl.FireflyNightEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldevents.event.impl.GoldRushEvent;
@@ -496,6 +497,21 @@ public class WorldEventsGameTests {
 		helper.assertTrue(haste != null && haste.getAmplifier() == 1, "no Haste II after the fragment");
 		helper.assertTrue(player.hasEffect(MobEffects.NIGHT_VISION), "no night vision after the fragment");
 		remove(player);
+		helper.succeed();
+	}
+
+	@GameTest(environment = "worldevents-test:give", maxTicks = 100)
+	public void helpCommandExplainsActiveAndNamedEvents(GameTestHelper helper) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+		ServerLevel level = helper.getLevel();
+		reset(level);
+		var commands = level.getServer().getCommands();
+		var source = level.getServer().createCommandSourceStack();
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 0, "help without active event");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos help unknown_event", source), 0, "unknown event help");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos help firefly_night", source), 1, "named event help");
+		helper.assertTrue(EventManager.start(level, event(FireflyNightEvent.ID)), "firefly event failed to start");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 1, "active event help");
+		EventManager.stop(level);
 		helper.succeed();
 	}
 

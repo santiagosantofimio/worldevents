@@ -33,14 +33,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-/** /worldevents (alias /eventos): list, start, stop, give, summon, status, reload. Vanilla argument types only. */
+
 public final class WorldEventsCommand {
 	private WorldEventsCommand() {
 	}
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(build("worldevents"));
-		// A redirect alias would not run the bare command, so the tree is simply built twice.
 		dispatcher.register(build("eventos"));
 	}
 
@@ -69,7 +68,12 @@ public final class WorldEventsCommand {
 								.executes(context -> summon(context, BlockPos.containing(context.getSource().getPosition())))
 								.then(Commands.argument("pos", BlockPosArgument.blockPos())
 										.executes(context -> summon(context, BlockPosArgument.getSpawnablePos(context, "pos"))))))
-				.then(Commands.literal("status").executes(WorldEventsCommand::status))
+				.then(Commands.literal("help")
+						.executes(context -> help(context, null))
+						.then(Commands.argument("id", StringArgumentType.word())
+								.suggests((context, builder) -> SharedSuggestionProvider.suggest(EventRegistry.all().stream().map(WorldEvent::id), builder))
+								.executes(context -> help(context, StringArgumentType.getString(context, "id")))))
+			.then(Commands.literal("status").executes(WorldEventsCommand::status))
 				.then(Commands.literal("reload").executes(WorldEventsCommand::reload));
 	}
 
@@ -135,7 +139,7 @@ public final class WorldEventsCommand {
 		return 1;
 	}
 
-	/** The special items, then the creature eggs ({@code <creature>_spawn_egg}). */
+
 	private static Stream<String> giveableIds() {
 		return Stream.concat(EventItems.all().stream().map(EventItems.EventItem::id), Creature.kinds().stream().map(EventItems::eggId));
 	}
@@ -154,7 +158,6 @@ public final class WorldEventsCommand {
 			String language = Lang.language(player);
 			ItemStack stack = item != null ? item.create(language, count) : EventItems.egg(egg, language, count);
 			if (!player.getInventory().add(stack)) {
-				// Inventory full: drop the rest at their feet.
 				Drops.spawn(player.level(), player.position(), stack);
 			}
 		}
@@ -164,7 +167,7 @@ public final class WorldEventsCommand {
 		return targets.size();
 	}
 
-	/** Summons a creature outside of any event: it stays until defeated. */
+
 	private static int summon(CommandContext<CommandSourceStack> context, BlockPos pos) {
 		CommandSourceStack source = context.getSource();
 		String id = StringArgumentType.getString(context, "creature");
@@ -207,6 +210,32 @@ public final class WorldEventsCommand {
 			source.sendSuccess(() -> line, false);
 		}
 		return active;
+	}
+
+
+	private static int help(CommandContext<CommandSourceStack> context, String id) {
+		CommandSourceStack source = context.getSource();
+		WorldEvent event;
+		if (id == null) {
+			ActiveEvent active = EventManager.active(source.getLevel());
+			if (active == null) {
+				source.sendFailure(Lang.component(source, "command.help.none"));
+				return 0;
+			}
+			event = active.event();
+		} else {
+			event = EventRegistry.get(id);
+			if (event == null) {
+				source.sendFailure(Lang.component(source, "command.start.unknown", id));
+				return 0;
+			}
+		}
+		String prefix = "command.help." + event.id();
+		source.sendSuccess(() -> Lang.component(source, "command.help.title", eventName(source, event)), false);
+		source.sendSuccess(() -> Lang.component(source, prefix + ".objective"), false);
+		source.sendSuccess(() -> Lang.component(source, prefix + ".reward"), false);
+		source.sendSuccess(() -> Lang.component(source, prefix + ".conditions"), false);
+		return 1;
 	}
 
 	private static int reload(CommandContext<CommandSourceStack> context) {

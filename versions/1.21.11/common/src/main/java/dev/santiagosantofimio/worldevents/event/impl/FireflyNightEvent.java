@@ -91,7 +91,7 @@ public final class FireflyNightEvent implements WorldEvent {
 				light = null;
 			}
 			if (light == null && level.canSeeSky(player.blockPosition())) {
-				light = MobSpawning.spotNear(level, EntityType.PLAYER, player.blockPosition(), 8, 16, 3, 16,
+				light = MobSpawning.spotNear(level, EntityType.PLAYER, player.blockPosition(), 8, 16, 3, 64,
 						pos -> safe(level, pos));
 				if (light != null) {
 					progress.putLong("target", light.asLong());

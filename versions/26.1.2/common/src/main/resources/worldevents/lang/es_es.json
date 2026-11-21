@@ -130,5 +130,16 @@
 	"event.blizzard.end": "La ventisca amaina.",
 	"mob.frost_yeti.arrived": "¡El Yeti de escarcha ruge en algún lugar de la tormenta!",
 	"mob.frost_yeti.defeated": "¡%s ha derrotado al Yeti de escarcha!",
-	"mob.frost_yeti.retreat": "El Yeti de escarcha desaparece en la nieve."
+	"mob.frost_yeti.retreat": "El Yeti de escarcha desaparece en la nieve.",
+	"event.firefly_night.name": "Noche de luciérnagas",
+	"event.firefly_night.start.title": "Noche de luciérnagas",
+	"event.firefly_night.start.subtitle": "Sigue las luces bajo las estrellas",
+	"event.firefly_night.start.chat": "Unas luces brillan cerca. Sal al aire libre y sigue las pistas de dirección y distancia: acércate a cada luz para ganar experiencia y puntos. No necesitas atraparlas ni llevar ningún objeto.",
+	"event.firefly_night.end": "Las luciérnagas se despiden hasta otra noche.",
+	"event.firefly_night.hint": "Luz al %1$s · %2$s bloques · %3$s/%4$s encontradas",
+	"event.firefly_night.found": "¡Luz encontrada! %1$s/%2$s",
+	"event.firefly_night.north": "norte",
+	"event.firefly_night.south": "sur",
+	"event.firefly_night.east": "este",
+	"event.firefly_night.west": "oeste"
 }

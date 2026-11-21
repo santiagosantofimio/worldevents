@@ -130,5 +130,16 @@
 	"event.blizzard.end": "The blizzard dies down.",
 	"mob.frost_yeti.arrived": "The Frost Yeti roars somewhere in the storm!",
 	"mob.frost_yeti.defeated": "%s has defeated the Frost Yeti!",
-	"mob.frost_yeti.retreat": "The Frost Yeti vanishes into the snow."
+	"mob.frost_yeti.retreat": "The Frost Yeti vanishes into the snow.",
+	"event.firefly_night.name": "Firefly Night",
+	"event.firefly_night.start.title": "Firefly Night",
+	"event.firefly_night.start.subtitle": "Follow the lights under the stars",
+	"event.firefly_night.start.chat": "Lights are glowing nearby. Head outdoors and follow the direction and distance hints: approach each light to earn experience and points. No catching or special items needed.",
+	"event.firefly_night.end": "The fireflies fade until another night.",
+	"event.firefly_night.hint": "Light to the %1$s · %2$s blocks · %3$s/%4$s found",
+	"event.firefly_night.found": "Light found! %1$s/%2$s",
+	"event.firefly_night.north": "north",
+	"event.firefly_night.south": "south",
+	"event.firefly_night.east": "east",
+	"event.firefly_night.west": "west"
 }

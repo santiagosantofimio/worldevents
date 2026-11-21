@@ -10,7 +10,8 @@
 			"dev.santiagosantofimio.worldevents.test.FireflyNightGameTests"
 		],
 		"fabric-client-gametest": [
-			"dev.santiagosantofimio.worldevents.test.WorldEventsClientGameTests"
+			"dev.santiagosantofimio.worldevents.test.WorldEventsClientGameTests",
+			"dev.santiagosantofimio.worldevents.test.FireflyNightClientGameTests"
 		]
 	},
 	"depends": {

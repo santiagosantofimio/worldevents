@@ -59,4 +59,5 @@ Los `.zip` de 1.2.0 se generan para cada versión. El evento nuevo usa partícul
 - GameTests de Fabric: 38 en 26.3 y 37 en 26.1.2 y 1.21.11. Builds de 1.18.2 y 1.16.5 aprobados.
 - Builds Forge de 1.18.2 y 1.16.5 aprobados.
 - Pruebas de humo de los once loaders en servidores de desarrollo: iniciaron y detuvieron eventos sin errores del mod.
-- Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, aspecto de luciérnagas en cliente y balance prolongado.
+- Cliente 26.3: `runClientGameTest` aprobó y la captura `worldevents_firefly_night` mostró boss bar, pistas de dirección/distancia y partículas verdes visibles a 13 bloques.
+- Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, aspecto en las otras versiones y balance prolongado.

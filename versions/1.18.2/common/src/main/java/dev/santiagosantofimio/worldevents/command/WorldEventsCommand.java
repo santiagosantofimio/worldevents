@@ -48,20 +48,20 @@ public final class WorldEventsCommand {
 				.requires(source -> source.hasPermission(2))
 				.executes(WorldEventsCommand::status)
 				.then(Commands.literal("list").executes(WorldEventsCommand::list))
-				.then(Commands.literal("start")
+				.then(Commands.literal("start").requires(source -> source.hasPermission(2))
 						.then(Commands.argument("id", StringArgumentType.word())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
 										EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(WorldEventsCommand::start)))
-				.then(Commands.literal("stop").executes(WorldEventsCommand::stop))
-				.then(Commands.literal("give")
+				.then(Commands.literal("stop").requires(source -> source.hasPermission(2)).executes(WorldEventsCommand::stop))
+				.then(Commands.literal("give").requires(source -> source.hasPermission(2))
 						.then(Commands.argument("targets", EntityArgument.players())
 								.then(Commands.argument("item", StringArgumentType.word())
 										.suggests((context, builder) -> SharedSuggestionProvider.suggest(giveableIds(), builder))
 										.executes(context -> give(context, 1))
 										.then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
 												.executes(context -> give(context, IntegerArgumentType.getInteger(context, "count")))))))
-				.then(Commands.literal("summon")
+				.then(Commands.literal("summon").requires(source -> source.hasPermission(2))
 						.then(Commands.argument("creature", StringArgumentType.word())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
 										Creature.kinds().stream().map(Creature.Kind::id), builder))
@@ -74,7 +74,7 @@ public final class WorldEventsCommand {
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(context -> help(context, StringArgumentType.getString(context, "id")))))
 			.then(Commands.literal("status").executes(WorldEventsCommand::status))
-				.then(Commands.literal("reload").executes(WorldEventsCommand::reload));
+				.then(Commands.literal("reload").requires(source -> source.hasPermission(2)).executes(WorldEventsCommand::reload));
 	}
 
 	private static String eventName(CommandSourceStack source, WorldEvent event) {

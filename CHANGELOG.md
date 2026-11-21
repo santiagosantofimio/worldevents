@@ -18,7 +18,7 @@ All notable changes to this project are documented here. The format follows
   `experiencePerLight` 5 (limited to 0–100), weight 10, cooldown 4800 s, duration 300 s.
   Existing config files receive the new section automatically.
 - Added `/worldevents help [id]` and `/eventos help [id]` in English and Spanish.
-  With no id, it describes the active event in the current dimension. With an id, it
+  With no id, it describes the active event in the current dimension. Players can use help without operator permissions. With an id, it
   explains that event’s objective, reward and conditions without changing world state.
 
 ## [1.1.1] - 2026-11-19

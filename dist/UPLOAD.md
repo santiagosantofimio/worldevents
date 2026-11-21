@@ -32,7 +32,7 @@ Markdown para Modrinth:
 ## World Omens 1.2.0
 
 - Firefly Night: follow five personal lights in the overworld at night. Each light grants experience and event points; completing the route grants an advancement. Progress survives restarts.
-- `/worldevents help [id]` and `/eventos help [id]` explain an event’s objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension.
+- `/worldevents help [id]` and `/eventos help [id]` explain an event’s objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 
@@ -44,7 +44,7 @@ Texto plano para CurseForge:
 World Omens 1.2.0
 
 - Firefly Night: follow five personal lights in the overworld at night. Each light grants experience and event points; completing the route grants an advancement. Progress survives restarts.
-- /worldevents help [id] and /eventos help [id] explain an event's objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension.
+- /worldevents help [id] and /eventos help [id] explain an event's objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 

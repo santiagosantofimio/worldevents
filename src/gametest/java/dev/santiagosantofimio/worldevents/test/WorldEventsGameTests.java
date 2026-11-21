@@ -500,7 +500,7 @@ public class WorldEventsGameTests {
 		helper.succeed();
 	}
 
-	@GameTest(environment = "worldevents-test:give", maxTicks = 100)
+	@GameTest(environment = "worldevents-test:help", maxTicks = 100)
 	public void helpCommandExplainsActiveAndNamedEvents(GameTestHelper helper) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
 		ServerLevel level = helper.getLevel();
 		reset(level);
@@ -509,6 +509,9 @@ public class WorldEventsGameTests {
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 0, "help without active event");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help unknown_event", source), 0, "unknown event help");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help firefly_night", source), 1, "named event help");
+		ServerPlayer player = player(helper, new BlockPos(1, 1, 1), "es_es");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos help firefly_night", player.createCommandSourceStack()), 1, "survival player help");
+		remove(player);
 		helper.assertTrue(EventManager.start(level, event(FireflyNightEvent.ID)), "firefly event failed to start");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 1, "active event help");
 		EventManager.stop(level);

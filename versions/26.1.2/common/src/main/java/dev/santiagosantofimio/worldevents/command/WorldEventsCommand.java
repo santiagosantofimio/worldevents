@@ -45,23 +45,22 @@ public final class WorldEventsCommand {
 
 	private static LiteralArgumentBuilder<CommandSourceStack> build(String name) {
 		return Commands.literal(name)
-				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.executes(WorldEventsCommand::status)
 				.then(Commands.literal("list").executes(WorldEventsCommand::list))
-				.then(Commands.literal("start")
+				.then(Commands.literal("start").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.argument("id", StringArgumentType.word())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
 										EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(WorldEventsCommand::start)))
-				.then(Commands.literal("stop").executes(WorldEventsCommand::stop))
-				.then(Commands.literal("give")
+				.then(Commands.literal("stop").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(WorldEventsCommand::stop))
+				.then(Commands.literal("give").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.argument("targets", EntityArgument.players())
 								.then(Commands.argument("item", StringArgumentType.word())
 										.suggests((context, builder) -> SharedSuggestionProvider.suggest(giveableIds(), builder))
 										.executes(context -> give(context, 1))
 										.then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
 												.executes(context -> give(context, IntegerArgumentType.getInteger(context, "count")))))))
-				.then(Commands.literal("summon")
+				.then(Commands.literal("summon").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.argument("creature", StringArgumentType.word())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
 										Creature.kinds().stream().map(Creature.Kind::id), builder))
@@ -74,7 +73,7 @@ public final class WorldEventsCommand {
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(context -> help(context, StringArgumentType.getString(context, "id")))))
 			.then(Commands.literal("status").executes(WorldEventsCommand::status))
-				.then(Commands.literal("reload").executes(WorldEventsCommand::reload));
+				.then(Commands.literal("reload").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(WorldEventsCommand::reload));
 	}
 
 	private static String eventName(CommandSourceStack source, WorldEvent event) {

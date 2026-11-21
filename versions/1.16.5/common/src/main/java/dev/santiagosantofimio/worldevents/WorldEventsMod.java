@@ -6,6 +6,7 @@ import dev.santiagosantofimio.worldevents.event.EventRegistry;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlessedHarvestEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BlizzardEvent;
+import dev.santiagosantofimio.worldevents.event.impl.FireflyNightEvent;
 import dev.santiagosantofimio.worldevents.event.impl.BloodMoonEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldevents.event.impl.EruptionEvent;
@@ -37,7 +38,7 @@ import dev.santiagosantofimio.worldevents.util.DeferredDiscard;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** The mod's setup, shared by every loader: the loader module calls {@link #init()} once and forwards its events to {@link Hooks}. */
+
 public final class WorldEventsMod {
 	public static final String MOD_ID = "worldevents";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
@@ -58,11 +59,11 @@ public final class WorldEventsMod {
 		EventRegistry.register(new VoidStormEvent());
 		EventRegistry.register(new EclipseEvent());
 		EventRegistry.register(new BlizzardEvent());
+		EventRegistry.register(new FireflyNightEvent());
 
 		Creature.registerKinds(BloodMoonLord.KIND, BloodEye.KIND, MimicSack.KIND, LivingMeteorite.KIND, StormSpirit.KIND,
 				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND, VoidStalker.KIND,
 				EclipseWraith.KIND, FrostYeti.KIND);
-		// What each kind wears, so a creature loaded from disk gets its parts back.
 		Creature.registerDress(BloodMoonLord.KIND, BloodMoonLord.ORB, BloodMoonLord.CROWN);
 		Creature.registerDress(BloodEye.KIND, BloodEye.BODY);
 		Creature.registerDress(MimicSack.KIND, MimicSack.BODY);
@@ -83,13 +84,11 @@ public final class WorldEventsMod {
 		for (WorldEvent event : EventRegistry.all()) {
 			event.registerHooks();
 		}
-		// After the events, so the starfall pickaxe smelts drops the gold rush has already doubled.
 		EventItems.registerHooks();
 		Hooks.END_LEVEL_TICK.register(EventManager::onLevelTick);
 		Hooks.PLAYER_JOIN.register(EventManager::onPlayerEnteredLevel);
 		Hooks.PLAYER_LEAVE.register(EventManager::onPlayerLeft);
 		Hooks.PLAYER_CHANGED_LEVEL.register(EventManager::onPlayerEnteredLevel);
-		// Commands are registered by the loader module, with WorldEventsCommand.register.
 
 		LOGGER.info("World Omens loaded with {} events", EventRegistry.all().size());
 	}

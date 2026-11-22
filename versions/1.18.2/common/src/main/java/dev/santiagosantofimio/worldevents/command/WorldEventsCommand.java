@@ -45,7 +45,6 @@ public final class WorldEventsCommand {
 
 	private static LiteralArgumentBuilder<CommandSourceStack> build(String name) {
 		return Commands.literal(name)
-				.requires(source -> source.hasPermission(2))
 				.executes(WorldEventsCommand::status)
 				.then(Commands.literal("list").executes(WorldEventsCommand::list))
 				.then(Commands.literal("start").requires(source -> source.hasPermission(2))
@@ -73,6 +72,18 @@ public final class WorldEventsCommand {
 						.then(Commands.argument("id", StringArgumentType.word())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(EventRegistry.all().stream().map(WorldEvent::id), builder))
 								.executes(context -> help(context, StringArgumentType.getString(context, "id")))))
+			.then(Commands.literal("encargo")
+                .executes(WorldEventsCommand::contracts)
+                .then(Commands.argument("id", StringArgumentType.word())
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                CaravanContracts.all().stream().map(CaravanContracts.Contract::id), builder))
+                        .executes(WorldEventsCommand::contract)))
+			.then(Commands.literal("contract")
+                .executes(WorldEventsCommand::contracts)
+                .then(Commands.argument("id", StringArgumentType.word())
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                CaravanContracts.all().stream().map(CaravanContracts.Contract::id), builder))
+                        .executes(WorldEventsCommand::contract)))
 			.then(Commands.literal("status").executes(WorldEventsCommand::status))
 				.then(Commands.literal("reload").requires(source -> source.hasPermission(2)).executes(WorldEventsCommand::reload));
 	}
@@ -237,6 +248,43 @@ public final class WorldEventsCommand {
 		source.sendSuccess(Lang.component(source, prefix + ".conditions"), false);
 		return 1;
 	}
+
+    private static int contracts(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getEntity() instanceof ServerPlayer p ? p : null;
+        if (player == null || CaravanContracts.remaining(player) < 0) {
+            source.sendFailure(Lang.component(source, "command.contract.no_event"));
+            return 0;
+        }
+        int remaining = CaravanContracts.remaining(player);
+        source.sendSuccess(Lang.component(source, "command.contract.header", remaining), false);
+        for (CaravanContracts.Contract contract : CaravanContracts.all()) {
+            source.sendSuccess(Lang.component(source, "command.contract." + contract.id()), false);
+        }
+        return remaining;
+    }
+
+    private static int contract(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        CaravanContracts.Contract recipe = CaravanContracts.get(StringArgumentType.getString(context, "id"));
+        if (recipe == null) {
+            source.sendFailure(Lang.component(source, "command.contract.unknown"));
+            return 0;
+        }
+        ServerPlayer player = source.getEntity() instanceof ServerPlayer p ? p : null;
+        if (player == null) {
+            source.sendFailure(Lang.component(source, "command.contract.no_event"));
+            return 0;
+        }
+        CaravanContracts.Result result = CaravanContracts.submit(player, recipe);
+        if (result != CaravanContracts.Result.SUCCESS) {
+            source.sendFailure(Lang.component(source, "command.contract." + result.name().toLowerCase(java.util.Locale.ROOT)));
+            return 0;
+        }
+        source.sendSuccess(Lang.component(source, "command.contract.success", recipe.count(),
+                Lang.text(Lang.language(source), "command.contract.item." + recipe.id()), CaravanContracts.remaining(player)), false);
+        return 1;
+    }
 
 	private static int reload(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack source = context.getSource();

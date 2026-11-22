@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import dev.santiagosantofimio.worldevents.WorldEventsMod;
 import dev.santiagosantofimio.worldevents.config.ModConfig;
+import dev.santiagosantofimio.worldevents.command.CaravanContracts;
 import dev.santiagosantofimio.worldevents.data.WorldEventsData;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
@@ -774,10 +775,32 @@ public class WorldEventsGameTests {
 		ServerLevel level = helper.getLevel();
 		reset(level);
 		buildGround(helper);
-		ServerPlayer player = player(helper, new BlockPos(1, 4, 1), "en_us");
+		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
+		setLanguage(player, "en_us");
 		MerchantCaravanEvent caravan = (MerchantCaravanEvent) event(MerchantCaravanEvent.ID);
 		EventManager.start(level, caravan);
 		WanderingTrader merchant = caravan.spawnCaravan(level, EventManager.active(level), helper.absolutePos(new BlockPos(4, 4, 4)), "es_es");
+		CaravanContracts.Contract wheat = CaravanContracts.get("wheat");
+		CaravanContracts.Contract iron = CaravanContracts.get("iron");
+		helper.assertValueEqual(CaravanContracts.remaining(player), 2, "initial contract limit");
+		CaravanContracts.Result emptyResult = CaravanContracts.submit(player, wheat);
+		helper.assertTrue(emptyResult == CaravanContracts.Result.NOT_ENOUGH, "free contract reward: " + emptyResult);
+		player.getInventory().add(new ItemStack(Items.WHEAT, 48));
+		helper.assertTrue(CaravanContracts.submit(player, wheat) == CaravanContracts.Result.SUCCESS, "wheat contract failed");
+		helper.assertValueEqual(CaravanContracts.remaining(player), 1, "first contract was not saved");
+		player.getInventory().add(new ItemStack(Items.IRON_INGOT, 12));
+		helper.assertTrue(CaravanContracts.submit(player, iron) == CaravanContracts.Result.SUCCESS, "iron contract failed");
+		helper.assertValueEqual(CaravanContracts.remaining(player), 0, "second contract was not saved");
+		helper.assertTrue(CaravanContracts.submit(player, wheat) == CaravanContracts.Result.LIMIT, "contract limit bypassed");
+		helper.assertTrue(player.getInventory().countItem(Items.WHEAT) == 0 && player.getInventory().countItem(Items.IRON_INGOT) == 0, "contract did not consume resources");
+		int seals = 0;
+		for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
+			ItemStack stack = player.getInventory().getItem(slot);
+			if (EventItems.EVENT_SEAL == EventItems.identify(stack)) {
+				seals += stack.getCount();
+			}
+		}
+		helper.assertValueEqual(seals, 2, "contract seals");
 
 		helper.assertTrue(merchant != null && NomadMerchant.is(merchant), "no merchant");
 		assertCreature(helper, merchant, "nomad_merchant");

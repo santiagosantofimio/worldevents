@@ -15,7 +15,7 @@ Eventos aleatorios que dan vida a tu servidor de Minecraft: lunas de sangre, fie
 | **Lluvia de meteoritos** | Estrellas fugaces cruzan el cielo y algunos meteoritos caen cerca de los jugadores. Cada uno deja un cráter pequeño con minerales y un núcleo de magma. |
 | **Tormenta eléctrica** | Lluvia y truenos, rayos cayendo alrededor de los jugadores (sin fuego ni daños), creepers que se cargan con la tormenta y espíritus de la tormenta que lanzan rayos. Al terminar, el cielo se despeja. |
 | **Cosecha bendita** | Durante 5 minutos, de día, los cultivos alrededor de los jugadores crecen solos y los maduros sueltan el doble. Cada jugador recibe un espíritu de la cosecha que le sigue y le deja semillas doradas. |
-| **Caravana de mercaderes** | Durante 10 minutos, de día, un mercader nómada acampa con sus llamas cerca de los jugadores y vende objetos de los eventos y otras rarezas a cambio de esmeraldas. Si los jugadores están lejos entre sí, puede llegar una segunda caravana. |
+| **Caravana de mercaderes** | Durante 10 minutos, de día, un mercader nómada acampa con sus llamas cerca de los jugadores y vende objetos raros. Cerca de él puedes entregar trigo, hierro o carne podrida por sellos de evento; máximo dos encargos por jugador y caravana. Si los jugadores están lejos entre sí, puede llegar una segunda caravana. |
 | **Horda** | De noche, tres oleadas de monstruos salen de la oscuridad a por los jugadores, cada una mayor que la anterior. El Caudillo de la horda encabeza la última. Quien ayuda a vencerla recibe experiencia; lo que quede de la horda se va al amanecer. |
 | **Caza del tesoro** | De día, aparece un cofre con botín en la superficie, no muy lejos de los jugadores. La barra de acción dice a cada uno si va frío o caliente, y una columna de luz sale del cofre. Quien lo abra primero gana, pero el Capitán espectral se alza para guardarlo y el cofre no se abre hasta que cae. |
 | **Erupción** (Nether) | Géiseres de fuego brotan del suelo alrededor de los jugadores, con un momento de aviso para apartarse, y el Coloso de magma sube a cazarlos. Los monstruos que mueren entre tanto pueden dejar un corazón de magma. No toca ningún bloque. |
@@ -148,7 +148,7 @@ Deja los jars y el resource pack de esa versión en `dist/<versión>/`. Para 26.
 
 ## Comandos
 
-`/worldevents` (alias `/eventos`), para operadores (nivel de permiso 2):
+`/worldevents` (alias `/eventos`). `list`, `status`, `help` y `contract`/`encargo` están disponibles para todos. Los demás comandos requieren operador (nivel de permiso 2):
 
 | Comando | Qué hace |
 |---|---|
@@ -156,6 +156,8 @@ Deja los jars y el resource pack de esa versión en `dist/<versión>/`. Para 26.
 | `/worldevents start <id>` | Empieza un evento ya en tu dimensión, sin esperas. |
 | `/worldevents stop` | Termina el evento de tu dimensión. |
 | `/worldevents status` | Estado de cada dimensión: evento activo, próximo evento o tiempo de espera. |
+| `/eventos help [id]` | Objetivo, recompensa y condiciones del evento activo o del indicado. |
+| `/eventos encargo [id]` | Durante la caravana, muestra encargos o entrega materiales cerca del mercader. Ids: `wheat` (48 de trigo), `iron` (12 lingotes), `rotten_flesh` (64 de carne podrida). Cada entrega da un sello; máximo dos por jugador y evento. También funciona `/worldevents contract`. |
 | `/worldevents reload` | Recarga la configuración sin reiniciar. |
 | `/worldevents give <jugadores> <ítem> [cantidad]` | Da ítems del mod: `meteorite_fragment`, `lucky_nugget`, `bloody_tear`, `blood_scythe`, `starfall_pickaxe`, `bottled_lightning`, `golden_seed`, `warlord_axe`, `captains_cutlass`, `magma_heart`, `colossus_hammer`, `unstable_pearl`, `eclipse_shard`, `frostfang`, `event_seal`, y los huevos `<criatura>_spawn_egg`. |
 | `/worldevents summon <criatura> [posición]` | Invoca una criatura donde estás (o en la posición), fuera de su evento. |
@@ -254,7 +256,7 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
 
-**Commands** (`/worldevents`, alias `/eventos`, permission level 2): `list`, `start <id>`, `stop`, `status`, `reload`, `give <players> <item> [count]`, `summon <creature> [pos]`. Event ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (Nether only), `void_storm` (End only), `eclipse`, `blizzard` (only when a player is somewhere snowy).
+**Commands** (`/worldevents`, alias `/eventos`): everyone can use `list`, `status`, `help [id]`, and `contract [id]` (alias `encargo`). During a caravan, stand within 8 blocks of its merchant and deliver 48 wheat, 12 iron ingots or 64 rotten flesh for one event seal. Each player can complete two contracts per caravan. Operators can also use `start <id>`, `stop`, `reload`, `give <players> <item> [count]`, and `summon <creature> [pos]`. Event ids include `firefly_night`, `merchant_caravan`, `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `horde`, `treasure_hunt`, `eruption`, `void_storm`, `eclipse`, and `blizzard`.
 
 **Config:** `config/worldevents.json`, times in seconds; see the tables above for every key. Missing keys are added on startup without touching yours; `/worldevents reload` applies changes.
 

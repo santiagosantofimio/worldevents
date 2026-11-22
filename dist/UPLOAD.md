@@ -37,7 +37,7 @@ Markdown para Modrinth:
 - `/worldevents ranking` and `/eventos ranking` show the current event's top three scores and your own score and rank.
 - Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
 - The Colossus Hammer has a squarer 2D icon with the same dark rock and lava colors.
-- The Nomad Merchant's hood now frames a visible face and nose, making its silhouette easier to read.
+- The Nomad Merchant, Harvest Spirit, Horde Warlord and Spectral Captain use their original models and textures again.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 
@@ -54,7 +54,7 @@ World Omens 1.2.0
 - /worldevents ranking and /eventos ranking show the current event's top three scores and your own score and rank.
 - Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
 - The Colossus Hammer has a squarer 2D icon with the same dark rock and lava colors.
-- The Nomad Merchant's hood now frames a visible face and nose, making its silhouette easier to read.
+- The Nomad Merchant, Harvest Spirit, Horde Warlord and Spectral Captain use their original models and textures again.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 
@@ -73,5 +73,6 @@ Los `.zip` de 1.2.0 se generan para cada versión. El evento nuevo usa partícul
 - Cliente 26.3: `runClientGameTest` aprobó y la captura `worldevents_firefly_night` mostró boss bar, pistas de dirección/distancia y partículas verdes visibles a 13 bloques.
 - Cliente 26.3 tras el ajuste de meteoritos: `runClientGameTest` aprobó; cuatro capturas `worldevents_meteor_shower` muestran varias estelas cruzando la vista del jugador.
 - Cliente 26.3 con el icono cuadrado del mazo: `runClientGameTest` aprobó y `worldevents_creative_tab` mostró el icono en el inventario. El primer arranque quedó detenido al cargar recursos; se cerró y el segundo terminó en verde.
-- Cliente 26.3 con el mercader actualizado: `runClientGameTest` aprobó; `worldevents_creature_nomad_merchant` mostró ojos, barba y nariz desde el frente, sin llamas que tapen la vista.
+- Cliente 26.3 tras restaurar cuatro criaturas: `runClientGameTest` aprobó; las capturas mostraron los modelos originales del Mercader nómada, Espíritu de la cosecha, Caudillo de la horda y Capitán espectral.
+- Los cinco resource packs y once jars de 1.2.0 contienen esos cuatro modelos y texturas restaurados; los cinco SHA-1 coinciden. Artefactos 1.1.1 conservados.
 - Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, aspecto en las otras versiones y balance prolongado.

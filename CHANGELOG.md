@@ -31,7 +31,7 @@ All notable changes to this project are documented here. The format follows
 
 - Meteor Shower shooting stars now start closer and above the player's forward view, then cross toward its center. The existing particle trail and sounds remain; the change makes stars easier to notice without a client mod.
 - The Colossus Hammer keeps its dark rock and lava colors in a squarer 16×16 item icon.
-- The Nomad Merchant's hood now frames a visible face, beard and protruding nose; a belt breaks up the blue robe. Its backpack and vanilla trading behavior remain.
+- The Nomad Merchant, Harvest Spirit, Horde Warlord and Spectral Captain use their original creature models and textures again.
 
 ## [1.1.1] - 2026-11-19
 

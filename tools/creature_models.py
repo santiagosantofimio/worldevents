@@ -13,6 +13,7 @@ Preview without the game: python3 tools/render_model.py MODEL.json TEXTURE.png O
 import json
 import os
 import random
+import shutil
 import sys
 
 from PIL import Image
@@ -351,6 +352,7 @@ def deco(face, name):
 # The creatures. Box: (from, to, style, {face: decoration}); north (-z) is the front.
 
 C = {}
+CLASSIC = ('harvest_spirit', 'nomad_merchant', 'horde_warlord', 'spectral_captain')
 
 C['magma_colossus'] = dict(tpu=2, boxes=[
     ((2, -3, 8), (7, 8, 14), 'rock', {}),
@@ -411,66 +413,6 @@ C['storm_spirit'] = dict(tpu=2, boxes=[
     ((7, 1, 7), (9, 4, 9), 'bolt', {}),
     ((8, -2, 7), (10, 1, 9), 'bolt', {}),
     ((6, -5, 7), (8, -2, 9), 'bolt', {}),
-])
-
-C['harvest_spirit'] = dict(tpu=2, boxes=[
-    ((4, 8, 4), (12, 15, 12), 'straw', {'north': 'cute_face'}),
-    ((7.5, 15, 7.5), (8.5, 17, 8.5), 'leaf', {}),
-    ((5, 16, 7.5), (7.5, 17, 8.5), 'leaf', {}),
-    ((8.5, 16.5, 7.5), (11, 17.5, 8.5), 'leaf', {}),
-    ((5, 2, 5), (11, 8, 11), 'straw', {}),
-    ((4.8, 4, 4.8), (11.2, 5, 11.2), 'twine', {}),
-    ((2, 4, 7), (5, 6, 9), 'straw', {}),
-    ((11, 4, 7), (14, 6, 9), 'straw', {}),
-    ((5.5, 0, 7), (7.5, 2, 9), 'straw', {}),
-    ((8.5, 0, 7), (10.5, 2, 9), 'straw', {}),
-])
-
-C['nomad_merchant'] = dict(tpu=1, boxes=[
-    ((2, -8, 4), (14, 2, 12), 'robe', {}),
-    ((3, 2, 4), (13, 12, 12), 'robe', {}),
-    ((0, 2, 5), (3, 12, 9), 'robe', {}),
-    ((13, 2, 5), (16, 12, 9), 'robe', {}),
-    ((0, 0, 5.5), (3, 2, 8.5), 'skin', {}),
-    ((13, 0, 5.5), (16, 2, 8.5), 'skin', {}),
-    ((3, 12, 4), (13, 22, 13), 'hood', {}),
-    ((4, 13, 2.5), (12, 21, 4.5), 'skin', {'north': 'merchant_face'}),
-    ((7, 15, 1.5), (9, 18, 2.5), 'skin', {}),
-    ((3, 5, 3.5), (13, 6, 12.5), 'leather', {}),
-    ((7, 5, 2.5), (9, 7, 3.5), 'gold', {}),
-    ((3.5, 21, 3.5), (12.5, 23, 12.5), 'hood', {}),
-    ((3, 4, 12), (13, 22, 17), 'leather', {}),
-    ((4, 23, 12.5), (12, 26, 16.5), 'bedroll', {}),
-    ((13, 8, 12), (15.5, 12, 16), 'clay', {}),
-])
-
-C['horde_warlord'] = dict(tpu=2, boxes=[
-    ((2, -8, 5), (7, 3, 11), 'armor', {}),
-    ((9, -8, 5), (14, 3, 11), 'armor', {}),
-    ((0, 3, 3), (16, 17, 13), 'armor', {'north': 'emblem'}),
-    ((-0.2, 3, 2.8), (16.2, 5, 13.2), 'leather', {}),
-    ((-4, 4, 5), (0, 16, 10), 'armor', {}),
-    ((16, 4, 5), (20, 16, 10), 'armor', {}),
-    ((-5, 14, 3), (2, 19, 12), 'armor_red', {}),
-    ((14, 14, 3), (21, 19, 12), 'armor_red', {}),
-    ((4, 17, 4), (12, 25, 12), 'armor', {'north': 'visor'}),
-    ((1, 21, 7), (4, 23, 9), 'bone', {}),
-    ((0, 23, 7), (2, 28, 9), 'bone', {}),
-    ((12, 21, 7), (15, 23, 9), 'bone', {}),
-    ((14, 23, 7), (16, 28, 9), 'bone', {}),
-])
-
-C['spectral_captain'] = dict(tpu=1, boxes=[
-    ((5, -8, 6), (11, -2, 10), 'ghost', {'north': 'fade', 'south': 'fade', 'east': 'fade', 'west': 'fade'}),
-    ((3, -2, 4), (13, 6, 12), 'coat', {}),
-    ((3, 6, 4), (13, 15, 12), 'coat', {'north': 'buttons'}),
-    ((0, 6, 6), (3, 15, 10), 'coat', {}),
-    ((13, 6, 6), (16, 15, 10), 'coat', {}),
-    ((0, 4, 6.5), (3, 6, 9.5), 'ghost', {}),
-    ((13, 4, 6.5), (16, 6, 9.5), 'ghost', {}),
-    ((4, 15, 4), (12, 22, 12), 'ghost', {'north': 'ghost_face'}),
-    ((1, 22, 2), (15, 23.5, 14), 'hat', {'north': 'trim', 'south': 'trim', 'east': 'trim', 'west': 'trim'}),
-    ((4, 23.5, 5), (12, 26, 11), 'hat', {'north': 'skull'}),
 ])
 
 C['void_stalker'] = dict(tpu=1, boxes=[
@@ -593,14 +535,20 @@ def main():
         only = set(args[k + 1:])
         args = args[:k]
     out = args[0] if args else 'src/main/resources'
-    for name, spec in C.items():
+    for name in (*C, *CLASSIC):
         if only and name not in only:
             continue
-        model, img = build(name, spec)
         mdir = os.path.join(out, 'assets', 'worldevents', 'models', 'item')
         tdir = os.path.join(out, 'assets', 'worldevents', 'textures', 'item')
         os.makedirs(mdir, exist_ok=True)
         os.makedirs(tdir, exist_ok=True)
+        if name in CLASSIC:
+            archive = os.path.join(os.path.dirname(__file__), 'classic_creatures')
+            shutil.copyfile(os.path.join(archive, name + '.json'), os.path.join(mdir, name + '.json'))
+            shutil.copyfile(os.path.join(archive, name + '.png'), os.path.join(tdir, name + '.png'))
+            print(name)
+            continue
+        model, img = build(name, C[name])
         with open(os.path.join(mdir, name + '.json'), 'w') as fh:
             json.dump(model, fh, indent='\t')
             fh.write('\n')

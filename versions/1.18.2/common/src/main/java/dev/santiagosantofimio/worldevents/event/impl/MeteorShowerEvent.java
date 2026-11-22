@@ -573,13 +573,16 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 
 		private static Streak near(ServerPlayer player, ServerLevel level, Random random) {
-			double angle = random.nextDouble() * Math.PI * 2;
-			double offset = Mth.nextDouble(random, 10, 50);
-			double y = Math.max(player.getY(), level.getSeaLevel()) + Mth.nextDouble(random, 25, 50);
-			Vec3 start = new Vec3(player.getX() + Math.cos(angle) * offset, y, player.getZ() + Math.sin(angle) * offset);
-			double heading = random.nextDouble() * Math.PI * 2;
-			double speed = Mth.nextDouble(random, 1.4, 2.4);
-			Vec3 step = new Vec3(Math.cos(heading) * speed, -Mth.nextDouble(random, 0.2, 0.6), Math.sin(heading) * speed);
+			double yaw = Math.toRadians(player.getYRot());
+			Vec3 forward = new Vec3(-Math.sin(yaw), 0.0, Math.cos(yaw));
+			Vec3 side = new Vec3(forward.z, 0.0, -forward.x);
+			double distance = Mth.nextDouble(random, 18, 30);
+			double lateral = Mth.nextDouble(random, -10, 10);
+			double y = Math.max(player.getY(), level.getSeaLevel()) + Mth.nextDouble(random, 18, 30);
+			Vec3 start = player.position().add(forward.scale(distance)).add(side.scale(lateral));
+			start = new Vec3(start.x, y, start.z);
+			double speed = Mth.nextDouble(random, 1.6, 2.2) * (lateral >= 0.0 ? -1.0 : 1.0);
+			Vec3 step = side.scale(speed).add(forward.scale(0.25)).add(0.0, -Mth.nextDouble(random, 0.15, 0.35), 0.0);
 			level.playSound(null, start.x, start.y, start.z, SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.WEATHER, 1.5f, Mth.nextFloat(random, 1.5f, 2.0f));
 			return new Streak(start, step, Mth.nextInt(random, 14, 24));
 		}

@@ -35,6 +35,7 @@ Markdown para Modrinth:
 - `/worldevents help [id]` and `/eventos help [id]` explain an event’s objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
 - Caravan contracts: near an active merchant, deliver wheat, iron ingots or rotten flesh for an event seal. Up to two deliveries per player per caravan; progress survives restarts. Use `/worldevents contract` or `/eventos encargo` to see recipes.
 - `/worldevents ranking` and `/eventos ranking` show the current event's top three scores and your own score and rank.
+- Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 
@@ -49,6 +50,7 @@ World Omens 1.2.0
 - /worldevents help [id] and /eventos help [id] explain an event's objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
 - Caravan contracts: near an active merchant, deliver wheat, iron ingots or rotten flesh for an event seal. Up to two deliveries per player per caravan; progress survives restarts. Use /worldevents contract or /eventos encargo to see recipes.
 - /worldevents ranking and /eventos ranking show the current event's top three scores and your own score and rank.
+- Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
 - Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
 ```
 
@@ -65,4 +67,5 @@ Los `.zip` de 1.2.0 se generan para cada versión. El evento nuevo usa partícul
 - Builds Forge de 1.18.2 y 1.16.5 aprobados.
 - Pruebas de humo previas a los encargos en once loaders: iniciaron y detuvieron eventos sin errores del mod.
 - Cliente 26.3: `runClientGameTest` aprobó y la captura `worldevents_firefly_night` mostró boss bar, pistas de dirección/distancia y partículas verdes visibles a 13 bloques.
+- Cliente 26.3 tras el ajuste de meteoritos: `runClientGameTest` aprobó; cuatro capturas `worldevents_meteor_shower` muestran varias estelas cruzando la vista del jugador.
 - Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, aspecto en las otras versiones y balance prolongado.

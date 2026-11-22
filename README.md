@@ -103,7 +103,7 @@ Los jugadores no necesitan instalar nada.
 
 ### Resource pack opcional
 
-Da a los ítems y criaturas su aspecto propio (texturas, modelos 3D) y traduce sus nombres al idioma de cada jugador. Sin él todo funciona igual: los ítems se ven como su ítem vanilla de base y las criaturas como un bloque flotando con su nombre.
+Da a los ítems iconos planos de 16×16 y a las criaturas modelos 3D, y traduce sus nombres al idioma de cada jugador. Sin él todo funciona igual: los ítems se ven como su ítem vanilla de base y las criaturas como un bloque flotando con su nombre.
 
 - **Servidor**: sube `worldevents-<versión>-resourcepack.zip` a una web con enlace directo de descarga y añade en `server.properties`:
   ```properties
@@ -253,7 +253,7 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Versions:** Minecraft 26.3 (Fabric), 26.1.2 and 1.21.11 (Fabric, NeoForge and Forge), 1.18.2 and 1.16.5 (Fabric and Forge; NeoForge does not exist there). The 26.3 code is in `src/`, the other versions are in `versions/<version>/`, and the finished jars and resource packs are in `dist/<version>/`; build one with `./gradlew -p versions/<version> dist`. On 1.18.2 and 1.16.5 creatures are invisible armor stands that wear the model, item names are in the language of whoever gets them, advancements are in English, and a few items work slightly differently (see `dist/UPLOAD.md`). The 1.16.5 jars run on Java 8.
 
-**Optional resource pack:** gives the items and mobs their own textures and 3D models and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
+**Optional resource pack:** gives items flat 16×16 icons, creatures 3D models, and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
 
 **Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
 

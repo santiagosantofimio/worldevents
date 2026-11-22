@@ -27,6 +27,10 @@ All notable changes to this project are documented here. The format follows
 
 - Players on 1.18.2 and 1.16.5 can now use read-only event help without operator permissions.
 
+### Changed
+
+- Meteor Shower shooting stars now start closer and above the player's forward view, then cross toward its center. The existing particle trail and sounds remain; the change makes stars easier to notice without a client mod.
+
 ## [1.1.1] - 2026-11-19
 
 The meteor shower is much easier to notice.

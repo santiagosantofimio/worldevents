@@ -280,14 +280,11 @@ def deco(face, name):
             face.put(ex - 1 if ex < mx else ex + 2, ey + 3, (230, 120, 90))
         face.rect(mx - 2, ey + 4, 4, 1, (110, 60, 20))
     elif name == 'merchant_face':
-        # A face in the shadow of the hood: skin, eyes, a grey beard.
-        face.rect(2, 2, w - 4, h - 3, (14, 18, 46))
-        face.rect(3, 3, w - 6, h - 4, (176, 126, 90))
-        ey = 4
-        face.rect(4, ey, 1, 1, BLACK)
-        face.rect(w - 5, ey, 1, 1, BLACK)
-        face.rect(3, h - 4, w - 6, 3, (190, 190, 186))
-        face.rect(mx - 1, ey + 2, 2, 1, (150, 100, 70))
+        face.rect(1, 1, w - 2, h - 2, (176, 126, 90))
+        face.rect(2, 3, 1, 1, BLACK)
+        face.rect(w - 3, 3, 1, 1, BLACK)
+        face.rect(2, h - 3, w - 4, 2, (190, 190, 186))
+        face.rect(mx - 1, 4, 2, 2, (150, 100, 70))
     elif name == 'visor':
         face.rect(1, int(h * 0.38), w - 2, 2, (10, 8, 10))
         face.put(mx - 2, int(h * 0.38), (255, 40, 30))
@@ -436,10 +433,14 @@ C['nomad_merchant'] = dict(tpu=1, boxes=[
     ((13, 2, 5), (16, 12, 9), 'robe', {}),
     ((0, 0, 5.5), (3, 2, 8.5), 'skin', {}),
     ((13, 0, 5.5), (16, 2, 8.5), 'skin', {}),
-    ((4, 12, 4), (12, 20, 12), 'hood', {'north': 'merchant_face'}),
-    ((3.5, 19, 3.5), (12.5, 22, 12.5), 'hood', {}),
+    ((3, 12, 4), (13, 22, 13), 'hood', {}),
+    ((4, 13, 2.5), (12, 21, 4.5), 'skin', {'north': 'merchant_face'}),
+    ((7, 15, 1.5), (9, 18, 2.5), 'skin', {}),
+    ((3, 5, 3.5), (13, 6, 12.5), 'leather', {}),
+    ((7, 5, 2.5), (9, 7, 3.5), 'gold', {}),
+    ((3.5, 21, 3.5), (12.5, 23, 12.5), 'hood', {}),
     ((3, 4, 12), (13, 22, 17), 'leather', {}),
-    ((4, 22, 12.5), (12, 25, 16.5), 'bedroll', {}),
+    ((4, 23, 12.5), (12, 26, 16.5), 'bedroll', {}),
     ((13, 8, 12), (15.5, 12, 16), 'clay', {}),
 ])
 

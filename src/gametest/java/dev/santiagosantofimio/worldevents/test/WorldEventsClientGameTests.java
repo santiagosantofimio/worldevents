@@ -23,6 +23,7 @@ import dev.santiagosantofimio.worldevents.event.impl.VoidStormEvent;
 import dev.santiagosantofimio.worldevents.mob.Creature;
 import dev.santiagosantofimio.worldevents.mob.LivingMeteorite;
 import dev.santiagosantofimio.worldevents.mob.MagmaColossus;
+import dev.santiagosantofimio.worldevents.mob.NomadMerchant;
 import dev.santiagosantofimio.worldevents.mob.SpectralCaptain;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -118,7 +119,7 @@ public class WorldEventsClientGameTests implements FabricClientGameTest {
 			showMob(context, singleplayer, BlessedHarvestEvent.ID, "worldevents_creature_harvest_spirit", 3,
 					(event, level, active, pos) -> ((BlessedHarvestEvent) event).spawnSpirit(level, active, pos.above(), level.players().get(0)));
 			showMob(context, singleplayer, MerchantCaravanEvent.ID, "worldevents_creature_nomad_merchant", 4,
-					(event, level, active, pos) -> ((MerchantCaravanEvent) event).spawnCaravan(level, active, pos, "es_es"));
+					(event, level, active, pos) -> NomadMerchant.spawn(level, pos, "es_es", active.remainingTicks() + 2400, 1.0));
 			showMob(context, singleplayer, HordeEvent.ID, "worldevents_creature_horde_warlord", 5,
 					(event, level, active, pos) -> ((HordeEvent) event).spawnWarlord(level, active, pos, "es_es"));
 			showMob(context, singleplayer, TreasureHuntEvent.ID, "worldevents_creature_spectral_captain", 4,

@@ -30,6 +30,7 @@ All notable changes to this project are documented here. The format follows
 ### Changed
 
 - Meteor Shower shooting stars now start closer and above the player's forward view, then cross toward its center. The existing particle trail and sounds remain; the change makes stars easier to notice without a client mod.
+- The Colossus Hammer keeps its dark rock and lava colors in a squarer 16×16 item icon.
 
 ## [1.1.1] - 2026-11-19
 

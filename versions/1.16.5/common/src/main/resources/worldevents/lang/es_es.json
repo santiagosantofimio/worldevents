@@ -195,5 +195,9 @@
 	"command.contract.limit": "Ya completaste dos encargos en esta caravana.",
 	"command.contract.not_enough": "No tienes suficientes materiales para ese encargo.",
 	"command.contract.unknown": "Encargo desconocido. Usa /eventos encargo para ver opciones.",
-	"command.contract.success": "Entregaste %s de %s; recibiste 1 sello. Te queda(n) %s encargo(s)."
+	"command.contract.success": "Entregaste %s de %s; recibiste 1 sello. Te queda(n) %s encargo(s).",
+	"command.ranking.no_event": "No hay evento activo en esta dimensión.",
+	"command.ranking.header": "Clasificación actual: %s",
+	"command.ranking.empty": "Aún nadie ha ganado puntos.",
+	"command.ranking.you": "Tus puntos: %1$s. Puesto: %2$s (0 = sin puntos)."
 }

@@ -12,6 +12,7 @@ import dev.santiagosantofimio.worldevents.data.WorldEventsData;
 import dev.santiagosantofimio.worldevents.event.ActiveEvent;
 import dev.santiagosantofimio.worldevents.event.EventManager;
 import dev.santiagosantofimio.worldevents.event.EventRegistry;
+import dev.santiagosantofimio.worldevents.event.EventScores;
 import dev.santiagosantofimio.worldevents.event.WorldEvent;
 import dev.santiagosantofimio.worldevents.i18n.Lang;
 import dev.santiagosantofimio.worldevents.item.EventItems;
@@ -84,6 +85,7 @@ public final class WorldEventsCommand {
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(
                                 CaravanContracts.all().stream().map(CaravanContracts.Contract::id), builder))
                         .executes(WorldEventsCommand::contract)))
+			.then(Commands.literal("ranking").executes(WorldEventsCommand::ranking))
 			.then(Commands.literal("status").executes(WorldEventsCommand::status))
 				.then(Commands.literal("reload").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(WorldEventsCommand::reload));
 	}
@@ -284,6 +286,41 @@ public final class WorldEventsCommand {
         source.sendSuccess(() -> Lang.component(source, "command.contract.success", recipe.count(),
                 Lang.text(Lang.language(source), "command.contract.item." + recipe.id()), CaravanContracts.remaining(player)), false);
         return 1;
+    }
+
+    private static int ranking(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ActiveEvent active = EventManager.active(source.getLevel());
+        if (active == null) {
+            source.sendFailure(Lang.component(source, "command.ranking.no_event"));
+            return 0;
+        }
+        java.util.List<EventScores.Entry> entries = EventScores.ranking(active);
+        source.sendSuccess(() -> Lang.component(source, "command.ranking.header", eventName(source, active.event())), false);
+        if (entries.isEmpty()) {
+            source.sendSuccess(() -> Lang.component(source, "command.ranking.empty"), false);
+        }
+        for (int i = 0; i < Math.min(3, entries.size()); i++) {
+            EventScores.Entry entry = entries.get(i);
+            int rank = i + 1;
+            source.sendSuccess(() -> Lang.component(source, "event.ranking.entry", rank, entry.name(), entry.points()), false);
+        }
+        ServerPlayer player = source.getPlayer();
+        if (player != null) {
+            int points = 0;
+            int place = 0;
+            for (int i = 0; i < entries.size(); i++) {
+                if (entries.get(i).player().equals(player.getUUID())) {
+                    points = entries.get(i).points();
+                    place = i + 1;
+                    break;
+                }
+            }
+            int finalPoints = points;
+            int finalPlace = place;
+            source.sendSuccess(() -> Lang.component(source, "command.ranking.you", finalPoints, finalPlace), false);
+        }
+        return entries.size();
     }
 
 	private static int reload(CommandContext<CommandSourceStack> context) {

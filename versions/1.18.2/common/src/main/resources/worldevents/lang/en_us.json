@@ -195,5 +195,9 @@
 	"command.contract.limit": "You already completed two contracts in this caravan.",
 	"command.contract.not_enough": "You do not have enough materials for that contract.",
 	"command.contract.unknown": "Unknown contract. Use /worldevents encargo to see options.",
-	"command.contract.success": "Delivered %s %s; received 1 seal. %s contract(s) left."
+	"command.contract.success": "Delivered %s %s; received 1 seal. %s contract(s) left.",
+	"command.ranking.no_event": "No event is active in this dimension.",
+	"command.ranking.header": "Current standings: %s",
+	"command.ranking.empty": "No one has earned points yet.",
+	"command.ranking.you": "Your points: %1$s. Rank: %2$s (0 = no points)."
 }

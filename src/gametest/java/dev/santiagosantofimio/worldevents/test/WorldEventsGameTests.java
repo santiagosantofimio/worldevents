@@ -508,14 +508,19 @@ public class WorldEventsGameTests {
 		var commands = level.getServer().getCommands();
 		var source = level.getServer().createCommandSourceStack();
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 0, "help without active event");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos ranking", source), 0, "ranking without active event");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help unknown_event", source), 0, "unknown event help");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help firefly_night", source), 1, "named event help");
 		ServerPlayer player = player(helper, new BlockPos(1, 1, 1), "es_es");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help firefly_night", player.createCommandSourceStack()), 1, "survival player help");
-		remove(player);
 		helper.assertTrue(EventManager.start(level, event(FireflyNightEvent.ID)), "firefly event failed to start");
 		helper.assertValueEqual(commands.getDispatcher().execute("eventos help", source), 1, "active event help");
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos ranking", player.createCommandSourceStack()), 0, "empty ranking");
+		EventManager.score(player, FireflyNightEvent.ID, 4);
+		helper.assertValueEqual(commands.getDispatcher().execute("eventos ranking", player.createCommandSourceStack()), 1, "ranking with player score");
+		helper.assertValueEqual(EventScores.ranking(EventManager.active(level)).get(0).points(), 4, "player ranking points");
 		EventManager.stop(level);
+		remove(player);
 		helper.succeed();
 	}
 

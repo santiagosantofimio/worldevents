@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:find_treasure",
+	"display": {
+		"icon": {
+			"id": "minecraft:sea_lantern",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:spectral_captain"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.defeat_spectral_captain.title",
+			"fallback": "Ghost Story"
+		},
+		"description": {
+			"translate": "advancements.worldevents.defeat_spectral_captain.description",
+			"fallback": "Defeat the Spectral Captain"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

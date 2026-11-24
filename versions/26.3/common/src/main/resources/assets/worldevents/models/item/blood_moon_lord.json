@@ -1,0 +1,260 @@
+{
+	"textures": {
+		"skin": "worldevents:item/blood_moon_lord",
+		"particle": "worldevents:item/blood_moon_lord"
+	},
+	"elements": [
+		{
+			"from": [
+				2,
+				2,
+				0
+			],
+			"to": [
+				14,
+				14,
+				16
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						9.0,
+						0.0,
+						10.5,
+						1.5
+					],
+					"texture": "#skin"
+				},
+				"south": {
+					"uv": [
+						10.5,
+						0.0,
+						12.0,
+						1.5
+					],
+					"texture": "#skin"
+				},
+				"east": {
+					"uv": [
+						12.0,
+						0.0,
+						14.0,
+						1.5
+					],
+					"texture": "#skin"
+				},
+				"west": {
+					"uv": [
+						14.0,
+						0.0,
+						16.0,
+						1.5
+					],
+					"texture": "#skin"
+				},
+				"up": {
+					"uv": [
+						0.0,
+						0.0,
+						1.5,
+						2.0
+					],
+					"texture": "#skin"
+				},
+				"down": {
+					"uv": [
+						1.5,
+						0.0,
+						3.0,
+						2.0
+					],
+					"texture": "#skin"
+				}
+			}
+		},
+		{
+			"from": [
+				0,
+				2,
+				2
+			],
+			"to": [
+				16,
+				14,
+				14
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						0.0,
+						2.0,
+						2.0,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"south": {
+					"uv": [
+						2.0,
+						2.0,
+						4.0,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"east": {
+					"uv": [
+						4.0,
+						2.0,
+						5.5,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"west": {
+					"uv": [
+						5.5,
+						2.0,
+						7.0,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"up": {
+					"uv": [
+						7.0,
+						2.0,
+						9.0,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"down": {
+					"uv": [
+						9.0,
+						2.0,
+						11.0,
+						3.5
+					],
+					"texture": "#skin"
+				}
+			}
+		},
+		{
+			"from": [
+				2,
+				0,
+				2
+			],
+			"to": [
+				14,
+				16,
+				14
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						3.0,
+						0.0,
+						4.5,
+						2.0
+					],
+					"texture": "#skin"
+				},
+				"south": {
+					"uv": [
+						4.5,
+						0.0,
+						6.0,
+						2.0
+					],
+					"texture": "#skin"
+				},
+				"east": {
+					"uv": [
+						6.0,
+						0.0,
+						7.5,
+						2.0
+					],
+					"texture": "#skin"
+				},
+				"west": {
+					"uv": [
+						7.5,
+						0.0,
+						9.0,
+						2.0
+					],
+					"texture": "#skin"
+				},
+				"up": {
+					"uv": [
+						11.0,
+						2.0,
+						12.5,
+						3.5
+					],
+					"texture": "#skin"
+				},
+				"down": {
+					"uv": [
+						12.5,
+						2.0,
+						14.0,
+						3.5
+					],
+					"texture": "#skin"
+				}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [
+				30,
+				225,
+				0
+			],
+			"translation": [
+				0,
+				0,
+				0
+			],
+			"scale": [
+				0.5,
+				0.5,
+				0.5
+			]
+		},
+		"ground": {
+			"rotation": [
+				0,
+				0,
+				0
+			],
+			"translation": [
+				0,
+				2,
+				0
+			],
+			"scale": [
+				0.25,
+				0.25,
+				0.25
+			]
+		},
+		"fixed": {
+			"rotation": [
+				0,
+				180,
+				0
+			],
+			"scale": [
+				0.5,
+				0.5,
+				0.5
+			]
+		}
+	}
+}

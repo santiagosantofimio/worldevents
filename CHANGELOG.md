@@ -23,6 +23,8 @@ All notable changes to this project are documented here. The format follows
 - **Caravan contracts**: players near an active caravan merchant can deliver 48 wheat, 12 iron ingots or 64 rotten flesh for one event seal. `/worldevents contract [id]` and `/eventos encargo [id]` show or complete these deliveries without operator permissions. Each player can complete two per caravan; progress survives server restarts. Creative and spectator players cannot claim seals.
 - `/worldevents ranking` and `/eventos ranking` show the current event’s top three scores and your own score and rank. Everyone can use them while an event is active.
 
+- NeoForge and Forge builds for Minecraft 26.3, with the same content as the Fabric build.
+
 ### Fixed
 
 - Players on 1.18.2 and 1.16.5 can now use read-only event help without operator permissions.

@@ -1,0 +1,26 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:blood_scythe",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/blood_scythe"
+				}
+			},
+			{
+				"when": "worldevents:frostfang",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/frostfang"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/diamond_sword"
+		}
+	}
+}

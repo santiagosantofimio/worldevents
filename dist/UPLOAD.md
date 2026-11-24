@@ -11,6 +11,8 @@ Valores para el formulario de Modrinth o CurseForge, en inglés como la página 
 | Archivo | Version name | Version number | Loader | Game version | Java | Dependencias |
 |---|---|---|---|---|---|---|
 | `26.3/worldevents-fabric-26.3-1.2.0.jar` | World Omens 1.2.0 for Fabric 26.3 | `1.2.0+26.3-fabric` | Fabric | 26.3 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `26.3/worldevents-neoforge-26.3-1.2.0.jar` | World Omens 1.2.0 for NeoForge 26.3 | `1.2.0+26.3-neoforge` | NeoForge | 26.3 | 25 | NeoForge 26.3.0.101+ |
+| `26.3/worldevents-forge-26.3-1.2.0.jar` | World Omens 1.2.0 for Forge 26.3 | `1.2.0+26.3-forge` | Forge | 26.3 | 25 | Forge 66.1.2+ |
 | `26.1.2/worldevents-fabric-26.1.2-1.2.0.jar` | World Omens 1.2.0 for Fabric 26.1.2 | `1.2.0+26.1.2-fabric` | Fabric | 26.1.2 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
 | `26.1.2/worldevents-neoforge-26.1.2-1.2.0.jar` | World Omens 1.2.0 for NeoForge 26.1.2 | `1.2.0+26.1.2-neoforge` | NeoForge | 26.1.2 | 25 | NeoForge 26.1.2.126+ |
 | `26.1.2/worldevents-forge-26.1.2-1.2.0.jar` | World Omens 1.2.0 for Forge 26.1.2 | `1.2.0+26.1.2-forge` | Forge | 26.1.2 | 25 | Forge 64.1.5+ |
@@ -66,6 +68,7 @@ Los `.zip` de 1.2.0 se generan para cada versión. El evento nuevo usa partícul
 
 ## Comprobado
 
+- NeoForge y Forge de 26.3 (añadidos después de publicar el resto): compilan y pasan la prueba de humo con Firefly Night y los comandos nuevos; solo se probó arrancando servidor sin jugadores, no con un cliente conectado.
 - GameTests de Fabric: 38 en 26.3 y 37 en 26.1.2 y 1.21.11. Builds de 1.18.2 y 1.16.5 aprobados.
 - Las pruebas en 26.3 verificaron consumo de materiales, dos sellos, límite por jugador y ranking vacío/con puntos. Los cinco builds y `dist` se repitieron tras estos cambios; los once jars incluyen los encargos y textos del ranking, y los cinco SHA-1 coinciden.
 - Builds Forge de 1.18.2 y 1.16.5 aprobados.

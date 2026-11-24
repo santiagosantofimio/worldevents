@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:defeat_spectral_captain",
+	"display": {
+		"icon": {
+			"id": "minecraft:iron_sword",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:captains_cutlass"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.captains_cutlass.title",
+			"fallback": "Boarding Party"
+		},
+		"description": {
+			"translate": "advancements.worldevents.captains_cutlass.description",
+			"fallback": "Get the Captain's Cutlass"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:iron_sword",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "captains_cutlass"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

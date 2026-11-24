@@ -102,7 +102,7 @@ tasks.named("assemble") {
 // The finished files, ready to upload, named like the other Minecraft versions' (versions/): dist/26.3/ at the top
 // of the repository. Run with: ./gradlew dist
 def distVersion = project.minecraft_version
-tasks.register("dist", Sync) {
+tasks.register("dist", Copy) {
 	group = "build"
 	description = "Builds the jar and the resource pack into dist/${distVersion}."
 	dependsOn("assemble")

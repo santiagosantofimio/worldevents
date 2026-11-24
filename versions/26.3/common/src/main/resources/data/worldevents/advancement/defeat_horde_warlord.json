@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:survive_horde",
+	"display": {
+		"icon": {
+			"id": "minecraft:chiseled_polished_blackstone",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:horde_warlord"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.defeat_horde_warlord.title",
+			"fallback": "Fallen Warlord"
+		},
+		"description": {
+			"translate": "advancements.worldevents.defeat_horde_warlord.description",
+			"fallback": "Defeat the Horde Warlord"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

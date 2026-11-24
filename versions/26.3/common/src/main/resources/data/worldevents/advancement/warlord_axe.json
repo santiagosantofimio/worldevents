@@ -1,0 +1,43 @@
+{
+	"parent": "worldevents:defeat_horde_warlord",
+	"display": {
+		"icon": {
+			"id": "minecraft:diamond_axe",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:warlord_axe"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.warlord_axe.title",
+			"fallback": "Battle Cry"
+		},
+		"description": {
+			"translate": "advancements.worldevents.warlord_axe.description",
+			"fallback": "Get the Warlord's Axe"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:diamond_axe",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldevents_item": "warlord_axe"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

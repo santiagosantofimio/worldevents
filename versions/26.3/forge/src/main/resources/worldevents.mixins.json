@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.santiagosantofimio.worldevents.forge.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"PlayerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

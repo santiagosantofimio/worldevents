@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldevents:captains_cutlass",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldevents:item/captains_cutlass"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/iron_sword"
+		}
+	}
+}

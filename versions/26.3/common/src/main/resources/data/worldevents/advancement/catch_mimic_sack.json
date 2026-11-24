@@ -1,0 +1,31 @@
+{
+	"parent": "worldevents:lucky_nugget",
+	"display": {
+		"icon": {
+			"id": "minecraft:raw_gold_block",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldevents:mimic_sack"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldevents.catch_mimic_sack.title",
+			"fallback": "Pop Goes the Sack"
+		},
+		"description": {
+			"translate": "advancements.worldevents.catch_mimic_sack.description",
+			"fallback": "Catch a mimic sack before it escapes"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

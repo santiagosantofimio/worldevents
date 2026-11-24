@@ -1,4 +1,4 @@
-# Datos para subir cada archivo: World Omens 1.2.0
+# Datos para subir cada archivo: World Omens 2.0.0
 
 Valores para el formulario de Modrinth o CurseForge, en inglés como la página del mod. En todos:
 
@@ -10,19 +10,19 @@ Valores para el formulario de Modrinth o CurseForge, en inglés como la página 
 
 | Archivo | Version name | Version number | Loader | Game version | Java | Dependencias |
 |---|---|---|---|---|---|---|
-| `26.3/worldevents-fabric-26.3-1.2.0.jar` | World Omens 1.2.0 for Fabric 26.3 | `1.2.0+26.3-fabric` | Fabric | 26.3 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
-| `26.3/worldevents-neoforge-26.3-1.2.0.jar` | World Omens 1.2.0 for NeoForge 26.3 | `1.2.0+26.3-neoforge` | NeoForge | 26.3 | 25 | NeoForge 26.3.0.101+ |
-| `26.3/worldevents-forge-26.3-1.2.0.jar` | World Omens 1.2.0 for Forge 26.3 | `1.2.0+26.3-forge` | Forge | 26.3 | 25 | Forge 66.1.2+ |
-| `26.1.2/worldevents-fabric-26.1.2-1.2.0.jar` | World Omens 1.2.0 for Fabric 26.1.2 | `1.2.0+26.1.2-fabric` | Fabric | 26.1.2 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
-| `26.1.2/worldevents-neoforge-26.1.2-1.2.0.jar` | World Omens 1.2.0 for NeoForge 26.1.2 | `1.2.0+26.1.2-neoforge` | NeoForge | 26.1.2 | 25 | NeoForge 26.1.2.126+ |
-| `26.1.2/worldevents-forge-26.1.2-1.2.0.jar` | World Omens 1.2.0 for Forge 26.1.2 | `1.2.0+26.1.2-forge` | Forge | 26.1.2 | 25 | Forge 64.1.5+ |
-| `1.21.11/worldevents-fabric-1.21.11-1.2.0.jar` | World Omens 1.2.0 for Fabric 1.21.11 | `1.2.0+1.21.11-fabric` | Fabric | 1.21.11 | 21 | Fabric API (required), Fabric Loader 0.19.5+ |
-| `1.21.11/worldevents-neoforge-1.21.11-1.2.0.jar` | World Omens 1.2.0 for NeoForge 1.21.11 | `1.2.0+1.21.11-neoforge` | NeoForge | 1.21.11 | 21 | NeoForge 21.11.48+ |
-| `1.21.11/worldevents-forge-1.21.11-1.2.0.jar` | World Omens 1.2.0 for Forge 1.21.11 | `1.2.0+1.21.11-forge` | Forge | 1.21.11 | 21 | Forge 61.2.4+ |
-| `1.18.2/worldevents-fabric-1.18.2-1.2.0.jar` | World Omens 1.2.0 for Fabric 1.18.2 | `1.2.0+1.18.2-fabric` | Fabric | 1.18.2 | 17 | Fabric API (required), Fabric Loader 0.19.5+ |
-| `1.18.2/worldevents-forge-1.18.2-1.2.0.jar` | World Omens 1.2.0 for Forge 1.18.2 | `1.2.0+1.18.2-forge` | Forge | 1.18.2 | 17 | Forge 40.3.12+ |
-| `1.16.5/worldevents-fabric-1.16.5-1.2.0.jar` | World Omens 1.2.0 for Fabric 1.16.5 | `1.2.0+1.16.5-fabric` | Fabric | 1.16.5 | 8 | Fabric API (required), Fabric Loader 0.19.5+ |
-| `1.16.5/worldevents-forge-1.16.5-1.2.0.jar` | World Omens 1.2.0 for Forge 1.16.5 | `1.2.0+1.16.5-forge` | Forge | 1.16.5 | 8 | Forge 36.2.42+ |
+| `26.3/worldomens-fabric-26.3-2.0.0.jar` | World Omens 2.0.0 for Fabric 26.3 | `2.0.0+26.3-fabric` | Fabric | 26.3 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `26.3/worldomens-neoforge-26.3-2.0.0.jar` | World Omens 2.0.0 for NeoForge 26.3 | `2.0.0+26.3-neoforge` | NeoForge | 26.3 | 25 | NeoForge 26.3.0.101+ |
+| `26.3/worldomens-forge-26.3-2.0.0.jar` | World Omens 2.0.0 for Forge 26.3 | `2.0.0+26.3-forge` | Forge | 26.3 | 25 | Forge 66.1.2+ |
+| `26.1.2/worldomens-fabric-26.1.2-2.0.0.jar` | World Omens 2.0.0 for Fabric 26.1.2 | `2.0.0+26.1.2-fabric` | Fabric | 26.1.2 | 25 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `26.1.2/worldomens-neoforge-26.1.2-2.0.0.jar` | World Omens 2.0.0 for NeoForge 26.1.2 | `2.0.0+26.1.2-neoforge` | NeoForge | 26.1.2 | 25 | NeoForge 26.1.2.126+ |
+| `26.1.2/worldomens-forge-26.1.2-2.0.0.jar` | World Omens 2.0.0 for Forge 26.1.2 | `2.0.0+26.1.2-forge` | Forge | 26.1.2 | 25 | Forge 64.1.5+ |
+| `1.21.11/worldomens-fabric-1.21.11-2.0.0.jar` | World Omens 2.0.0 for Fabric 1.21.11 | `2.0.0+1.21.11-fabric` | Fabric | 1.21.11 | 21 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `1.21.11/worldomens-neoforge-1.21.11-2.0.0.jar` | World Omens 2.0.0 for NeoForge 1.21.11 | `2.0.0+1.21.11-neoforge` | NeoForge | 1.21.11 | 21 | NeoForge 21.11.48+ |
+| `1.21.11/worldomens-forge-1.21.11-2.0.0.jar` | World Omens 2.0.0 for Forge 1.21.11 | `2.0.0+1.21.11-forge` | Forge | 1.21.11 | 21 | Forge 61.2.4+ |
+| `1.18.2/worldomens-fabric-1.18.2-2.0.0.jar` | World Omens 2.0.0 for Fabric 1.18.2 | `2.0.0+1.18.2-fabric` | Fabric | 1.18.2 | 17 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `1.18.2/worldomens-forge-1.18.2-2.0.0.jar` | World Omens 2.0.0 for Forge 1.18.2 | `2.0.0+1.18.2-forge` | Forge | 1.18.2 | 17 | Forge 40.3.12+ |
+| `1.16.5/worldomens-fabric-1.16.5-2.0.0.jar` | World Omens 2.0.0 for Fabric 1.16.5 | `2.0.0+1.16.5-fabric` | Fabric | 1.16.5 | 8 | Fabric API (required), Fabric Loader 0.19.5+ |
+| `1.16.5/worldomens-forge-1.16.5-2.0.0.jar` | World Omens 2.0.0 for Forge 1.16.5 | `2.0.0+1.16.5-forge` | Forge | 1.16.5 | 8 | Forge 36.2.42+ |
 
 NeoForge no existe para 1.18.2 ni 1.16.5. Los jars de 1.16.5 funcionan con Java 8 (y con versiones más nuevas).
 
@@ -31,16 +31,17 @@ NeoForge no existe para 1.18.2 ni 1.16.5. Los jars de 1.16.5 funcionan con Java 
 Markdown para Modrinth:
 
 ```markdown
-## World Omens 1.2.0
+## World Omens 2.0.0
 
-- Firefly Night: follow five personal lights in the overworld at night. Each light grants experience and event points; completing the route grants an advancement. Progress survives restarts.
-- `/worldevents help [id]` and `/eventos help [id]` explain an event’s objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
-- Caravan contracts: near an active merchant, deliver wheat, iron ingots or rotten flesh for an event seal. Up to two deliveries per player per caravan; progress survives restarts. Use `/worldevents contract` or `/eventos encargo` to see recipes.
-- `/worldevents ranking` and `/eventos ranking` show the current event's top three scores and your own score and rank.
-- Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
-- The Colossus Hammer has a squarer 2D icon with the same dark rock and lava colors.
-- The Nomad Merchant, Harvest Spirit, Horde Warlord and Spectral Captain use their original models and textures again.
-- Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
+The mod id, command and config now use the name World Omens. This is a breaking change, with automatic migration.
+
+- The command is `/worldomens` (aliases `/omens` and `/eventos`). `/worldevents` no longer exists.
+- The config is `config/worldomens.json`. Your old `config/worldevents.json` is moved and its values are kept.
+- Saved event state (running event, planned event, cooldowns) is copied from the old data automatically.
+- Update the resource pack together with the mod: the old pack uses the old namespace and will not apply.
+- Relics and spawn eggs you already own keep working. Advancement progress starts over, because the advancements have new ids.
+- Jar files are now named `worldomens-<loader>-<minecraft>-<version>.jar`.
+- NeoForge and Forge builds for Minecraft 26.3.
 ```
 
 En Fabric: `- Requires Fabric API.`
@@ -48,34 +49,29 @@ En Fabric: `- Requires Fabric API.`
 Texto plano para CurseForge:
 
 ```text
-World Omens 1.2.0
+World Omens 2.0.0
 
-- Firefly Night: follow five personal lights in the overworld at night. Each light grants experience and event points; completing the route grants an advancement. Progress survives restarts.
-- /worldevents help [id] and /eventos help [id] explain an event's objective, reward and conditions in English or Spanish. Without an id, they describe the active event in the current dimension. Players can use help without operator permissions.
-- Caravan contracts: near an active merchant, deliver wheat, iron ingots or rotten flesh for an event seal. Up to two deliveries per player per caravan; progress survives restarts. Use /worldevents contract or /eventos encargo to see recipes.
-- /worldevents ranking and /eventos ranking show the current event's top three scores and your own score and rank.
-- Meteor Shower shooting stars now cross closer to the player's forward view, making them easier to see.
-- The Colossus Hammer has a squarer 2D icon with the same dark rock and lava colors.
-- The Nomad Merchant, Harvest Spirit, Horde Warlord and Spectral Captain use their original models and textures again.
-- Firefly Night and help are available on all five supported Minecraft versions. Existing configuration files receive the new event settings.
+The mod id, command and config now use the name World Omens. This is a breaking change, with automatic migration.
+
+- The command is /worldomens (aliases /omens and /eventos). /worldevents no longer exists.
+- The config is config/worldomens.json. Your old config/worldevents.json is moved and its values are kept.
+- Saved event state (running event, planned event, cooldowns) is copied from the old data automatically.
+- Update the resource pack together with the mod: the old pack uses the old namespace and will not apply.
+- Relics and spawn eggs you already own keep working. Advancement progress starts over, because the advancements have new ids.
+- Jar files are now named worldomens-<loader>-<minecraft>-<version>.jar.
+- NeoForge and Forge builds for Minecraft 26.3.
 ```
 
 En Fabric: `- Requires Fabric API.`
 
 ## Resource packs
 
-Los `.zip` de 1.2.0 se generan para cada versión. El evento nuevo usa partículas vanilla y no necesita modelos ni texturas nuevas.
+Los cinco `.zip` de 2.0.0 (`worldomens-2.0.0+<minecraft>-resourcepack.zip`) hay que subirlos de nuevo: cambió el espacio de nombres, así que los de 1.2.0 no sirven con este mod.
 
 ## Comprobado
 
-- NeoForge y Forge de 26.3 (añadidos después de publicar el resto): compilan y pasan la prueba de humo con Firefly Night y los comandos nuevos; solo se probó arrancando servidor sin jugadores, no con un cliente conectado.
-- GameTests de Fabric: 38 en 26.3 y 37 en 26.1.2 y 1.21.11. Builds de 1.18.2 y 1.16.5 aprobados.
-- Las pruebas en 26.3 verificaron consumo de materiales, dos sellos, límite por jugador y ranking vacío/con puntos. Los cinco builds y `dist` se repitieron tras estos cambios; los once jars incluyen los encargos y textos del ranking, y los cinco SHA-1 coinciden.
-- Builds Forge de 1.18.2 y 1.16.5 aprobados.
-- Pruebas de humo previas a los encargos en once loaders: iniciaron y detuvieron eventos sin errores del mod.
-- Cliente 26.3: `runClientGameTest` aprobó y la captura `worldevents_firefly_night` mostró boss bar, pistas de dirección/distancia y partículas verdes visibles a 13 bloques.
-- Cliente 26.3 tras el ajuste de meteoritos: `runClientGameTest` aprobó; cuatro capturas `worldevents_meteor_shower` muestran varias estelas cruzando la vista del jugador.
-- Cliente 26.3 con el icono cuadrado del mazo: `runClientGameTest` aprobó y `worldevents_creative_tab` mostró el icono en el inventario. El primer arranque quedó detenido al cargar recursos; se cerró y el segundo terminó en verde.
-- Cliente 26.3 tras restaurar cuatro criaturas: `runClientGameTest` aprobó; las capturas mostraron los modelos originales del Mercader nómada, Espíritu de la cosecha, Caudillo de la horda y Capitán espectral.
-- Los cinco resource packs y once jars de 1.2.0 contienen esos cuatro modelos y texturas restaurados; los cinco SHA-1 coinciden. Artefactos 1.1.1 conservados.
-- Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, aspecto en las otras versiones y balance prolongado.
+- Pruebas de servidor tras el renombrado: 38 de 38 en 26.3 (la primera pasada tuvo un fallo en la prueba frágil de la luna de sangre, que pasó al repetir), 37 de 37 en 26.1.2 y 1.21.11. Builds de 26.3, 1.18.2 y 1.16.5 aprobados.
+- Prueba de humo (arranca el servidor, invoca cada criatura, inicia y detiene cada evento, incluidos Firefly Night y los comandos de ayuda) aprobada en los 13 loaders: Fabric, NeoForge y Forge de 26.3, 26.1.2 y 1.21.11, y Fabric y Forge de 1.18.2 y 1.16.5. En Forge 26.3 el script marca un aviso de red del servidor (`LanServerPinger`) ajeno al mod.
+- Los 13 jars y los 5 resource packs de 2.0.0 se regeneraron: ningún archivo conserva el nombre viejo, todos incluyen Firefly Night y el id `worldomens`, y los cinco SHA-1 coinciden.
+- Migración probada en 26.1.2 con un config y un estado guardado con los nombres viejos: el config pasó a `worldomens.json` conservando un valor personalizado y el estado copió un dato marcado.
+- Sin verificar: los jars de `dist/` en servidores reales con cliente vanilla, un jugador conectado en cualquier loader, aspecto en cliente tras el renombrado, y la migración en 1.21.11, 1.18.2 y 1.16.5 (el código es el mismo, pero solo se ejecutó en 26.1.2).

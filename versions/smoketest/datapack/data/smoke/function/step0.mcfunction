@@ -2,6 +2,11 @@ say [smoke] start
 forceload add ~-32 ~-32 ~32 ~32
 worldevents list
 worldevents status
+worldevents help
+worldevents help firefly_night
+worldevents help blood_moon
+worldevents ranking
+worldevents contract
 time set night
 worldevents summon blood_moon_lord ~0 ~3 ~0
 worldevents summon blood_eye ~3 ~3 ~0

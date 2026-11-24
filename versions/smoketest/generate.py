@@ -1,7 +1,3 @@
-"""Writes the smoke test data pack. Run with: python3 generate.py [legacy]
-
-Without arguments it writes datapack/ for 1.20.5 and later. "legacy" writes datapack-legacy/ for 1.16.5 and 1.18.2:
-plural folder names, and item NBT instead of item components."""
 import json, os, sys
 
 legacy = len(sys.argv) > 1 and sys.argv[1] == "legacy"
@@ -22,23 +18,23 @@ kinds = ["blood_moon_lord", "blood_eye", "mimic_sack", "living_meteorite", "stor
 events = [("blood_moon", "overworld"), ("gold_rush", "overworld"), ("meteor_shower", "overworld"),
           ("thunderstorm", "overworld"), ("blessed_harvest", "overworld"), ("merchant_caravan", "overworld"),
           ("horde", "overworld"), ("treasure_hunt", "overworld"), ("eruption", "the_nether"), ("void_storm", "the_end"),
-          ("eclipse", "overworld"), ("blizzard", "overworld")]
+          ("eclipse", "overworld"), ("blizzard", "overworld"), ("firefly_night", "overworld")]
 if legacy:
     pickaxe = 'minecraft:diamond_pickaxe{worldevents_item:"starfall_pickaxe"}'
 else:
     pickaxe = 'minecraft:diamond_pickaxe[minecraft:custom_data={worldevents_item:"starfall_pickaxe"}]'
 
 steps = []
-steps.append(["say [smoke] start", "forceload add ~-32 ~-32 ~32 ~32", "worldevents list", "worldevents status",
+steps.append(["say [smoke] start", "forceload add ~-32 ~-32 ~32 ~32", "worldevents list", "worldevents status", "worldevents help", "worldevents help firefly_night",
+              "worldevents help blood_moon", "worldevents ranking", "worldevents contract",
               "time set night"]
              + [f"worldevents summon {k} ~{(i % 4) * 3} ~3 ~{(i // 4) * 3}" for i, k in enumerate(kinds)]
-             # The starfall pickaxe smelts what it mines: checks the loot hook.
              + ["setblock ~ ~20 ~ minecraft:iron_ore", f"loot spawn ~ ~22 ~ mine ~ ~20 ~ {pickaxe}"])
 steps.append(['execute if entity @e[type=item,nbt={Item:{id:"minecraft:iron_ingot"}}] run say [smoke] loot hook ok',
               "kill @e[type=!player]", "say [smoke] killed creatures"])
 for event, dim in events:
     steps.append([f"say [smoke] start {event}", f"execute in minecraft:{dim} run worldevents start {event}"])
-    steps.append([f"execute in minecraft:{dim} run worldevents status", f"execute in minecraft:{dim} run worldevents stop",
+    steps.append([f"execute in minecraft:{dim} run worldevents status", f"execute in minecraft:{dim} run worldevents help", f"execute in minecraft:{dim} run worldevents ranking", f"execute in minecraft:{dim} run worldevents stop",
                   f"say [smoke] stopped {event}"])
 steps.append(["worldevents reload", "say [smoke] done", "stop"])
 

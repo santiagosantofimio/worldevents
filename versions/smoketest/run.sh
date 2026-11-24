@@ -14,7 +14,7 @@ mkdir -p "$RUN_DIR/world/datapacks"
 cp -r "$DIR/${SMOKE_PACK:-datapack}" "$RUN_DIR/world/datapacks/smoke"
 printf '{"pack":{"description":"World Omens smoke test","pack_format":%s,"min_format":%s,"max_format":%s}}\n' "$FORMAT" "$FORMAT" "$FORMAT" \
 	> "$RUN_DIR/world/datapacks/smoke/pack.mcmeta"
-printf 'online-mode=false\nspawn-protection=0\nfunction-permission-level=4\n' > "$RUN_DIR/server.properties"
+printf 'online-mode=false\nspawn-protection=0\nfunction-permission-level=4\npause-when-empty-seconds=-1\n' > "$RUN_DIR/server.properties"
 LOG=$(mktemp)
 "$@" > "$LOG" 2>&1
 grep -E "\[smoke\]|worldevents|World Omens|Exception|ERROR|at dev\.santiago" "$LOG" | grep -vE "yggdrasil|minecraftservices|Failed to load properties|eula" | head -150

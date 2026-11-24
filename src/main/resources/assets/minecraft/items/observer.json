@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:blood_eye",
+				"when": "worldomens:blood_eye",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/blood_eye"
+					"model": "worldomens:item/blood_eye"
 				}
 			}
 		],

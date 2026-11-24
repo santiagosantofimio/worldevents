@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:void_stalker",
+				"when": "worldomens:void_stalker",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/void_stalker"
+					"model": "worldomens:item/void_stalker"
 				}
 			}
 		],

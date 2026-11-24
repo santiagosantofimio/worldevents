@@ -4,24 +4,24 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:blood_eye",
+				"when": "worldomens:blood_eye",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/blood_eye"
+					"model": "worldomens:item/blood_eye"
 				}
 			},
 			{
-				"when": "worldevents:eclipse_wraith",
+				"when": "worldomens:eclipse_wraith",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/eclipse_wraith"
+					"model": "worldomens:item/eclipse_wraith"
 				}
 			},
 			{
-				"when": "worldevents:storm_spirit",
+				"when": "worldomens:storm_spirit",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/storm_spirit"
+					"model": "worldomens:item/storm_spirit"
 				}
 			}
 		],

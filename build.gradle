@@ -12,7 +12,7 @@ fabricApi {
 	// Client tests: ./gradlew runClientGameTest (opens a window and saves screenshots; not part of the build).
 	configureTests {
 		createSourceSet = true
-		modId = "worldevents-test"
+		modId = "worldomens-test"
 		enableGameTests = true
 		enableClientGameTests = true
 	}
@@ -61,7 +61,7 @@ def modVersion = project.version
 def resourcePack = tasks.register("resourcePack", Zip) {
 	group = "build"
 	description = "Builds the optional resource pack and its SHA-1 for server.properties."
-	archiveFileName = "worldevents-${modVersion}-resourcepack.zip"
+	archiveFileName = "worldomens-${modVersion}-resourcepack.zip"
 	destinationDirectory = layout.buildDirectory.dir("libs")
 	preserveFileTimestamps = false
 	reproducibleFileOrder = true
@@ -73,9 +73,9 @@ def resourcePack = tasks.register("resourcePack", Zip) {
 	}
 	from("src/main/resources/assets") {
 		into("assets")
-		exclude("worldevents/icon.png")
+		exclude("worldomens/icon.png")
 	}
-	from("src/main/resources/assets/worldevents/icon.png") {
+	from("src/main/resources/assets/worldomens/icon.png") {
 		rename { "pack.png" }
 	}
 	def zipFile = archiveFile
@@ -107,12 +107,12 @@ tasks.register("dist", Copy) {
 	description = "Builds the jar and the resource pack into dist/${distVersion}."
 	dependsOn("assemble")
 	from(layout.buildDirectory.dir("libs")) {
-		include("worldevents-${modVersion}.jar")
-		rename { "worldevents-fabric-${distVersion}-${modVersion}.jar" }
+		include("worldomens-${modVersion}.jar")
+		rename { "worldomens-fabric-${distVersion}-${modVersion}.jar" }
 	}
 	from(layout.buildDirectory.dir("libs")) {
-		include("worldevents-${modVersion}-resourcepack.zip", "worldevents-${modVersion}-resourcepack.zip.sha1")
-		rename { name -> name.replace("worldevents-${modVersion}-", "worldevents-${modVersion}+${distVersion}-") }
+		include("worldomens-${modVersion}-resourcepack.zip", "worldomens-${modVersion}-resourcepack.zip.sha1")
+		rename { name -> name.replace("worldomens-${modVersion}-", "worldomens-${modVersion}+${distVersion}-") }
 	}
 	into(file("dist/${distVersion}"))
 }

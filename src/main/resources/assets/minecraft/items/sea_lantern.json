@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:spectral_captain",
+				"when": "worldomens:spectral_captain",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/spectral_captain"
+					"model": "worldomens:item/spectral_captain"
 				}
 			}
 		],

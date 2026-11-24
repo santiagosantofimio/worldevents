@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:harvest_spirit",
+				"when": "worldomens:harvest_spirit",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/harvest_spirit"
+					"model": "worldomens:item/harvest_spirit"
 				}
 			}
 		],

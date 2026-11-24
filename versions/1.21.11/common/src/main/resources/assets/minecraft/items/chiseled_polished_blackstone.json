@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:horde_warlord",
+				"when": "worldomens:horde_warlord",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/horde_warlord"
+					"model": "worldomens:item/horde_warlord"
 				}
 			}
 		],

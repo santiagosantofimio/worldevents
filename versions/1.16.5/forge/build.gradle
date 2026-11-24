@@ -14,7 +14,7 @@ version = shared.version
 group = shared.group
 
 base {
-	archivesName = "worldevents-forge-${mcVersion}"
+	archivesName = "worldomens-forge-${mcVersion}"
 }
 
 java {
@@ -28,7 +28,7 @@ sourceSets.main {
 
 loom {
 	silentMojangMappingsLicense()
-	accessWidenerPath = file('src/main/resources/worldevents.accesswidener')
+	accessWidenerPath = file('src/main/resources/worldomens.accesswidener')
 	forge {
 		// Forge reads access transformers: the access widener is turned into one, with Forge's runtime names.
 		convertAccessWideners = true
@@ -65,7 +65,7 @@ processResources {
 
 jar {
 	from('../../../LICENSE') {
-		rename { "${it}_worldevents" }
+		rename { "${it}_worldomens" }
 	}
 }
 

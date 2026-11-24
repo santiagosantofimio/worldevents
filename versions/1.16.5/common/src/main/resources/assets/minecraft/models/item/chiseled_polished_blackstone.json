@@ -5,7 +5,7 @@
 			"predicate": {
 				"custom_model_data": 6981083
 			},
-			"model": "worldevents:item/horde_warlord"
+			"model": "worldomens:item/horde_warlord"
 		}
 	]
 }

@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:storm_spirit",
+				"when": "worldomens:storm_spirit",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/storm_spirit"
+					"model": "worldomens:item/storm_spirit"
 				}
 			}
 		],

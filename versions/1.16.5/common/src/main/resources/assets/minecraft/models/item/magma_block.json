@@ -5,13 +5,13 @@
 			"predicate": {
 				"custom_model_data": 7347828
 			},
-			"model": "worldevents:item/magma_colossus"
+			"model": "worldomens:item/magma_colossus"
 		},
 		{
 			"predicate": {
 				"custom_model_data": 8440647
 			},
-			"model": "worldevents:item/living_meteorite"
+			"model": "worldomens:item/living_meteorite"
 		}
 	]
 }

@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:meteorite_fragment",
+				"when": "worldomens:meteorite_fragment",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/meteorite_fragment"
+					"model": "worldomens:item/meteorite_fragment"
 				}
 			}
 		],

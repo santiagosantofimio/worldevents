@@ -1,0 +1,33 @@
+{
+	"parent": "worldomens:defeat_eclipse_wraith",
+	"display": {
+		"icon": {
+			"item": "minecraft:amethyst_shard",
+			"nbt": "{CustomModelData:3077463}"
+		},
+		"title": {
+			"text": "Piece of the Dark"
+		},
+		"description": {
+			"text": "Get an Eclipse Shard"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"minecraft:amethyst_shard"
+						],
+						"nbt": "{worldomens_item:\"eclipse_shard\"}"
+					}
+				]
+			}
+		}
+	}
+}

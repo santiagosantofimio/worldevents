@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:eclipse_shard",
+				"when": "worldomens:eclipse_shard",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/eclipse_shard"
+					"model": "worldomens:item/eclipse_shard"
 				}
 			}
 		],

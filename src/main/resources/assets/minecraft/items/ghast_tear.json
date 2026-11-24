@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:bloody_tear",
+				"when": "worldomens:bloody_tear",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/bloody_tear"
+					"model": "worldomens:item/bloody_tear"
 				}
 			}
 		],

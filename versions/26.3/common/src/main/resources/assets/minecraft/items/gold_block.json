@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:blood_moon_lord_crown",
+				"when": "worldomens:blood_moon_lord_crown",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/blood_moon_lord_crown"
+					"model": "worldomens:item/blood_moon_lord_crown"
 				}
 			}
 		],

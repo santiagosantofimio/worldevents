@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:bottled_lightning",
+				"when": "worldomens:bottled_lightning",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/bottled_lightning"
+					"model": "worldomens:item/bottled_lightning"
 				}
 			}
 		],

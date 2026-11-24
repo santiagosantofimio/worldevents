@@ -16,7 +16,7 @@ Kinds (how the model is placed and displayed):
            scale, so the vanilla block shown without the resource pack is half as big (Creature.Part#big).
 
 Usage:
-    python3 tools/import_model.py INPUT.glb KIND MODEL.json TEXTURE.png --texture-id worldevents:item/name_3d
+    python3 tools/import_model.py INPUT.glb KIND MODEL.json TEXTURE.png --texture-id worldomens:item/name_3d
         [--resolution N] [--colors N] [--turn DEGREES] [--flip] [--big] [--dominant] [--preview PREVIEW.png]
 
 Requires Pillow and numpy (dev tool only; the mod does not use them).

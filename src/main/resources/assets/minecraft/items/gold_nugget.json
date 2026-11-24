@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:lucky_nugget",
+				"when": "worldomens:lucky_nugget",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/lucky_nugget"
+					"model": "worldomens:item/lucky_nugget"
 				}
 			}
 		],

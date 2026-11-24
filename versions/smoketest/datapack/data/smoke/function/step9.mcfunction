@@ -1,6 +1,6 @@
-execute in minecraft:overworld run worldevents status
-execute in minecraft:overworld run worldevents help
-execute in minecraft:overworld run worldevents ranking
-execute in minecraft:overworld run worldevents stop
+execute in minecraft:overworld run worldomens status
+execute in minecraft:overworld run worldomens help
+execute in minecraft:overworld run worldomens ranking
+execute in minecraft:overworld run worldomens stop
 say [smoke] stopped thunderstorm
 schedule function smoke:step10 40t

@@ -8,7 +8,7 @@ subprojects {
 
 	plugins.withId('java') {
 		base {
-			archivesName = "worldevents-${project.name}-${project.minecraft_version}"
+			archivesName = "worldomens-${project.name}-${project.minecraft_version}"
 		}
 
 		java {
@@ -41,7 +41,7 @@ subprojects {
 
 		jar {
 			from(rootProject.file('../../LICENSE')) {
-				rename { "${it}_worldevents" }
+				rename { "${it}_worldomens" }
 			}
 		}
 	}
@@ -54,7 +54,7 @@ def mcVersion = project.minecraft_version
 tasks.register("resourcePack", Zip) {
 	group = "build"
 	description = "Builds the optional resource pack and its SHA-1 for server.properties."
-	archiveFileName = "worldevents-${modVersion}+${mcVersion}-resourcepack.zip"
+	archiveFileName = "worldomens-${modVersion}+${mcVersion}-resourcepack.zip"
 	destinationDirectory = layout.buildDirectory.dir("libs")
 	preserveFileTimestamps = false
 	reproducibleFileOrder = true
@@ -66,9 +66,9 @@ tasks.register("resourcePack", Zip) {
 	}
 	from("common/src/main/resources/assets") {
 		into("assets")
-		exclude("worldevents/icon.png")
+		exclude("worldomens/icon.png")
 	}
-	from("common/src/main/resources/assets/worldevents/icon.png") {
+	from("common/src/main/resources/assets/worldomens/icon.png") {
 		rename { "pack.png" }
 	}
 	def zipFile = archiveFile
@@ -91,12 +91,12 @@ tasks.register("dist", Copy) {
 	subprojects.each { sub ->
 		dependsOn("${sub.path}:assemble")
 		from(sub.layout.buildDirectory.dir("libs")) {
-			include("worldevents-${sub.name}-${distVersion}-${distModVersion}.jar")
+			include("worldomens-${sub.name}-${distVersion}-${distModVersion}.jar")
 		}
 	}
 	from(layout.buildDirectory.dir("libs")) {
 		// Only this version's pack: build/libs keeps the packs of earlier versions of the mod.
-		include("worldevents-${distModVersion}+${distVersion}-resourcepack.zip", "worldevents-${distModVersion}+${distVersion}-resourcepack.zip.sha1")
+		include("worldomens-${distModVersion}+${distVersion}-resourcepack.zip", "worldomens-${distModVersion}+${distVersion}-resourcepack.zip.sha1")
 	}
 	into(rootProject.file("../../dist/${distVersion}"))
 }

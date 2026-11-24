@@ -8,13 +8,13 @@
 			"predicate": {
 				"custom_model_data": 1970236
 			},
-			"model": "worldevents:item/blood_scythe"
+			"model": "worldomens:item/blood_scythe"
 		},
 		{
 			"predicate": {
 				"custom_model_data": 5981417
 			},
-			"model": "worldevents:item/frostfang"
+			"model": "worldomens:item/frostfang"
 		}
 	]
 }

@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:eclipse_wraith",
+				"when": "worldomens:eclipse_wraith",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/eclipse_wraith"
+					"model": "worldomens:item/eclipse_wraith"
 				}
 			}
 		],

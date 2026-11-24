@@ -49,13 +49,13 @@ Cómo funcionan sin mod en el cliente: un mob vanilla invisible pone el movimien
 
 ### Invocar criaturas
 
-Cada criatura tiene su **huevo generador**: el huevo vanilla de su mob base, que al usarlo sobre un bloque saca la criatura de verdad, a cualquier hora y sin su evento. También se pueden invocar con `/worldevents summon <criatura>`. Una criatura invocada no pertenece a ningún evento: se queda hasta que la derrotan, con sus habilidades, su barra de jefe y su botín. Al mercader y al espíritu de la cosecha, que no reciben daño, se les puede quitar golpeándolos en creativo.
+Cada criatura tiene su **huevo generador**: el huevo vanilla de su mob base, que al usarlo sobre un bloque saca la criatura de verdad, a cualquier hora y sin su evento. También se pueden invocar con `/worldomens summon <criatura>`. Una criatura invocada no pertenece a ningún evento: se queda hasta que la derrotan, con sus habilidades, su barra de jefe y su botín. Al mercader y al espíritu de la cosecha, que no reciben daño, se les puede quitar golpeándolos en creativo.
 
-Ids: `blood_moon_lord`, `blood_eye`, `mimic_sack`, `living_meteorite`, `storm_spirit`, `harvest_spirit`, `nomad_merchant`, `horde_warlord`, `spectral_captain`, `magma_colossus`, `void_stalker`. Los huevos se dan con `/worldevents give <jugadores> <criatura>_spawn_egg`.
+Ids: `blood_moon_lord`, `blood_eye`, `mimic_sack`, `living_meteorite`, `storm_spirit`, `harvest_spirit`, `nomad_merchant`, `horde_warlord`, `spectral_captain`, `magma_colossus`, `void_stalker`. Los huevos se dan con `/worldomens give <jugadores> <criatura>_spawn_egg`.
 
 ### Pestaña de creativo
 
-En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña **World Omens** en el inventario de creativo, con todos los ítems y los huevos. Un cliente vanilla no la ve, porque es parte de la interfaz del cliente; en un servidor, lo mismo se consigue con `/worldevents give` y `/worldevents summon`.
+En un jugador (o si un jugador instala el mod en su cliente) aparece la pestaña **World Omens** en el inventario de creativo, con todos los ítems y los huevos. Un cliente vanilla no la ve, porque es parte de la interfaz del cliente; en un servidor, lo mismo se consigue con `/worldomens give` y `/worldomens summon`.
 
 ## Ítems
 
@@ -97,7 +97,7 @@ Una pestaña propia, «World Omens»: sobrevivir a una luna de sangre, derrotar 
 
 1. Servidor con Fabric (y Fabric API), NeoForge o Forge, en una de las [versiones de Minecraft](#versiones-de-minecraft) del mod.
 2. Copia el `.jar` en la carpeta `mods/` del servidor.
-3. Arranca el servidor: se crea `config/worldevents.json`.
+3. Arranca el servidor: se crea `config/worldomens.json`.
 
 Los jugadores no necesitan instalar nada.
 
@@ -105,9 +105,9 @@ Los jugadores no necesitan instalar nada.
 
 Da a los ítems iconos planos de 16×16 y a las criaturas modelos 3D, y traduce sus nombres al idioma de cada jugador. Sin él todo funciona igual: los ítems se ven como su ítem vanilla de base y las criaturas como un bloque flotando con su nombre.
 
-- **Servidor**: sube `worldevents-<versión>-resourcepack.zip` a una web con enlace directo de descarga y añade en `server.properties`:
+- **Servidor**: sube `worldomens-<versión>-resourcepack.zip` a una web con enlace directo de descarga y añade en `server.properties`:
   ```properties
-  resource-pack=https://tu-web/worldevents-<versión>-resourcepack.zip
+  resource-pack=https://tu-web/worldomens-<versión>-resourcepack.zip
   resource-pack-sha1=<contenido del archivo .sha1>
   require-resource-pack=false
   ```
@@ -148,20 +148,20 @@ Deja los jars y el resource pack de esa versión en `dist/<versión>/`. Para 26.
 
 ## Comandos
 
-`/worldevents` (alias `/eventos`). `list`, `status`, `help`, `ranking` y `contract`/`encargo` están disponibles para todos. Los demás comandos requieren operador (nivel de permiso 2):
+`/worldomens` (alias `/eventos`). `list`, `status`, `help`, `ranking` y `contract`/`encargo` están disponibles para todos. Los demás comandos requieren operador (nivel de permiso 2):
 
 | Comando | Qué hace |
 |---|---|
-| `/worldevents list` | Lista los eventos, su peso y si están en espera. |
-| `/worldevents start <id>` | Empieza un evento ya en tu dimensión, sin esperas. |
-| `/worldevents stop` | Termina el evento de tu dimensión. |
-| `/worldevents status` | Estado de cada dimensión: evento activo, próximo evento o tiempo de espera. |
+| `/worldomens list` | Lista los eventos, su peso y si están en espera. |
+| `/worldomens start <id>` | Empieza un evento ya en tu dimensión, sin esperas. |
+| `/worldomens stop` | Termina el evento de tu dimensión. |
+| `/worldomens status` | Estado de cada dimensión: evento activo, próximo evento o tiempo de espera. |
 | `/eventos ranking` | Muestra los tres mejores del evento activo y tus puntos y puesto. |
 | `/eventos help [id]` | Objetivo, recompensa y condiciones del evento activo o del indicado. |
-| `/eventos encargo [id]` | Durante la caravana, muestra encargos o entrega materiales cerca del mercader. Ids: `wheat` (48 de trigo), `iron` (12 lingotes), `rotten_flesh` (64 de carne podrida). Cada entrega da un sello; máximo dos por jugador y evento. También funciona `/worldevents contract`. |
-| `/worldevents reload` | Recarga la configuración sin reiniciar. |
-| `/worldevents give <jugadores> <ítem> [cantidad]` | Da ítems del mod: `meteorite_fragment`, `lucky_nugget`, `bloody_tear`, `blood_scythe`, `starfall_pickaxe`, `bottled_lightning`, `golden_seed`, `warlord_axe`, `captains_cutlass`, `magma_heart`, `colossus_hammer`, `unstable_pearl`, `eclipse_shard`, `frostfang`, `event_seal`, y los huevos `<criatura>_spawn_egg`. |
-| `/worldevents summon <criatura> [posición]` | Invoca una criatura donde estás (o en la posición), fuera de su evento. |
+| `/eventos encargo [id]` | Durante la caravana, muestra encargos o entrega materiales cerca del mercader. Ids: `wheat` (48 de trigo), `iron` (12 lingotes), `rotten_flesh` (64 de carne podrida). Cada entrega da un sello; máximo dos por jugador y evento. También funciona `/worldomens contract`. |
+| `/worldomens reload` | Recarga la configuración sin reiniciar. |
+| `/worldomens give <jugadores> <ítem> [cantidad]` | Da ítems del mod: `meteorite_fragment`, `lucky_nugget`, `bloody_tear`, `blood_scythe`, `starfall_pickaxe`, `bottled_lightning`, `golden_seed`, `warlord_axe`, `captains_cutlass`, `magma_heart`, `colossus_hammer`, `unstable_pearl`, `eclipse_shard`, `frostfang`, `event_seal`, y los huevos `<criatura>_spawn_egg`. |
+| `/worldomens summon <criatura> [posición]` | Invoca una criatura donde estás (o en la posición), fuera de su evento. |
 
 Ids: `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `merchant_caravan`, `horde`, `treasure_hunt`, `eruption` (solo en el Nether), `void_storm` (solo en el End), `eclipse`, `blizzard` (solo si hay un jugador en un bioma nevado). Para probar la luna de sangre, la horda o los meteoritos, usa antes `/time set night`.
 
@@ -171,7 +171,7 @@ En cada dimensión, cuando termina la espera global, se sortea el próximo event
 
 ## Configuración
 
-`config/worldevents.json`. Los tiempos van en **segundos** (un día de Minecraft son 1200 s). Si faltan claves, se añaden al arrancar sin tocar las tuyas. Aplica los cambios con `/worldevents reload`.
+`config/worldomens.json`. Los tiempos van en **segundos** (un día de Minecraft son 1200 s). Si faltan claves, se añaden al arrancar sin tocar las tuyas. Aplica los cambios con `/worldomens reload`.
 
 **General**
 
@@ -253,13 +253,13 @@ Craters only dig natural terrain (dirt, grass, sand, gravel, stone…), never bu
 
 **Versions:** Minecraft 26.3 (Fabric), 26.1.2 and 1.21.11 (Fabric, NeoForge and Forge), 1.18.2 and 1.16.5 (Fabric and Forge; NeoForge does not exist there). The 26.3 code is in `src/`, the other versions are in `versions/<version>/`, and the finished jars and resource packs are in `dist/<version>/`; build one with `./gradlew -p versions/<version> dist`. On 1.18.2 and 1.16.5 creatures are invisible armor stands that wear the model, item names are in the language of whoever gets them, advancements are in English, and a few items work slightly differently (see `dist/UPLOAD.md`). The 1.16.5 jars run on Java 8.
 
-**Optional resource pack:** gives items flat 16×16 icons, creatures 3D models, and translates their names. Host `worldevents-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
+**Optional resource pack:** gives items flat 16×16 icons, creatures 3D models, and translates their names. Host `worldomens-<version>-resourcepack.zip` anywhere with a direct download link and set `resource-pack` and `resource-pack-sha1` (from the `.sha1` file) in `server.properties`. Without it everything still works, with the look of the vanilla base items and mobs. In singleplayer the mod loads it by itself.
 
-**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldevents summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldevents give` (eggs are `<creature>_spawn_egg`) and `summon`.
+**Summoning:** every creature has a spawn egg (the vanilla egg of its base mob, which brings out the real creature when used on a block), and `/worldomens summon <creature> [pos]` summons one too. Summoned creatures belong to no event: they stay until defeated, with their abilities, boss bar and loot. With the mod on the client (singleplayer), a **World Omens** creative tab holds every item and egg; vanilla clients don't see it, so on servers use `/worldomens give` (eggs are `<creature>_spawn_egg`) and `summon`.
 
-**Commands** (`/worldevents`, alias `/eventos`): everyone can use `list`, `status`, `help [id]`, `ranking` (current event’s top three and your score), and `contract [id]` (alias `encargo`). During a caravan, stand within 8 blocks of its merchant and deliver 48 wheat, 12 iron ingots or 64 rotten flesh for one event seal. Each player can complete two contracts per caravan. Operators can also use `start <id>`, `stop`, `reload`, `give <players> <item> [count]`, and `summon <creature> [pos]`. Event ids include `firefly_night`, `merchant_caravan`, `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `horde`, `treasure_hunt`, `eruption`, `void_storm`, `eclipse`, and `blizzard`.
+**Commands** (`/worldomens`, alias `/eventos`): everyone can use `list`, `status`, `help [id]`, `ranking` (current event’s top three and your score), and `contract [id]` (alias `encargo`). During a caravan, stand within 8 blocks of its merchant and deliver 48 wheat, 12 iron ingots or 64 rotten flesh for one event seal. Each player can complete two contracts per caravan. Operators can also use `start <id>`, `stop`, `reload`, `give <players> <item> [count]`, and `summon <creature> [pos]`. Event ids include `firefly_night`, `merchant_caravan`, `blood_moon`, `gold_rush`, `meteor_shower`, `thunderstorm`, `blessed_harvest`, `horde`, `treasure_hunt`, `eruption`, `void_storm`, `eclipse`, and `blizzard`.
 
-**Config:** `config/worldevents.json`, times in seconds; see the tables above for every key. Missing keys are added on startup without touching yours; `/worldevents reload` applies changes.
+**Config:** `config/worldomens.json`, times in seconds; see the tables above for every key. Missing keys are added on startup without touching yours; `/worldomens reload` applies changes.
 
 Texts are available in English and Spanish, picked from each player's game language.
 

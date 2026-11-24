@@ -1,0 +1,156 @@
+package dev.santiagosantofimio.worldomens.test;
+
+import dev.santiagosantofimio.worldomens.event.ActiveEvent;
+import dev.santiagosantofimio.worldomens.event.EventManager;
+import dev.santiagosantofimio.worldomens.event.EventRegistry;
+import dev.santiagosantofimio.worldomens.event.WorldEvent;
+import dev.santiagosantofimio.worldomens.event.impl.BlessedHarvestEvent;
+import dev.santiagosantofimio.worldomens.event.impl.BloodMoonEvent;
+import dev.santiagosantofimio.worldomens.event.impl.EruptionEvent;
+import dev.santiagosantofimio.worldomens.event.impl.GoldRushEvent;
+import dev.santiagosantofimio.worldomens.event.impl.HordeEvent;
+import dev.santiagosantofimio.worldomens.event.impl.MerchantCaravanEvent;
+import dev.santiagosantofimio.worldomens.event.impl.MeteorShowerEvent;
+import dev.santiagosantofimio.worldomens.event.impl.ThunderstormEvent;
+import dev.santiagosantofimio.worldomens.event.impl.TreasureHuntEvent;
+import dev.santiagosantofimio.worldomens.event.impl.VoidStormEvent;
+import dev.santiagosantofimio.worldomens.fabric.WorldOmensFabricClient;
+import dev.santiagosantofimio.worldomens.mob.LivingMeteorite;
+import dev.santiagosantofimio.worldomens.mob.SpectralCaptain;
+import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
+import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
+import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
+import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.ChatVisiblity;
+import net.minecraft.world.phys.Vec3;
+
+/**
+ * Visual check on a real client, run with {@code ./gradlew runClientGameTest} (not part of the build: it opens a
+ * window). Gives the special items and shows each event mob during its event, and saves screenshots to
+ * {@code build/run/clientGameTest/screenshots} to look at by eye.
+ */
+public class WorldOmensClientGameTests implements FabricClientGameTest {
+	private static final String[] ITEMS = {"meteorite_fragment", "lucky_nugget", "bloody_tear", "blood_scythe", "starfall_pickaxe", "bottled_lightning",
+			"golden_seed", "warlord_axe", "captains_cutlass", "colossus_hammer", "magma_heart", "unstable_pearl", "event_seal"};
+
+	@FunctionalInterface
+	private interface MobSpawner {
+		Mob spawn(WorldEvent event, ServerLevel level, ActiveEvent active, BlockPos pos);
+	}
+
+	@Override
+	public void runTest(ClientGameTestContext context) {
+		context.runOnClient(client -> client.options.chatVisibility().set(ChatVisiblity.HIDDEN));
+		try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
+			singleplayer.getServer().runCommand("time set noon");
+			singleplayer.getServer().runCommand("weather clear");
+			singleplayer.getServer().runCommand("difficulty easy");
+			for (String item : ITEMS) {
+				singleplayer.getServer().runCommand("worldomens give @a " + item);
+			}
+			// Let the advancement toasts for the new items go away.
+			context.waitTicks(220);
+
+			// A weapon comes up as its attack recharges: wait until it is all the way up.
+			context.getInput().pressKey(options -> options.keyHotbarSlots[3]);
+			context.waitTicks(30);
+			context.takeScreenshot("worldomens_hotbar_scythe");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[4]);
+			context.waitTicks(30);
+			context.takeScreenshot("worldomens_hand_pickaxe");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[7]);
+			// A slow weapon comes up as its attack recharges: a full second for this axe.
+			context.waitTicks(30);
+			context.takeScreenshot("worldomens_hand_warlord_axe");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
+			context.waitTicks(30);
+			context.takeScreenshot("worldomens_hand_captains_cutlass");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[3]);
+			context.getInput().pressKey(options -> options.keyTogglePerspective);
+			context.getInput().pressKey(options -> options.keyTogglePerspective);
+			context.waitTicks(10);
+			context.takeScreenshot("worldomens_third_person_scythe");
+			context.getInput().pressKey(options -> options.keyHotbarSlots[7]);
+			context.waitTicks(30);
+			context.takeScreenshot("worldomens_third_person_warlord_axe");
+			context.getInput().pressKey(options -> options.keyTogglePerspective);
+
+			// The cutlass's lunge: the client moves its player, so the push has to reach it.
+			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
+			context.waitTicks(30);
+			Vec3 before = context.computeOnClient(client -> client.player.position());
+			context.getInput().pressKey(options -> options.keyUse);
+			context.waitTicks(10);
+			Vec3 after = context.computeOnClient(client -> client.player.position());
+			if (after.subtract(before).horizontalDistance() < 2.0) {
+				throw new AssertionError("the cutlass's lunge did not move the player: " + before + " -> " + after);
+			}
+
+			// Event creatures only exist while their event runs, so each one gets its own event.
+			showMob(context, singleplayer, BloodMoonEvent.ID, "worldomens_creature_lord", 4,
+					(event, level, active, pos) -> ((BloodMoonEvent) event).spawnLord(level, active, pos, "es_es"));
+			showMob(context, singleplayer, BloodMoonEvent.ID, "worldomens_creature_blood_eye", 3,
+					(event, level, active, pos) -> ((BloodMoonEvent) event).spawnEye(level, active, pos.above(), "es_es"));
+			showMob(context, singleplayer, GoldRushEvent.ID, "worldomens_creature_mimic_sack", 3,
+					(event, level, active, pos) -> ((GoldRushEvent) event).spawnSack(level, active, pos, "es_es"));
+			showMob(context, singleplayer, MeteorShowerEvent.ID, "worldomens_creature_living_meteorite", 3,
+					(event, level, active, pos) -> LivingMeteorite.spawn(level, pos, "es_es"));
+			showMob(context, singleplayer, ThunderstormEvent.ID, "worldomens_creature_storm_spirit", 3,
+					(event, level, active, pos) -> ((ThunderstormEvent) event).spawnSpirit(level, active, pos.above(), "es_es"));
+			showMob(context, singleplayer, BlessedHarvestEvent.ID, "worldomens_creature_harvest_spirit", 3,
+					(event, level, active, pos) -> ((BlessedHarvestEvent) event).spawnSpirit(level, active, pos.above(), level.players().get(0)));
+			showMob(context, singleplayer, MerchantCaravanEvent.ID, "worldomens_creature_nomad_merchant", 4,
+					(event, level, active, pos) -> ((MerchantCaravanEvent) event).spawnCaravan(level, active, pos, "es_es"));
+			showMob(context, singleplayer, HordeEvent.ID, "worldomens_creature_horde_warlord", 5,
+					(event, level, active, pos) -> ((HordeEvent) event).spawnWarlord(level, active, pos, "es_es"));
+			showMob(context, singleplayer, TreasureHuntEvent.ID, "worldomens_creature_spectral_captain", 4,
+					(event, level, active, pos) -> SpectralCaptain.spawn(level, pos, "es_es", 120.0));
+			showMob(context, singleplayer, EruptionEvent.ID, "worldomens_creature_magma_colossus", 6,
+					(event, level, active, pos) -> ((EruptionEvent) event).spawnColossus(level, active, pos, "es_es"));
+			showMob(context, singleplayer, VoidStormEvent.ID, "worldomens_creature_void_stalker", 4,
+					(event, level, active, pos) -> ((VoidStormEvent) event).spawnStalker(level, active, pos, "es_es"));
+
+			// The creative tab, with the special items and the creature eggs.
+			singleplayer.getServer().runCommand("gamemode creative @a");
+			context.waitTicks(5);
+			context.getInput().pressKey(options -> options.keyInventory);
+			context.waitForScreen(CreativeModeInventoryScreen.class);
+			context.runOnClient(client -> ((FabricCreativeModeInventoryScreen) client.screen)
+					.setSelectedTab(BuiltInRegistries.CREATIVE_MODE_TAB.getValueOrThrow(WorldOmensFabricClient.TAB)));
+			context.waitTicks(10);
+			context.takeScreenshot("worldomens_creative_tab");
+			context.setScreen(() -> null);
+		}
+	}
+
+	private static void showMob(ClientGameTestContext context, TestSingleplayerContext singleplayer, String eventId, String screenshot,
+			int distance, MobSpawner spawner) {
+		singleplayer.getServer().runOnServer(server -> {
+			ServerPlayer player = server.getPlayerList().getPlayers().get(0);
+			ServerLevel level = player.level();
+			WorldEvent event = EventRegistry.get(eventId);
+			EventManager.start(level, event);
+			Mob mob = spawner.spawn(event, level, EventManager.active(level), player.blockPosition().offset(0, 0, distance));
+			if (mob != null) {
+				// Posed facing the player, and not after them: some creatures act on their own while they have a target.
+				mob.setNoAi(true);
+				mob.setTarget(null);
+				mob.setYRot(180.0f);
+				mob.setYHeadRot(180.0f);
+				mob.setYBodyRot(180.0f);
+			}
+		});
+		context.getInput().lookAt(0.0f, 12.0f);
+		// Wait for the event title to fade out.
+		context.waitTicks(110);
+		context.takeScreenshot(screenshot);
+		singleplayer.getServer().runOnServer(server -> EventManager.stop(server.getPlayerList().getPlayers().get(0).level()));
+		context.waitTicks(20);
+	}
+}

@@ -5,7 +5,7 @@
 			"predicate": {
 				"custom_model_data": 5129415
 			},
-			"model": "worldevents:item/nomad_merchant"
+			"model": "worldomens:item/nomad_merchant"
 		}
 	]
 }

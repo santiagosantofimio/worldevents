@@ -1,0 +1,31 @@
+{
+	"display": {
+		"icon": {
+			"id": "minecraft:raw_iron",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldomens:meteorite_fragment"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldomens.root.title",
+			"fallback": "World Omens"
+		},
+		"description": {
+			"translate": "advancements.worldomens.root.description",
+			"fallback": "Strange things happen in this world"
+		},
+		"frame": "task",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"background": "minecraft:gui/advancements/backgrounds/stone"
+	},
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

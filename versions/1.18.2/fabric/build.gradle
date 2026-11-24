@@ -3,7 +3,7 @@ plugins {
 }
 
 loom {
-	accessWidenerPath = file('src/main/resources/worldevents.accesswidener')
+	accessWidenerPath = file('src/main/resources/worldomens.accesswidener')
 }
 
 dependencies {

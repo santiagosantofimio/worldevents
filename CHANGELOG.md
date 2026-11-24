@@ -4,6 +4,25 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] - Unreleased
+
+The mod id, package and command now match the name: everything that was `worldevents` is `worldomens`.
+
+### Changed
+
+- **Breaking:** the mod id is `worldomens`. The command is `/worldomens` (the aliases `/omens` and `/eventos` stay), the
+  config file is `config/worldomens.json`, and data and resource pack namespaces use `worldomens:`.
+- Jar files are named `worldomens-<loader>-<minecraft>-<version>.jar`.
+- The resource pack must be updated together with the mod: the old pack uses the old namespace and will not apply.
+
+### Migration
+
+- On first start, `config/worldevents.json` is moved to `config/worldomens.json` with its values.
+- Each dimension's saved event state (running event, planned event and cooldowns) is copied from the old data.
+- Event relics and creature spawn eggs you already own still work.
+- Not migrated: advancement progress (the advancements have new ids), creatures alive at the moment of the update, and
+  the custom model of items you already own until they are given again.
+
 ## [1.2.0] - Unreleased
 
 ### Added

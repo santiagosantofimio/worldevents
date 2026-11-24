@@ -17,5 +17,5 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'worldevents-26.3'
+rootProject.name = 'worldomens-26.3'
 include 'neoforge', 'forge'

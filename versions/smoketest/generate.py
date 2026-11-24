@@ -20,23 +20,23 @@ events = [("blood_moon", "overworld"), ("gold_rush", "overworld"), ("meteor_show
           ("horde", "overworld"), ("treasure_hunt", "overworld"), ("eruption", "the_nether"), ("void_storm", "the_end"),
           ("eclipse", "overworld"), ("blizzard", "overworld"), ("firefly_night", "overworld")]
 if legacy:
-    pickaxe = 'minecraft:diamond_pickaxe{worldevents_item:"starfall_pickaxe"}'
+    pickaxe = 'minecraft:diamond_pickaxe{worldomens_item:"starfall_pickaxe"}'
 else:
-    pickaxe = 'minecraft:diamond_pickaxe[minecraft:custom_data={worldevents_item:"starfall_pickaxe"}]'
+    pickaxe = 'minecraft:diamond_pickaxe[minecraft:custom_data={worldomens_item:"starfall_pickaxe"}]'
 
 steps = []
-steps.append(["say [smoke] start", "forceload add ~-32 ~-32 ~32 ~32", "worldevents list", "worldevents status", "worldevents help", "worldevents help firefly_night",
-              "worldevents help blood_moon", "worldevents ranking", "worldevents contract",
+steps.append(["say [smoke] start", "forceload add ~-32 ~-32 ~32 ~32", "worldomens list", "worldomens status", "worldomens help", "worldomens help firefly_night",
+              "worldomens help blood_moon", "worldomens ranking", "worldomens contract",
               "time set night"]
-             + [f"worldevents summon {k} ~{(i % 4) * 3} ~3 ~{(i // 4) * 3}" for i, k in enumerate(kinds)]
+             + [f"worldomens summon {k} ~{(i % 4) * 3} ~3 ~{(i // 4) * 3}" for i, k in enumerate(kinds)]
              + ["setblock ~ ~20 ~ minecraft:iron_ore", f"loot spawn ~ ~22 ~ mine ~ ~20 ~ {pickaxe}"])
 steps.append(['execute if entity @e[type=item,nbt={Item:{id:"minecraft:iron_ingot"}}] run say [smoke] loot hook ok',
               "kill @e[type=!player]", "say [smoke] killed creatures"])
 for event, dim in events:
-    steps.append([f"say [smoke] start {event}", f"execute in minecraft:{dim} run worldevents start {event}"])
-    steps.append([f"execute in minecraft:{dim} run worldevents status", f"execute in minecraft:{dim} run worldevents help", f"execute in minecraft:{dim} run worldevents ranking", f"execute in minecraft:{dim} run worldevents stop",
+    steps.append([f"say [smoke] start {event}", f"execute in minecraft:{dim} run worldomens start {event}"])
+    steps.append([f"execute in minecraft:{dim} run worldomens status", f"execute in minecraft:{dim} run worldomens help", f"execute in minecraft:{dim} run worldomens ranking", f"execute in minecraft:{dim} run worldomens stop",
                   f"say [smoke] stopped {event}"])
-steps.append(["worldevents reload", "say [smoke] done", "stop"])
+steps.append(["worldomens reload", "say [smoke] done", "stop"])
 
 for i, lines in enumerate(steps):
     lines = list(lines)

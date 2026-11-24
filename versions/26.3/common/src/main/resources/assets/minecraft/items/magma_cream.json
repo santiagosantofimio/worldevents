@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:magma_heart",
+				"when": "worldomens:magma_heart",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/magma_heart"
+					"model": "worldomens:item/magma_heart"
 				}
 			}
 		],

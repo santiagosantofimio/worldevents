@@ -17,7 +17,7 @@ printf '{"pack":{"description":"World Omens smoke test","pack_format":%s,"min_fo
 printf 'online-mode=false\nspawn-protection=0\nfunction-permission-level=4\npause-when-empty-seconds=-1\n' > "$RUN_DIR/server.properties"
 LOG=$(mktemp)
 "$@" > "$LOG" 2>&1
-grep -E "\[smoke\]|worldevents|World Omens|Exception|ERROR|at dev\.santiago" "$LOG" | grep -vE "yggdrasil|minecraftservices|Failed to load properties|eula" | head -150
+grep -E "\[smoke\]|worldomens|World Omens|Exception|ERROR|at dev\.santiago" "$LOG" | grep -vE "yggdrasil|minecraftservices|Failed to load properties|eula" | head -150
 if grep -qE "\[smoke\] done" "$LOG" && grep -qE "\[smoke\] loot hook ok" "$LOG" && ! grep -E "Exception|/ERROR\]" "$LOG" | grep -vqE "yggdrasil|minecraftservices|Failed to load properties|UnknownHost|Cache miss|kqueue|Only supported on OSX|AppenderLoggingException|maxThreads"; then
 	echo "SMOKE TEST PASSED"; rm "$LOG"; exit 0
 fi

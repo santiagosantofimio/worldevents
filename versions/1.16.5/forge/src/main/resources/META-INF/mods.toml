@@ -1,27 +1,27 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
 license = "MIT"
-issueTrackerURL = "https://github.com/santiagosantofimio/worldevents/issues"
+issueTrackerURL = "https://github.com/santiagosantofimio/worldomens/issues"
 
 [[mods]]
-modId = "worldevents"
+modId = "worldomens"
 version = "${version}"
 displayName = "World Omens"
 authors = "Santiago Santofimio"
-displayURL = "https://github.com/santiagosantofimio/worldevents"
-logoFile = "assets/worldevents/icon.png"
+displayURL = "https://github.com/santiagosantofimio/worldomens"
+logoFile = "assets/worldomens/icon.png"
 description = '''
 Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.
 '''
 
-[[dependencies.worldevents]]
+[[dependencies.worldomens]]
 modId = "forge"
 mandatory = true
 versionRange = "[${forge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.worldevents]]
+[[dependencies.worldomens]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.16.5,1.17)"

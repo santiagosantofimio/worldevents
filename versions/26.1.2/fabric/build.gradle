@@ -6,7 +6,7 @@ fabricApi {
 	// Game tests in src/gametest. Server tests: ../gradlew :fabric:runGameTest. Client tests: :fabric:runClientGameTest.
 	configureTests {
 		createSourceSet = true
-		modId = "worldevents-test"
+		modId = "worldomens-test"
 		enableGameTests = true
 		enableClientGameTests = true
 	}

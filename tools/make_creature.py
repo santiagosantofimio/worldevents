@@ -7,7 +7,7 @@ with tools/import_model.py's box merging and palette texture.
 Big creatures (tall ones, see Creature.Part#big) use a 32x32x32 grid that fills 32 model units instead.
 
 Usage:
-    python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldevents:item/NAME [--preview PNG]
+    python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldomens:item/NAME [--preview PNG]
 Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big),
 spectral_captain (big), magma_colossus (big), void_stalker (big).
 """

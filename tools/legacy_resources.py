@@ -6,11 +6,11 @@ The output folder is replaced. What changes:
 
 - Item looks: 1.21.4+ picks models in assets/minecraft/items/*.json by a string custom_model_data. Old versions pick
   them with numeric CustomModelData "overrides" in the vanilla item model (assets/minecraft/models/item). The number
-  is EventItems.modelNumber in Java: a hash of "worldevents:<id>", worked out the same way here. Tools and weapons
+  is EventItems.modelNumber in Java: a hash of "worldomens:<id>", worked out the same way here. Tools and weapons
   use their 2D model everywhere: old versions cannot pick a model by where the item is shown.
 - Creature models get a "head" transform: on old versions each creature part is worn on an armor stand's head
   (Creature.java), and the transform gives it the size the part has in Java (PART_SCALES below).
-- Advancements: data/worldevents/advancements, with icons and item conditions in NBT, and plain English titles
+- Advancements: data/worldomens/advancements, with icons and item conditions in NBT, and plain English titles
   (old versions have no translatable text with a fallback, and vanilla clients do not have the mod's translations).
 - Base items that do not exist in the old version are swapped (ITEM_SWAPS), as in EventItems.java.
 - The creative tab's name gets the key old Fabric and Forge versions look for.
@@ -21,7 +21,7 @@ import shutil
 import sys
 import zipfile
 
-MOD_ID = "worldevents"
+MOD_ID = "worldomens"
 
 # How big each creature part is, in blocks per 16 model units: the Creature.Part scale in the mob classes.
 PART_SCALES = {
@@ -70,7 +70,7 @@ def java_hash(text):
 
 
 def model_number(model_id):
-    """EventItems.modelNumber: Math.floorMod(("worldevents:" + id).hashCode(), 9_000_000) + 1_000_000."""
+    """EventItems.modelNumber: Math.floorMod(("worldomens:" + id).hashCode(), 9_000_000) + 1_000_000."""
     return java_hash(MOD_ID + ":" + model_id) % 9_000_000 + 1_000_000
 
 
@@ -176,7 +176,7 @@ def convert_advancements(modern, out, version, swaps):
 
 
 def add_tab_name(out):
-    """Old Fabric and Forge versions name the creative tab itemGroup.worldevents.items."""
+    """Old Fabric and Forge versions name the creative tab itemGroup.worldomens.items."""
     lang = os.path.join(out, "assets", MOD_ID, "lang")
     for name in os.listdir(lang):
         path = os.path.join(lang, name)

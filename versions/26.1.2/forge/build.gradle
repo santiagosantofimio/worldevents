@@ -11,10 +11,10 @@ minecraft {
 			workingDir = layout.projectDirectory.dir('run')
 		}
 		register('client') {
-			args '--mixin.config', 'worldevents.mixins.json'
+			args '--mixin.config', 'worldomens.mixins.json'
 		}
 		register('server') {
-			args '--nogui', '--mixin.config', 'worldevents.mixins.json'
+			args '--nogui', '--mixin.config', 'worldomens.mixins.json'
 		}
 	}
 }
@@ -34,7 +34,7 @@ dependencies {
 }
 
 jar {
-	manifest.attributes('MixinConfigs': 'worldevents.mixins.json')
+	manifest.attributes('MixinConfigs': 'worldomens.mixins.json')
 }
 
 processResources {

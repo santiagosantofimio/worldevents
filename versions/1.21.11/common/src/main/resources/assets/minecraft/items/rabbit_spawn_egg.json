@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:mimic_sack",
+				"when": "worldomens:mimic_sack",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/mimic_sack"
+					"model": "worldomens:item/mimic_sack"
 				}
 			}
 		],

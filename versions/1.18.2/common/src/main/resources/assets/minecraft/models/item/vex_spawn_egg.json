@@ -5,19 +5,19 @@
 			"predicate": {
 				"custom_model_data": 5189750
 			},
-			"model": "worldevents:item/storm_spirit"
+			"model": "worldomens:item/storm_spirit"
 		},
 		{
 			"predicate": {
 				"custom_model_data": 8407261
 			},
-			"model": "worldevents:item/blood_eye"
+			"model": "worldomens:item/blood_eye"
 		},
 		{
 			"predicate": {
 				"custom_model_data": 8850782
 			},
-			"model": "worldevents:item/eclipse_wraith"
+			"model": "worldomens:item/eclipse_wraith"
 		}
 	]
 }

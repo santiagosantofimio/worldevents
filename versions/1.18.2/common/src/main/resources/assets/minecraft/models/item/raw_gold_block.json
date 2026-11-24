@@ -5,7 +5,7 @@
 			"predicate": {
 				"custom_model_data": 7756409
 			},
-			"model": "worldevents:item/mimic_sack"
+			"model": "worldomens:item/mimic_sack"
 		}
 	]
 }

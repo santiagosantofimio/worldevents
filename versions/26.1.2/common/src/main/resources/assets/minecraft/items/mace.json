@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:colossus_hammer",
+				"when": "worldomens:colossus_hammer",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/colossus_hammer"
+					"model": "worldomens:item/colossus_hammer"
 				}
 			}
 		],

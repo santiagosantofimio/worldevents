@@ -3,7 +3,7 @@
 
     python3 tools/creature_models.py [OUTPUT_RESOURCES_DIR] [--only NAME...]
 
-Writes assets/worldevents/models/item/<name>.json and assets/worldevents/textures/item/<name>.png under the
+Writes assets/worldomens/models/item/<name>.json and assets/worldomens/textures/item/<name>.png under the
 resources folder (src/main/resources by default). Every model faces north (-z), as the item displays expect.
 Normal parts fill about 16 units (0 to 16), "big" ones 32 (-8 to 24); see Creature.Part in the Java code. The
 texture density is chosen per creature so a texel is about 1/16 of a block in game, like vanilla mobs.
@@ -516,7 +516,7 @@ def build(name, spec):
             faces[face] = {'uv': [x0 * 16 / tex, y0 * 16 / tex, (x0 + w) * 16 / tex, (y0 + h) * 16 / tex], 'texture': '#skin'}
         elements.append({'from': list(f), 'to': list(t), 'faces': faces})
     model = {
-        'textures': {'skin': 'worldevents:item/' + name, 'particle': 'worldevents:item/' + name},
+        'textures': {'skin': 'worldomens:item/' + name, 'particle': 'worldomens:item/' + name},
         'elements': elements,
         'display': {
             'gui': {'rotation': [30, 225, 0], 'translation': [0, 0, 0], 'scale': [0.5, 0.5, 0.5]},
@@ -538,8 +538,8 @@ def main():
     for name in (*C, *CLASSIC):
         if only and name not in only:
             continue
-        mdir = os.path.join(out, 'assets', 'worldevents', 'models', 'item')
-        tdir = os.path.join(out, 'assets', 'worldevents', 'textures', 'item')
+        mdir = os.path.join(out, 'assets', 'worldomens', 'models', 'item')
+        tdir = os.path.join(out, 'assets', 'worldomens', 'textures', 'item')
         os.makedirs(mdir, exist_ok=True)
         os.makedirs(tdir, exist_ok=True)
         if name in CLASSIC:

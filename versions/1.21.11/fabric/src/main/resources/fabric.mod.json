@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "worldevents",
+	"id": "worldomens",
 	"version": "${version}",
 	"name": "World Omens",
 	"description": "Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.",
@@ -8,18 +8,18 @@
 		"Santiago Santofimio"
 	],
 	"contact": {
-		"sources": "https://github.com/santiagosantofimio/worldevents",
-		"issues": "https://github.com/santiagosantofimio/worldevents/issues"
+		"sources": "https://github.com/santiagosantofimio/worldomens",
+		"issues": "https://github.com/santiagosantofimio/worldomens/issues"
 	},
 	"license": "MIT",
-	"icon": "assets/worldevents/icon.png",
+	"icon": "assets/worldomens/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"dev.santiagosantofimio.worldevents.fabric.WorldEventsFabric"
+			"dev.santiagosantofimio.worldomens.fabric.WorldOmensFabric"
 		],
 		"client": [
-			"dev.santiagosantofimio.worldevents.fabric.WorldEventsFabricClient"
+			"dev.santiagosantofimio.worldomens.fabric.WorldOmensFabricClient"
 		]
 	},
 	"depends": {

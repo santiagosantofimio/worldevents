@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:event_seal",
+				"when": "worldomens:event_seal",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/event_seal"
+					"model": "worldomens:item/event_seal"
 				}
 			}
 		],

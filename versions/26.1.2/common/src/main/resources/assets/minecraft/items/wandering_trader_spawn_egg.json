@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:nomad_merchant",
+				"when": "worldomens:nomad_merchant",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/nomad_merchant"
+					"model": "worldomens:item/nomad_merchant"
 				}
 			}
 		],

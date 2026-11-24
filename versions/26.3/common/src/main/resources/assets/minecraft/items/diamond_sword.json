@@ -4,17 +4,17 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:blood_scythe",
+				"when": "worldomens:blood_scythe",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/blood_scythe"
+					"model": "worldomens:item/blood_scythe"
 				}
 			},
 			{
-				"when": "worldevents:frostfang",
+				"when": "worldomens:frostfang",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/frostfang"
+					"model": "worldomens:item/frostfang"
 				}
 			}
 		],

@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:golden_seed",
+				"when": "worldomens:golden_seed",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/golden_seed"
+					"model": "worldomens:item/golden_seed"
 				}
 			}
 		],

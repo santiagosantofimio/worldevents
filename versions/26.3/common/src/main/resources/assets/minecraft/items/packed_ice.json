@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:frost_yeti",
+				"when": "worldomens:frost_yeti",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/frost_yeti"
+					"model": "worldomens:item/frost_yeti"
 				}
 			}
 		],

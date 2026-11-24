@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:starfall_pickaxe",
+				"when": "worldomens:starfall_pickaxe",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/starfall_pickaxe"
+					"model": "worldomens:item/starfall_pickaxe"
 				}
 			}
 		],

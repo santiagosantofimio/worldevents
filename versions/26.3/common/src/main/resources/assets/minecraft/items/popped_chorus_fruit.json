@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:unstable_pearl",
+				"when": "worldomens:unstable_pearl",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/unstable_pearl"
+					"model": "worldomens:item/unstable_pearl"
 				}
 			}
 		],

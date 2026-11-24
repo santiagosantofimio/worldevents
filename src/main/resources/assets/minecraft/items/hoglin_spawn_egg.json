@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:magma_colossus",
+				"when": "worldomens:magma_colossus",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/magma_colossus"
+					"model": "worldomens:item/magma_colossus"
 				}
 			}
 		],

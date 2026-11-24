@@ -4,10 +4,10 @@
 		"property": "minecraft:custom_model_data",
 		"cases": [
 			{
-				"when": "worldevents:living_meteorite",
+				"when": "worldomens:living_meteorite",
 				"model": {
 					"type": "minecraft:model",
-					"model": "worldevents:item/living_meteorite"
+					"model": "worldomens:item/living_meteorite"
 				}
 			}
 		],

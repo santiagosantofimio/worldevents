@@ -8,7 +8,7 @@
 			"predicate": {
 				"custom_model_data": 4429873
 			},
-			"model": "worldevents:item/event_seal"
+			"model": "worldomens:item/event_seal"
 		}
 	]
 }

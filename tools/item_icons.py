@@ -4,7 +4,7 @@ darker outline, as vanilla items are.
 
     python3 tools/item_icons.py [OUTPUT_TEXTURES_DIR] [--preview PREVIEW.png]
 
-Writes <id>.png into the folder (src/main/resources/assets/worldevents/textures/item by default). Tools and
+Writes <id>.png into the folder (src/main/resources/assets/worldomens/textures/item by default). Tools and
 weapons lie on the diagonal like vanilla ones: handle at the bottom left, head at the top right.
 The lucky nugget is already a vanilla-size icon and is left alone.
 """
@@ -291,7 +291,7 @@ def main():
         k = args.index('--preview')
         preview = args[k + 1]
         args = args[:k] + args[k + 2:]
-    out = args[0] if args else 'src/main/resources/assets/worldevents/textures/item'
+    out = args[0] if args else 'src/main/resources/assets/worldomens/textures/item'
     os.makedirs(out, exist_ok=True)
     images = {}
     for name, fn in ICONS.items():

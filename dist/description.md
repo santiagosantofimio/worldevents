@@ -1,6 +1,6 @@
 # World Omens
 
-World Omens brings twelve random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
+World Omens brings thirteen random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
 
 ## Events
 
@@ -14,6 +14,7 @@ World Omens brings twelve random events to your Minecraft world, each with its o
 - **Treasure Hunt:** A loot chest appears not far away. Your action bar tells you when you're getting warmer and a beam of light marks the spot, but the Spectral Captain keeps it shut until he falls.
 - **Eruption (Nether):** Fire geysers burst from the ground around you while the Magma Colossus rises to hunt you.
 - **Eclipse:** In the daytime the sky goes dark and monsters walk in the sun without burning. Phantoms dive at you, and the Eclipse Wraith blinds you with pulses of darkness.
+- **Firefly Night:** A calm five-minute night search. Follow personal green lights across nearby open ground, with direction and distance hints, and find all five for XP, points and an advancement. It works in Peaceful too and never changes blocks or spawns creatures.
 - **Blizzard:** Snow and wind in snowy biomes. Stay under a roof, by a fire or in leather, or you freeze. The Frost Yeti's roar chills everyone near it.
 - **Void Storm (End):** Void Stalkers blink in behind you and blind you, while void pulses lift you into the air and let you drift back down.
 
@@ -41,7 +42,7 @@ Every event also awards points. The best players are announced at the end, and e
 - **Server-side:** Install it on the server only. Players can join with vanilla Minecraft and still see everything: boss bars, titles, particles and sounds.
 - **Optional resource pack:** Gives items and creatures their own textures and 3D models. Without it, items look like their vanilla base item and creatures show up as a floating block with their name. In singleplayer, the mod loads it by itself.
 - **Safe for your builds:** Meteor craters only dig natural terrain and never touch chests, liquids or spawn protection. Geysers, the Colossus and the Captain's cannons never break a block. You can also turn off block changes entirely.
-- **Configurable:** Set how often each event happens and how long it lasts, or turn it off, in `config/worldevents.json`. Apply your changes with `/worldevents reload`.
-- **Easy to try:** Operators can start any event with `/worldevents start <event>` (or `/eventos start <event>`) and summon any creature with `/worldevents summon <creature>`. In singleplayer, every item and spawn egg is in its own creative tab.
+- **Configurable:** Set how often each event happens and how long it lasts, or turn it off, in `config/worldomens.json`. Apply your changes with `/worldomens reload`.
+- **Easy to try:** Operators can start any event with `/worldomens start <event>` (or `/eventos start <event>`) and summon any creature with `/worldomens summon <creature>`. Anyone can use `/worldomens help`, `/worldomens ranking` and `/worldomens contract` without operator permissions. In singleplayer, every item and spawn egg is in its own creative tab.
 - **Progression:** A dedicated advancement tab tracks your victories.
 - **Languages:** English and Spanish. Each player sees the texts in their own game language.

@@ -12,6 +12,11 @@ import dev.santiagosantofimio.worldomens.event.impl.EclipseEvent;
 import dev.santiagosantofimio.worldomens.event.impl.EruptionEvent;
 import dev.santiagosantofimio.worldomens.event.impl.GoldRushEvent;
 import dev.santiagosantofimio.worldomens.event.impl.FireflyNightEvent;
+import dev.santiagosantofimio.worldomens.mob.Tidecaller;
+import dev.santiagosantofimio.worldomens.mob.PiglinWarchief;
+import dev.santiagosantofimio.worldomens.event.impl.PiglinWarbandEvent;
+import dev.santiagosantofimio.worldomens.event.impl.FishingFestivalEvent;
+import dev.santiagosantofimio.worldomens.event.impl.DrownedTideEvent;
 import dev.santiagosantofimio.worldomens.event.impl.HordeEvent;
 import dev.santiagosantofimio.worldomens.event.impl.MerchantCaravanEvent;
 import dev.santiagosantofimio.worldomens.event.impl.MeteorShowerEvent;
@@ -62,10 +67,13 @@ public class WorldOmensMod implements ModInitializer {
 		EventRegistry.register(new EclipseEvent());
 		EventRegistry.register(new BlizzardEvent());
 		EventRegistry.register(new FireflyNightEvent());
+		EventRegistry.register(new FishingFestivalEvent());
+		EventRegistry.register(new PiglinWarbandEvent());
+		EventRegistry.register(new DrownedTideEvent());
 
 		Creature.registerKinds(BloodMoonLord.KIND, BloodEye.KIND, MimicSack.KIND, LivingMeteorite.KIND, StormSpirit.KIND,
 				HarvestSpirit.KIND, NomadMerchant.KIND, HordeWarlord.KIND, SpectralCaptain.KIND, MagmaColossus.KIND, VoidStalker.KIND,
-				EclipseWraith.KIND, FrostYeti.KIND);
+				EclipseWraith.KIND, FrostYeti.KIND, PiglinWarchief.KIND, Tidecaller.KIND);
 
 		ModConfig.load();
 		Lang.load();

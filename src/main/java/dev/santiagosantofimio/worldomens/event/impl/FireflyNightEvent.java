@@ -29,6 +29,11 @@ public final class FireflyNightEvent implements WorldEvent {
 	public static final String ID = "firefly_night";
 
 	@Override
+	public boolean peaceful() {
+		return true;
+	}
+
+	@Override
 	public String id() {
 		return ID;
 	}

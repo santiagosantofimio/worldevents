@@ -86,6 +86,7 @@ public final class ModConfig {
 		root.addProperty("sealsForWinner", 2);
 		root.addProperty("minScoreForSeal", 3);
 		root.addProperty("convergenceChance", 0.08);
+		root.addProperty("preset", Preset.NORMAL.id());
 		JsonObject events = new JsonObject();
 		for (WorldEvent event : EventRegistry.all()) {
 			events.add(event.id(), event.defaultSettings());
@@ -114,11 +115,11 @@ public final class ModConfig {
 	}
 
 	public double startChance() {
-		return Math.clamp(root().getDouble("startChance"), 0.0, 1.0);
+		return Math.clamp(root().getDouble("startChance") * preset().startChanceFactor(), 0.0, 1.0);
 	}
 
 	public long globalCooldownTicks() {
-		return Math.max(0L, (long) root().getInt("globalCooldown") * 20L);
+		return Math.max(0L, (long) (root().getInt("globalCooldown") * 20L * preset().cooldownFactor()));
 	}
 
 	public int minPlayers() {
@@ -150,7 +151,17 @@ public final class ModConfig {
 	}
 
 	public double convergenceChance() {
-		return Math.clamp(root().getDouble("convergenceChance"), 0.0, 1.0);
+		return Math.clamp(root().getDouble("convergenceChance") * preset().convergenceFactor(), 0.0, 1.0);
+	}
+
+	public Preset preset() {
+		JsonElement element = values.get("preset");
+		return Preset.byId(element != null && element.isJsonPrimitive() ? element.getAsString() : Preset.NORMAL.id());
+	}
+
+	public void setPreset(Preset preset) {
+		values.addProperty("preset", preset.id());
+		write(path(), values);
 	}
 
 	public EventSettings event(String id) {

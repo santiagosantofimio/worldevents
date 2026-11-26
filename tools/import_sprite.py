@@ -93,7 +93,7 @@ def to_texture(cells):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser = argparse.ArgumentParser()
     parser.add_argument("input")
     parser.add_argument("output")
     parser.add_argument("--grid", type=int, help="size of one drawn pixel in the image, instead of finding it")

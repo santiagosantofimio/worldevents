@@ -7,7 +7,8 @@
 	"entrypoints": {
 		"fabric-gametest": [
 			"dev.santiagosantofimio.worldomens.test.WorldOmensGameTests",
-			"dev.santiagosantofimio.worldomens.test.FireflyNightGameTests"
+			"dev.santiagosantofimio.worldomens.test.FireflyNightGameTests",
+			"dev.santiagosantofimio.worldomens.test.NewEventsGameTests"
 		],
 		"fabric-client-gametest": [
 			"dev.santiagosantofimio.worldomens.test.WorldOmensClientGameTests",

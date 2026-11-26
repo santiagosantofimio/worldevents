@@ -142,6 +142,23 @@ public final class EventItems {
 					.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 					.build())));
 
+	public static final Identifier GILDED_RESOLVE = Identifier.fromNamespaceAndPath(WorldOmensMod.MOD_ID, "gilded_resolve");
+	public static final int GILDED_RESOLVE_COOLDOWN_SECONDS = 60;
+
+	public static final EventItem WARCHIEFS_CLEAVER = register(new EventItem("warchiefs_cleaver", Items.GOLDEN_AXE, Rarity.EPIC, false, stack -> {
+		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 8.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+				.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+				.build());
+		stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(GILDED_RESOLVE));
+	}));
+
+	public static final Identifier TIDAL_BLESSING = Identifier.fromNamespaceAndPath(WorldOmensMod.MOD_ID, "tidal_blessing");
+	public static final int TIDAL_BLESSING_COOLDOWN_SECONDS = 90;
+
+	public static final EventItem TIDECALLERS_CONCH = register(new EventItem("tidecallers_conch", Items.NAUTILUS_SHELL, Rarity.EPIC, true,
+			stack -> stack.set(DataComponents.USE_COOLDOWN, abilityCooldown(TIDAL_BLESSING))));
+
 	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, true, stack -> {
 	}));
 

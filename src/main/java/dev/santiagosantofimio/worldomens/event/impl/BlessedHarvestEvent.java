@@ -61,6 +61,11 @@ public final class BlessedHarvestEvent implements WorldEvent {
 	private static final double MAX_FRIEND_DISTANCE = 48.0;
 
 	@Override
+	public boolean peaceful() {
+		return true;
+	}
+
+	@Override
 	public String id() {
 		return ID;
 	}

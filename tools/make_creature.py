@@ -330,6 +330,93 @@ def void_stalker():
     return filled, colours
 
 
+def piglin_warchief():
+    rng = random.Random(41)
+    filled, colours = grid(BIG_SIZE)
+    skin = np.array([196, 120, 112])
+    snout = np.array([170, 92, 90])
+    gold = np.array([226, 178, 58])
+    dark_gold = np.array([150, 108, 30])
+    black = np.array([30, 28, 32])
+    red = np.array([138, 24, 28])
+    bone = np.array([232, 222, 196])
+
+    def skin_fn(x, y, z):
+        return skin * rng.uniform(0.9, 1.08)
+
+    def gold_fn(x, y, z):
+        return gold * rng.uniform(0.86, 1.08)
+
+    box(filled, colours, (8, 6, 20), (24, 22, 22), lambda x, y, z: red * rng.uniform(0.85, 1.05))
+    for lo_x in (10, 17):
+        box(filled, colours, (lo_x, 0, 12), (lo_x + 5, 3, 19), black)
+        box(filled, colours, (lo_x, 3, 12), (lo_x + 5, 11, 19), gold_fn)
+    box(filled, colours, (8, 11, 11), (24, 13, 20), black)
+    box(filled, colours, (7, 13, 10), (25, 23, 21), skin_fn)
+    box(filled, colours, (9, 14, 9), (23, 22, 11), gold_fn)
+    paint_front(filled, colours, [(16, y) for y in range(15, 21)] + [(15, 19), (17, 19)], black)
+    for lo_x in (2, 25):
+        box(filled, colours, (lo_x, 21, 9), (lo_x + 5, 25, 21), gold_fn)
+        box(filled, colours, (lo_x, 9, 11), (lo_x + 5, 21, 19), skin_fn)
+        box(filled, colours, (lo_x, 7, 10), (lo_x + 5, 11, 20), dark_gold)
+    box(filled, colours, (10, 23, 9), (22, 30, 20), skin_fn)
+    box(filled, colours, (13, 24, 5), (19, 28, 9), lambda x, y, z: snout * rng.uniform(0.92, 1.05))
+    paint_front(filled, colours, [(14, 25), (18, 25)], black)
+    paint_front(filled, colours, [(12, 27), (13, 27), (19, 27), (20, 27)], np.array([255, 190, 40]))
+    for x in (12, 19):
+        box(filled, colours, (x, 23, 4), (x + 1, 27, 7), bone)
+    for lo_x in (6, 22):
+        box(filled, colours, (lo_x, 25, 13), (lo_x + 4, 29, 17), snout)
+    box(filled, colours, (10, 29, 9), (22, 31, 20), gold_fn)
+    for x in (10, 14, 18, 21):
+        filled[x, 31, 10] = True
+        colours[x, 31, 10] = gold
+    return filled, colours
+
+
+def tidecaller():
+    rng = random.Random(53)
+    filled, colours = grid(BIG_SIZE)
+    teal = np.array([40, 118, 120])
+    deep = np.array([22, 62, 96])
+    kelp = np.array([34, 96, 58])
+    skin = np.array([112, 170, 150])
+    coral = np.array([224, 112, 100])
+    pearl = np.array([226, 232, 226])
+    glow = np.array([120, 255, 240])
+
+    for y in range(0, 20):
+        radius = 8.0 - y * 0.2
+        for x in range(BIG_SIZE):
+            for z in range(BIG_SIZE):
+                if math.dist((x + 0.5, z + 0.5), (16, 15)) <= radius and not (y < 5 and rng.random() < (5 - y) * 0.2):
+                    filled[x, y, z] = True
+                    colours[x, y, z] = (deep if y < 4 else teal) * rng.uniform(0.85, 1.1)
+    for x in range(8, 24):
+        for z in range(9, 22):
+            if (x + z) % 4 == 0 and rng.random() < 0.6:
+                for y in range(0, rng.randint(3, 9)):
+                    filled[x, y, z] = True
+                    colours[x, y, z] = kelp * rng.uniform(0.85, 1.1)
+    box(filled, colours, (8, 19, 10), (24, 24, 21), lambda x, y, z: teal * rng.uniform(0.88, 1.08))
+    for lo_x in (3, 24):
+        box(filled, colours, (lo_x, 20, 10), (lo_x + 5, 24, 20), lambda x, y, z: kelp * rng.uniform(0.9, 1.1))
+        box(filled, colours, (lo_x, 24, 11), (lo_x + 5, 31, 18), lambda x, y, z: skin * rng.uniform(0.92, 1.06))
+    box(filled, colours, (11, 22, 10), (21, 29, 20), lambda x, y, z: skin * rng.uniform(0.92, 1.06))
+    paint_front(filled, colours, [(13, 25), (14, 25), (18, 25), (19, 25)], glow)
+    paint_front(filled, colours, [(15, 23), (16, 23), (17, 23)], np.array([30, 56, 56]))
+    for x in (11, 14, 17, 20):
+        box(filled, colours, (x, 29, 10), (x + 1, 31, 12), coral)
+    box(filled, colours, (10, 29, 10), (22, 30, 20), lambda x, y, z: coral * rng.uniform(0.9, 1.08))
+    filled[15:17, 30:32, 15:17] = True
+    colours[15:17, 30:32, 15:17] = pearl
+    for x in (9, 22):
+        for y in range(17, 22):
+            filled[x, y, 9] = True
+            colours[x, y, 9] = kelp
+    return filled, colours
+
+
 BUILDERS = {
     "blood_moon_lord": blood_moon_lord,
     "blood_eye": blood_eye,
@@ -340,12 +427,14 @@ BUILDERS = {
     "spectral_captain": spectral_captain,
     "magma_colossus": magma_colossus,
     "void_stalker": void_stalker,
+    "piglin_warchief": piglin_warchief,
+    "tidecaller": tidecaller,
 }
-BIG = {"nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker"}
+BIG = {"nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker", "piglin_warchief", "tidecaller"}
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser = argparse.ArgumentParser()
     parser.add_argument("name", choices=sorted(BUILDERS))
     parser.add_argument("model")
     parser.add_argument("texture")

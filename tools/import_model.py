@@ -392,7 +392,7 @@ def preview(index, palette, path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser = argparse.ArgumentParser()
     parser.add_argument("input")
     parser.add_argument("kind", choices=["tool", "head", "crown", "held", "part"])
     parser.add_argument("model")

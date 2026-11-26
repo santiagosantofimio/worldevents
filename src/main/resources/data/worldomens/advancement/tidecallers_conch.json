@@ -1,0 +1,43 @@
+{
+	"parent": "worldomens:defeat_tidecaller",
+	"display": {
+		"icon": {
+			"id": "minecraft:nautilus_shell",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldomens:tidecallers_conch"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldomens.tidecallers_conch.title",
+			"fallback": "The Sea Answers"
+		},
+		"description": {
+			"translate": "advancements.worldomens.tidecallers_conch.description",
+			"fallback": "Get the Tidecaller's Conch"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:nautilus_shell",
+						"predicates": {
+							"minecraft:custom_data": {
+								"worldomens_item": "tidecallers_conch"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

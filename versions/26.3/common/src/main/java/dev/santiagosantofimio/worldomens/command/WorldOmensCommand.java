@@ -8,6 +8,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.santiagosantofimio.worldomens.config.EventSettings;
 import dev.santiagosantofimio.worldomens.config.ModConfig;
+import dev.santiagosantofimio.worldomens.config.Preset;
+import dev.santiagosantofimio.worldomens.data.PlayerStatsData;
 import dev.santiagosantofimio.worldomens.data.WorldOmensData;
 import dev.santiagosantofimio.worldomens.event.ActiveEvent;
 import dev.santiagosantofimio.worldomens.event.EventManager;
@@ -41,6 +43,7 @@ public final class WorldOmensCommand {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(build("worldomens"));
+		dispatcher.register(build("omens"));
 		dispatcher.register(build("eventos"));
 	}
 
@@ -86,6 +89,11 @@ public final class WorldOmensCommand {
                                 CaravanContracts.all().stream().map(CaravanContracts.Contract::id), builder))
                         .executes(WorldOmensCommand::contract)))
 			.then(Commands.literal("ranking").executes(WorldOmensCommand::ranking))
+			.then(Commands.literal("stats").executes(WorldOmensCommand::stats))
+			.then(Commands.literal("preset").executes(WorldOmensCommand::showPreset)
+					.then(Commands.argument("name", StringArgumentType.word()).requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+							.suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(Preset.values()).map(Preset::id), builder))
+							.executes(WorldOmensCommand::setPreset)))
 			.then(Commands.literal("status").executes(WorldOmensCommand::status))
 				.then(Commands.literal("reload").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(WorldOmensCommand::reload));
 	}
@@ -322,6 +330,46 @@ public final class WorldOmensCommand {
         }
         return entries.size();
     }
+
+	private static String presetName(CommandSourceStack source, Preset preset) {
+		return Lang.text(Lang.language(source), "command.preset." + preset.id());
+	}
+
+	private static int showPreset(CommandContext<CommandSourceStack> context) {
+		CommandSourceStack source = context.getSource();
+		Preset preset = ModConfig.get().preset();
+		source.sendSuccess(() -> Lang.component(source, "command.preset.current", presetName(source, preset)), false);
+		return 1;
+	}
+
+	private static int setPreset(CommandContext<CommandSourceStack> context) {
+		CommandSourceStack source = context.getSource();
+		String name = StringArgumentType.getString(context, "name");
+		Preset preset = Preset.parse(name);
+		if (preset == null) {
+			source.sendFailure(Lang.component(source, "command.preset.unknown", name));
+			return 0;
+		}
+		ModConfig.get().setPreset(preset);
+		source.sendSuccess(() -> Lang.component(source, "command.preset.set", presetName(source, preset)), true);
+		return 1;
+	}
+
+	private static int stats(CommandContext<CommandSourceStack> context) {
+		CommandSourceStack source = context.getSource();
+		ServerPlayer player = source.getPlayer();
+		if (player == null) {
+			source.sendFailure(Lang.component(source, "command.stats.none"));
+			return 0;
+		}
+		PlayerStatsData.Stats stats = PlayerStatsData.get(source.getServer()).stats(player.getUUID());
+		source.sendSuccess(() -> Lang.component(source, "command.stats.header"), false);
+		source.sendSuccess(() -> Lang.component(source, "command.stats.events", stats.events()), false);
+		source.sendSuccess(() -> Lang.component(source, "command.stats.points", stats.points()), false);
+		source.sendSuccess(() -> Lang.component(source, "command.stats.seals", stats.seals()), false);
+		source.sendSuccess(() -> Lang.component(source, "command.stats.bosses", stats.bosses()), false);
+		return 1;
+	}
 
 	private static int reload(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack source = context.getSource();

@@ -1,0 +1,31 @@
+{
+	"parent": "worldomens:survive_drowned_tide",
+	"display": {
+		"icon": {
+			"id": "minecraft:prismarine_bricks",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldomens:tidecaller"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldomens.defeat_tidecaller.title",
+			"fallback": "Tide Turned"
+		},
+		"description": {
+			"translate": "advancements.worldomens.defeat_tidecaller.description",
+			"fallback": "Defeat the Tidecaller"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

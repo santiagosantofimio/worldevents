@@ -1,0 +1,24 @@
+{
+	"parent": "worldomens:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:heart_of_the_sea"
+		},
+		"title": {
+			"translate": "advancements.worldomens.survive_drowned_tide.title",
+			"fallback": "Holding the Shore"
+		},
+		"description": {
+			"translate": "advancements.worldomens.survive_drowned_tide.description",
+			"fallback": "Fight off all three waves of the tide of the drowned"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

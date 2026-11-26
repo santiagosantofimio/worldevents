@@ -80,7 +80,9 @@ public final class NomadMerchant {
 			new Relic(EventItems.STARFALL_PICKAXE, 8),
 			new Relic(EventItems.WARLORD_AXE, 8),
 			new Relic(EventItems.CAPTAINS_CUTLASS, 6),
-			new Relic(EventItems.COLOSSUS_HAMMER, 10));
+			new Relic(EventItems.COLOSSUS_HAMMER, 10),
+			new Relic(EventItems.WARCHIEFS_CLEAVER, 8),
+			new Relic(EventItems.TIDECALLERS_CONCH, 8));
 
 	private record Purchase(Item crop, int count) {
 	}

@@ -1,0 +1,24 @@
+{
+	"parent": "worldomens:root",
+	"display": {
+		"icon": {
+			"id": "minecraft:fishing_rod"
+		},
+		"title": {
+			"translate": "advancements.worldomens.festival_angler.title",
+			"fallback": "Festival Angler"
+		},
+		"description": {
+			"translate": "advancements.worldomens.festival_angler.description",
+			"fallback": "Make your quota of catches during a fishing festival"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

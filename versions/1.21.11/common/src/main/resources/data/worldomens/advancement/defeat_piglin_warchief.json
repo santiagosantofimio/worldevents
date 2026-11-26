@@ -1,0 +1,31 @@
+{
+	"parent": "worldomens:survive_piglin_warband",
+	"display": {
+		"icon": {
+			"id": "minecraft:gilded_blackstone",
+			"components": {
+				"minecraft:custom_model_data": {
+					"strings": [
+						"worldomens:piglin_warchief"
+					]
+				}
+			}
+		},
+		"title": {
+			"translate": "advancements.worldomens.defeat_piglin_warchief.title",
+			"fallback": "Fallen Warchief"
+		},
+		"description": {
+			"translate": "advancements.worldomens.defeat_piglin_warchief.description",
+			"fallback": "Defeat the Piglin Warchief"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

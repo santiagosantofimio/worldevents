@@ -38,6 +38,11 @@ public final class MerchantCaravanEvent implements WorldEvent {
 	private static final int STAY_MARGIN_TICKS = 2400;
 
 	@Override
+	public boolean peaceful() {
+		return true;
+	}
+
+	@Override
 	public String id() {
 		return ID;
 	}

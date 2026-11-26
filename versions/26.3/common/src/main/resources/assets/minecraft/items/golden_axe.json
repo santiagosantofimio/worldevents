@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldomens:warchiefs_cleaver",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldomens:item/warchiefs_cleaver"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/golden_axe"
+		}
+	}
+}

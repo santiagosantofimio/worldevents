@@ -1,0 +1,19 @@
+{
+	"model": {
+		"type": "minecraft:select",
+		"property": "minecraft:custom_model_data",
+		"cases": [
+			{
+				"when": "worldomens:piglin_warchief",
+				"model": {
+					"type": "minecraft:model",
+					"model": "worldomens:item/piglin_warchief"
+				}
+			}
+		],
+		"fallback": {
+			"type": "minecraft:model",
+			"model": "minecraft:block/gilded_blackstone"
+		}
+	}
+}

@@ -2,6 +2,7 @@ package dev.santiagosantofimio.worldomens.mob;
 
 import com.mojang.math.Transformation;
 import dev.santiagosantofimio.worldomens.WorldOmensMod;
+import dev.santiagosantofimio.worldomens.data.PlayerStatsData;
 import dev.santiagosantofimio.worldomens.i18n.Lang;
 import dev.santiagosantofimio.worldomens.item.EventItems;
 import dev.santiagosantofimio.worldomens.platform.Hooks;
@@ -329,6 +330,14 @@ public final class Creature {
 	public static void registerHooks() {
 		Hooks.AFTER_DEATH.register((entity, source) -> {
 			clearBossBar(entity);
+			Kind kind = kindOf(entity);
+			if (kind != null && kind.bossBar() != null && !isSummoned(entity) && entity instanceof Mob boss) {
+				ServerPlayer killer = source.getEntity() instanceof ServerPlayer player ? player
+						: boss.getLastHurtByPlayer() instanceof ServerPlayer player ? player : null;
+				if (killer != null) {
+					PlayerStatsData.get(killer.level().getServer()).add(killer.getUUID(), 0, 0, 0, 1);
+				}
+			}
 			if (!parts(entity).isEmpty() && entity.level() instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.POOF, entity.getX(), entity.getY() + entity.getBbHeight() / 2, entity.getZ(),
 						20, entity.getBbWidth() / 2, entity.getBbHeight() / 2, entity.getBbWidth() / 2, 0.05);

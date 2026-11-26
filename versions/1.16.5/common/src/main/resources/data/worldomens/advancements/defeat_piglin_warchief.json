@@ -1,0 +1,23 @@
+{
+	"parent": "worldomens:survive_piglin_warband",
+	"display": {
+		"icon": {
+			"item": "minecraft:gilded_blackstone",
+			"nbt": "{CustomModelData:1192921}"
+		},
+		"title": {
+			"text": "Fallen Warchief"
+		},
+		"description": {
+			"text": "Defeat the Piglin Warchief"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

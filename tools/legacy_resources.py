@@ -21,6 +21,8 @@ PART_SCALES = {
     "void_stalker": 1.05,
     "eclipse_wraith": 1.6,
     "frost_yeti": 1.4,
+    "piglin_warchief": 1.45,
+    "tidecaller": 1.45,
 }
 HEAD_ITEM_SCALE = 0.625
 

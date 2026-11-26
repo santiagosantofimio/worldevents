@@ -2,7 +2,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:iron_nugget",
-			"nbt": "{CustomModelData:8618416}"
+			"nbt": "{CustomModelData:2965697}"
 		},
 		"title": {
 			"text": "World Omens"

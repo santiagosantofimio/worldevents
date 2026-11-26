@@ -6,7 +6,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 5729240
+				"custom_model_data": 7044775
 			},
 			"model": "worldomens:item/golden_seed"
 		}

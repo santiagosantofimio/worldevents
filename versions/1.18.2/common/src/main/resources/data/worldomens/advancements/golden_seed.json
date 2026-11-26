@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:glistering_melon_slice",
-			"nbt": "{CustomModelData:5729240}"
+			"nbt": "{CustomModelData:7044775}"
 		},
 		"title": {
 			"text": "Green Thumb"

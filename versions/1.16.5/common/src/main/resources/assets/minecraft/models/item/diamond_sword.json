@@ -6,15 +6,15 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 1970236
+				"custom_model_data": 3159672
 			},
-			"model": "worldomens:item/blood_scythe"
+			"model": "worldomens:item/frostfang"
 		},
 		{
 			"predicate": {
-				"custom_model_data": 5981417
+				"custom_model_data": 4784525
 			},
-			"model": "worldomens:item/frostfang"
+			"model": "worldomens:item/blood_scythe"
 		}
 	]
 }

@@ -1,0 +1,31 @@
+{
+	"parent": "worldomens:defeat_piglin_warchief",
+	"display": {
+		"icon": {
+			"item": "minecraft:golden_axe",
+			"nbt": "{CustomModelData:6631797}"
+		},
+		"title": {
+			"text": "Gilded Resolve"
+		},
+		"description": {
+			"text": "Get the Warchief's Cleaver"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:golden_axe",
+						"nbt": "{worldomens_item:\"warchiefs_cleaver\"}"
+					}
+				]
+			}
+		}
+	}
+}

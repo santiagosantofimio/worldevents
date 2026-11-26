@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:magma_block",
-			"nbt": "{CustomModelData:7347828}"
+			"nbt": "{CustomModelData:9680645}"
 		},
 		"title": {
 			"text": "Cooled Down"

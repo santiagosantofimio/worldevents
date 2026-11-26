@@ -5,8 +5,17 @@ worldomens status
 worldomens help
 worldomens help firefly_night
 worldomens help blood_moon
+worldomens help piglin_warband
 worldomens ranking
 worldomens contract
+worldomens stats
+worldomens preset
+worldomens preset calm
+worldomens preset epic
+worldomens preset normal
+omens status
+worldomens give @s warchiefs_cleaver
+worldomens give @s tidecallers_conch
 time set night
 worldomens summon blood_moon_lord ~0 ~3 ~0
 worldomens summon blood_eye ~3 ~3 ~0
@@ -21,6 +30,8 @@ worldomens summon magma_colossus ~3 ~3 ~6
 worldomens summon void_stalker ~6 ~3 ~6
 worldomens summon eclipse_wraith ~9 ~3 ~6
 worldomens summon frost_yeti ~0 ~3 ~9
+worldomens summon piglin_warchief ~3 ~3 ~9
+worldomens summon tidecaller ~6 ~3 ~9
 setblock ~ ~20 ~ minecraft:iron_ore
 loot spawn ~ ~22 ~ mine ~ ~20 ~ minecraft:diamond_pickaxe{worldomens_item:"starfall_pickaxe"}
 schedule function smoke:step1 40t

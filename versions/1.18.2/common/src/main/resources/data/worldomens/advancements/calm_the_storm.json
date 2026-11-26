@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:white_wool",
-			"nbt": "{CustomModelData:5189750}"
+			"nbt": "{CustomModelData:6036743}"
 		},
 		"title": {
 			"text": "Calm the Storm"

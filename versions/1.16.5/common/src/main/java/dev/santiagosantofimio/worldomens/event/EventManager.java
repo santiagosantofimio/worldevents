@@ -3,6 +3,7 @@ package dev.santiagosantofimio.worldomens.event;
 import dev.santiagosantofimio.worldomens.WorldOmensMod;
 import dev.santiagosantofimio.worldomens.config.EventSettings;
 import dev.santiagosantofimio.worldomens.config.ModConfig;
+import dev.santiagosantofimio.worldomens.data.PlayerStatsData;
 import dev.santiagosantofimio.worldomens.data.WorldOmensData;
 import dev.santiagosantofimio.worldomens.i18n.Lang;
 import dev.santiagosantofimio.worldomens.item.EventItems;
@@ -95,7 +96,8 @@ public final class EventManager {
 				candidates.add(event);
 			}
 		}
-		WorldEvent picked = WeightedPicker.pick(candidates, event -> event.settings().weight(), level.getRandom().nextDouble());
+		WorldEvent picked = WeightedPicker.pick(candidates, event -> ModConfig.get().preset().scaleWeight(event.settings().weight(), event.peaceful()),
+				level.getRandom().nextDouble());
 		if (picked != null) {
 			data.setPlan(new WorldOmensData.Plan(picked.id(), now));
 			WorldOmensMod.LOGGER.info("Planned {} in {}", picked.id(), level.dimension().location());
@@ -217,7 +219,9 @@ public final class EventManager {
 	public static void score(ServerPlayer player, String eventId, int points) {
 		ActiveEvent active = active(player.getLevel());
 		if (active != null && active.event().id().equals(eventId)) {
-			EventScores.add(active, player, isConvergence(active) ? points * 2 : points);
+			int amount = isConvergence(active) ? points * 2 : points;
+			EventScores.add(active, player, amount);
+			PlayerStatsData.get(player.level.getServer()).add(player.getUUID(), 0, amount, 0, 0);
 		}
 	}
 
@@ -243,6 +247,7 @@ public final class EventManager {
 			if (isConvergence(active)) {
 				seals *= 2;
 			}
+			PlayerStatsData.get(level.getServer()).add(player.getUUID(), 1, 0, Math.max(0, seals), 0);
 			if (seals > 0) {
 				ItemStack stack = EventItems.EVENT_SEAL.create(Lang.language(player), seals);
 				if (!player.inventory.add(stack)) {

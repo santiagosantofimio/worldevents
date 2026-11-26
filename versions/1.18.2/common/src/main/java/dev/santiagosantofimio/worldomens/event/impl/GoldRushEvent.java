@@ -46,6 +46,11 @@ public final class GoldRushEvent implements WorldEvent {
 	private static final DustParticleOptions SPARKLE = Particles.dust(0xFFD700, 1.0f);
 
 	@Override
+	public boolean peaceful() {
+		return true;
+	}
+
+	@Override
 	public String id() {
 		return ID;
 	}

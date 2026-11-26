@@ -6,7 +6,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 3077463
+				"custom_model_data": 1745574
 			},
 			"model": "worldomens:item/eclipse_shard"
 		}

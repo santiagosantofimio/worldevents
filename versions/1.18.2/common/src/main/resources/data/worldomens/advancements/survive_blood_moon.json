@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:ghast_tear",
-			"nbt": "{CustomModelData:3187027}"
+			"nbt": "{CustomModelData:4502562}"
 		},
 		"title": {
 			"text": "Red Dawn"

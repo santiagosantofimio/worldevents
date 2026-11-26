@@ -3,7 +3,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 5129415
+				"custom_model_data": 7462232
 			},
 			"model": "worldomens:item/nomad_merchant"
 		}

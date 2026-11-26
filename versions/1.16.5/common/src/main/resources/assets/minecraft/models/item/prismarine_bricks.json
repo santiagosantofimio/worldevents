@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/prismarine_bricks",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 5127297
+			},
+			"model": "worldomens:item/tidecaller"
+		}
+	]
+}

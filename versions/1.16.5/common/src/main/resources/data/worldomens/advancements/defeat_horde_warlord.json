@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:chiseled_polished_blackstone",
-			"nbt": "{CustomModelData:6981083}"
+			"nbt": "{CustomModelData:5649194}"
 		},
 		"title": {
 			"text": "Fallen Warlord"

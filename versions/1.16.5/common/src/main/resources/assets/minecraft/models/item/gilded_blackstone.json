@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/gilded_blackstone",
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 1192921
+			},
+			"model": "worldomens:item/piglin_warchief"
+		}
+	]
+}

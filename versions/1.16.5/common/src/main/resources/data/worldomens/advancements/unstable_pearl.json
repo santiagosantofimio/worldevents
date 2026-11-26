@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:popped_chorus_fruit",
-			"nbt": "{CustomModelData:8044938}"
+			"nbt": "{CustomModelData:1377755}"
 		},
 		"title": {
 			"text": "In the Blink of an Eye"

@@ -1,0 +1,31 @@
+{
+	"parent": "worldomens:defeat_tidecaller",
+	"display": {
+		"icon": {
+			"item": "minecraft:nautilus_shell",
+			"nbt": "{CustomModelData:7596730}"
+		},
+		"title": {
+			"text": "The Sea Answers"
+		},
+		"description": {
+			"text": "Get the Tidecaller's Conch"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:nautilus_shell",
+						"nbt": "{worldomens_item:\"tidecallers_conch\"}"
+					}
+				]
+			}
+		}
+	}
+}

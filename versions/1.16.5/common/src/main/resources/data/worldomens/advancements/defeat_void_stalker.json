@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:crying_obsidian",
-			"nbt": "{CustomModelData:7454928}"
+			"nbt": "{CustomModelData:1269217}"
 		},
 		"title": {
 			"text": "Shadow Slayer"

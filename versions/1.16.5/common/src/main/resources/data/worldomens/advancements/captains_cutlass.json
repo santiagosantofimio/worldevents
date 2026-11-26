@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:iron_sword",
-			"nbt": "{CustomModelData:3025558}"
+			"nbt": "{CustomModelData:6262887}"
 		},
 		"title": {
 			"text": "Boarding Party"

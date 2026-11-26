@@ -3,15 +3,15 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 7347828
+				"custom_model_data": 2677976
 			},
-			"model": "worldomens:item/magma_colossus"
+			"model": "worldomens:item/living_meteorite"
 		},
 		{
 			"predicate": {
-				"custom_model_data": 8440647
+				"custom_model_data": 9680645
 			},
-			"model": "worldomens:item/living_meteorite"
+			"model": "worldomens:item/magma_colossus"
 		}
 	]
 }

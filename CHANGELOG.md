@@ -4,13 +4,42 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [2.1.0] - Unreleased
+
+Three new events, presets to tune how much combat you want, and personal statistics, on all five Minecraft versions.
+
+### Added
+
+- **Piglin Warband** (`piglin_warband`, Nether): three waves of piglins, brutes and hoglins, led in the last wave by the
+  **Piglin Warchief** (150-160 health, calls two brutes at half health). Golden armor calms regular piglins but not the
+  brutes or the Warchief. Drops gold and, sometimes, the **Warchief's Cleaver** (use it for Absorption and Fire Resistance).
+- **Tide of the Drowned** (`drowned_tide`, overworld coast at night): three waves of drowned come out of the water near
+  players standing on a coast, led by **The Tidecaller** (pulls nearby players toward it with an undertow). Drops prismarine
+  and, sometimes, the **Tidecaller's Conch** (use it for Conduit Power, Dolphin's Grace and Water Breathing). Ends at dawn.
+- **Fishing Festival** (`fishing_festival`, overworld daytime near water): a calm event with Luck while it lasts, experience
+  and points for every catch (up to a configurable limit per player) and an advancement at the goal.
+- **Presets**: `preset` in `config/worldomens.json` (`calm`, `normal` or `epic`) and `/worldomens preset [name]` (operators change it).
+  Calm makes events less frequent and favours peaceful ones; epic does the opposite. Your own values are kept.
+- `/worldomens stats`: your events taken part in, points, seals and bosses defeated, saved across restarts.
+- The `/omens` alias (the 2.0.0 notes promised it, but it was missing).
+- The Nomad Merchant can now trade the two new relics for event seals. New advancements and Spanish and English texts for everything.
+
+### Fixed
+
+- In the 1.18.2 and 1.16.5 resource packs the models of relics, creatures and spawn eggs did not apply: their model numbers
+  were still computed from the old mod id. The packs are regenerated with the right numbers.
+
+### Changed
+
+- Every comment was removed from the code and configuration files.
+
 ## [2.0.0] - Unreleased
 
 The mod id, package and command now match the name: everything that was `worldevents` is `worldomens`.
 
 ### Changed
 
-- **Breaking:** the mod id is `worldomens`. The command is `/worldomens` (the aliases `/omens` and `/eventos` stay), the
+- **Breaking:** the mod id is `worldomens`. The command is `/worldomens` (the alias `/eventos` stays), the
   config file is `config/worldomens.json`, and data and resource pack namespaces use `worldomens:`.
 - Jar files are named `worldomens-<loader>-<minecraft>-<version>.jar`.
 - The resource pack must be updated together with the mod: the old pack uses the old namespace and will not apply.

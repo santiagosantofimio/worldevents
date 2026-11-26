@@ -3,15 +3,15 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 2248343
+				"custom_model_data": 3543946
 			},
-			"model": "worldomens:item/blood_moon_lord_crown"
+			"model": "worldomens:item/mimic_sack"
 		},
 		{
 			"predicate": {
-				"custom_model_data": 7756409
+				"custom_model_data": 6798886
 			},
-			"model": "worldomens:item/mimic_sack"
+			"model": "worldomens:item/blood_moon_lord_crown"
 		}
 	]
 }

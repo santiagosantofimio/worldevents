@@ -3,15 +3,15 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 2775224
+				"custom_model_data": 5649194
 			},
-			"model": "worldomens:item/spectral_captain"
+			"model": "worldomens:item/horde_warlord"
 		},
 		{
 			"predicate": {
-				"custom_model_data": 6981083
+				"custom_model_data": 6012553
 			},
-			"model": "worldomens:item/horde_warlord"
+			"model": "worldomens:item/spectral_captain"
 		}
 	]
 }

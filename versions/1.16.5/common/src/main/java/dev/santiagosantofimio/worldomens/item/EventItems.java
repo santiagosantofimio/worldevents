@@ -108,6 +108,16 @@ public final class EventItems {
 	public static final EventItem FROSTFANG = register(new EventItem("frostfang", Items.DIAMOND_SWORD, Rarity.EPIC, false,
 			stack -> weapon(stack, 7.0, -2.4)));
 
+	public static final int GILDED_RESOLVE_COOLDOWN_SECONDS = 60;
+
+	public static final EventItem WARCHIEFS_CLEAVER = register(new EventItem("warchiefs_cleaver", Items.GOLDEN_AXE, Rarity.EPIC, false,
+			stack -> weapon(stack, 8.0, -3.0)));
+
+	public static final int TIDAL_BLESSING_COOLDOWN_SECONDS = 90;
+
+	public static final EventItem TIDECALLERS_CONCH = register(new EventItem("tidecallers_conch", Items.NAUTILUS_SHELL, Rarity.EPIC, true, stack -> {
+	}));
+
 	public static final EventItem EVENT_SEAL = register(new EventItem("event_seal", Items.NAUTILUS_SHELL, Rarity.UNCOMMON, true, stack -> {
 	}));
 

@@ -6,7 +6,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 8389884
+				"custom_model_data": 2204173
 			},
 			"model": "worldomens:item/lucky_nugget"
 		}

@@ -6,7 +6,13 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 4429873
+				"custom_model_data": 7596730
+			},
+			"model": "worldomens:item/tidecallers_conch"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 9217410
 			},
 			"model": "worldomens:item/event_seal"
 		}

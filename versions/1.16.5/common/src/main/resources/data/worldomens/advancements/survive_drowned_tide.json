@@ -1,0 +1,22 @@
+{
+	"parent": "worldomens:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:heart_of_the_sea"
+		},
+		"title": {
+			"text": "Holding the Shore"
+		},
+		"description": {
+			"text": "Fight off all three waves of the tide of the drowned"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"criteria": {
+		"done": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

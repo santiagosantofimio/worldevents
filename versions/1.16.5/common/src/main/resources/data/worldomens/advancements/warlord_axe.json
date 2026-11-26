@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:diamond_axe",
-			"nbt": "{CustomModelData:9893597}"
+			"nbt": "{CustomModelData:2209132}"
 		},
 		"title": {
 			"text": "Battle Cry"

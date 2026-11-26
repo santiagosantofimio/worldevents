@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:honey_bottle",
-			"nbt": "{CustomModelData:2186010}"
+			"nbt": "{CustomModelData:5804841}"
 		},
 		"title": {
 			"text": "Lightning in a Bottle"

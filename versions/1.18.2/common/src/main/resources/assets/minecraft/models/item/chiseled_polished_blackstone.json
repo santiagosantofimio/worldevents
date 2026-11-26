@@ -3,7 +3,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 6981083
+				"custom_model_data": 5649194
 			},
 			"model": "worldomens:item/horde_warlord"
 		}

@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:magma_cream",
-			"nbt": "{CustomModelData:3312799}"
+			"nbt": "{CustomModelData:4628334}"
 		},
 		"title": {
 			"text": "Heart of Fire"

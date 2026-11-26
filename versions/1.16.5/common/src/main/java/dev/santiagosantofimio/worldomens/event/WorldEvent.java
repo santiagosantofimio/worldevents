@@ -20,6 +20,10 @@ public interface WorldEvent {
 		return ModConfig.get().event(id());
 	}
 
+	default boolean peaceful() {
+		return false;
+	}
+
 	default boolean isAvailable(ServerLevel level) {
 		return true;
 	}

@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:diamond_sword",
-			"nbt": "{CustomModelData:5981417}"
+			"nbt": "{CustomModelData:3159672}"
 		},
 		"title": {
 			"text": "Cold Steel"

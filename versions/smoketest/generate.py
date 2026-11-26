@@ -14,11 +14,12 @@ os.makedirs(tags, exist_ok=True)
 
 kinds = ["blood_moon_lord", "blood_eye", "mimic_sack", "living_meteorite", "storm_spirit", "harvest_spirit",
          "nomad_merchant", "horde_warlord", "spectral_captain", "magma_colossus", "void_stalker",
-         "eclipse_wraith", "frost_yeti"]
+         "eclipse_wraith", "frost_yeti", "piglin_warchief", "tidecaller"]
 events = [("blood_moon", "overworld"), ("gold_rush", "overworld"), ("meteor_shower", "overworld"),
           ("thunderstorm", "overworld"), ("blessed_harvest", "overworld"), ("merchant_caravan", "overworld"),
           ("horde", "overworld"), ("treasure_hunt", "overworld"), ("eruption", "the_nether"), ("void_storm", "the_end"),
-          ("eclipse", "overworld"), ("blizzard", "overworld"), ("firefly_night", "overworld")]
+          ("eclipse", "overworld"), ("blizzard", "overworld"), ("firefly_night", "overworld"),
+          ("fishing_festival", "overworld"), ("piglin_warband", "the_nether"), ("drowned_tide", "overworld")]
 if legacy:
     pickaxe = 'minecraft:diamond_pickaxe{worldomens_item:"starfall_pickaxe"}'
 else:
@@ -26,7 +27,9 @@ else:
 
 steps = []
 steps.append(["say [smoke] start", "forceload add ~-32 ~-32 ~32 ~32", "worldomens list", "worldomens status", "worldomens help", "worldomens help firefly_night",
-              "worldomens help blood_moon", "worldomens ranking", "worldomens contract",
+              "worldomens help blood_moon", "worldomens help piglin_warband", "worldomens ranking", "worldomens contract",
+              "worldomens stats", "worldomens preset", "worldomens preset calm", "worldomens preset epic", "worldomens preset normal", "omens status",
+              "worldomens give @s warchiefs_cleaver", "worldomens give @s tidecallers_conch",
               "time set night"]
              + [f"worldomens summon {k} ~{(i % 4) * 3} ~3 ~{(i // 4) * 3}" for i, k in enumerate(kinds)]
              + ["setblock ~ ~20 ~ minecraft:iron_ore", f"loot spawn ~ ~22 ~ mine ~ ~20 ~ {pickaxe}"])

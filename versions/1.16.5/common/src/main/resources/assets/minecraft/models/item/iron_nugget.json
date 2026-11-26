@@ -6,7 +6,7 @@
 	"overrides": [
 		{
 			"predicate": {
-				"custom_model_data": 8618416
+				"custom_model_data": 2965697
 			},
 			"model": "worldomens:item/meteorite_fragment"
 		}

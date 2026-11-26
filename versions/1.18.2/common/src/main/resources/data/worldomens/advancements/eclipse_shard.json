@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:amethyst_shard",
-			"nbt": "{CustomModelData:3077463}"
+			"nbt": "{CustomModelData:1745574}"
 		},
 		"title": {
 			"text": "Piece of the Dark"

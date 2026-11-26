@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:coal_block",
-			"nbt": "{CustomModelData:8850782}"
+			"nbt": "{CustomModelData:2183599}"
 		},
 		"title": {
 			"text": "Let There Be Light"

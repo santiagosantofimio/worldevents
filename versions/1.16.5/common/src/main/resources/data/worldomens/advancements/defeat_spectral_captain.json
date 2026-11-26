@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:sea_lantern",
-			"nbt": "{CustomModelData:2775224}"
+			"nbt": "{CustomModelData:6012553}"
 		},
 		"title": {
 			"text": "Ghost Story"

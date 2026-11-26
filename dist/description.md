@@ -1,6 +1,6 @@
 # World Omens
 
-World Omens brings thirteen random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
+World Omens brings sixteen random events to your Minecraft world, each with its own creatures, bosses and rewards. A minute before an event starts, everyone gets a warning. Then the moon turns red, meteors start to fall, or a horde comes out of the dark.
 
 ## Events
 
@@ -15,6 +15,9 @@ World Omens brings thirteen random events to your Minecraft world, each with its
 - **Eruption (Nether):** Fire geysers burst from the ground around you while the Magma Colossus rises to hunt you.
 - **Eclipse:** In the daytime the sky goes dark and monsters walk in the sun without burning. Phantoms dive at you, and the Eclipse Wraith blinds you with pulses of darkness.
 - **Firefly Night:** A calm five-minute night search. Follow personal green lights across nearby open ground, with direction and distance hints, and find all five for XP, points and an advancement. It works in Peaceful too and never changes blocks or spawns creatures.
+- **Fishing Festival:** A calm daytime event near water. Fish for Luck, experience and points, and earn an advancement when you reach the goal.
+- **Piglin Warband (Nether):** Three waves of piglins, brutes and hoglins march on you, and the Piglin Warchief leads the last one. Golden armor calms the piglins, but not the brutes or the Warchief.
+- **Tide of the Drowned:** At night on a coast, three waves of drowned come ashore and The Tidecaller drags you toward the water. It ends at dawn.
 - **Blizzard:** Snow and wind in snowy biomes. Stay under a roof, by a fire or in leather, or you freeze. The Frost Yeti's roar chills everyone near it.
 - **Void Storm (End):** Void Stalkers blink in behind you and blind you, while void pulses lift you into the air and let you drift back down.
 
@@ -22,7 +25,7 @@ Now and then an event comes as a **Convergence**: half as long again, with doubl
 
 ## Creatures and rewards
 
-Meet thirteen creatures with their own 3D models, six of them bosses. Defeat them to earn unique gear:
+Meet fifteen creatures with their own 3D models, eight of them bosses. Defeat them to earn unique gear:
 
 - **Blood Scythe:** Heals you as you hit.
 - **Starfall Pickaxe:** Smelts ores as you mine them.
@@ -34,6 +37,8 @@ Meet thirteen creatures with their own 3D models, six of them bosses. Defeat the
 - **Frostfang:** A blade of ice whose hits chill and slow.
 - **Unstable Pearl:** Blinks you forward, then lets you float down.
 - **Golden Seed:** Ripens the crops around it at once.
+- **Warchief's Cleaver:** Gilded resolve: Absorption and Fire Resistance.
+- **Tidecaller's Conch:** Calls the sea: Conduit Power, Dolphin's Grace and Water Breathing.
 
 Every event also awards points. The best players are announced at the end, and everyone who took part earns Event Seals, which Nomad Merchants trade for their strongest relics.
 
@@ -44,5 +49,6 @@ Every event also awards points. The best players are announced at the end, and e
 - **Safe for your builds:** Meteor craters only dig natural terrain and never touch chests, liquids or spawn protection. Geysers, the Colossus and the Captain's cannons never break a block. You can also turn off block changes entirely.
 - **Configurable:** Set how often each event happens and how long it lasts, or turn it off, in `config/worldomens.json`. Apply your changes with `/worldomens reload`.
 - **Easy to try:** Operators can start any event with `/worldomens start <event>` (or `/eventos start <event>`) and summon any creature with `/worldomens summon <creature>`. Anyone can use `/worldomens help`, `/worldomens ranking` and `/worldomens contract` without operator permissions. In singleplayer, every item and spawn egg is in its own creative tab.
-- **Progression:** A dedicated advancement tab tracks your victories.
+- **Presets:** Choose `calm`, `normal` or `epic` in the config or with `/worldomens preset` to set how often events happen and how much combat you get.
+- **Progression:** A dedicated advancement tab tracks your victories, and `/worldomens stats` shows your totals.
 - **Languages:** English and Spanish. Each player sees the texts in their own game language.

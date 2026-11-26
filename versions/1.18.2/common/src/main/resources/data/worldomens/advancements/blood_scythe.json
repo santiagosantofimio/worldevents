@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:diamond_sword",
-			"nbt": "{CustomModelData:1970236}"
+			"nbt": "{CustomModelData:4784525}"
 		},
 		"title": {
 			"text": "Reaper"

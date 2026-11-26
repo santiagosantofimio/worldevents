@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:gold_nugget",
-			"nbt": "{CustomModelData:8389884}"
+			"nbt": "{CustomModelData:2204173}"
 		},
 		"title": {
 			"text": "Struck Gold"

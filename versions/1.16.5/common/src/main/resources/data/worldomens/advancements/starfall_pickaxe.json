@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:diamond_pickaxe",
-			"nbt": "{CustomModelData:1173002}"
+			"nbt": "{CustomModelData:4410331}"
 		},
 		"title": {
 			"text": "Forged in the Sky"

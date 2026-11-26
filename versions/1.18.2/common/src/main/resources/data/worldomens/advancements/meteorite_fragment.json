@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:raw_iron",
-			"nbt": "{CustomModelData:8618416}"
+			"nbt": "{CustomModelData:2965697}"
 		},
 		"title": {
 			"text": "Stardust"

@@ -3,7 +3,7 @@
 	"display": {
 		"icon": {
 			"item": "minecraft:netherite_axe",
-			"nbt": "{CustomModelData:9073481}"
+			"nbt": "{CustomModelData:4867544}"
 		},
 		"title": {
 			"text": "Hammer Time"

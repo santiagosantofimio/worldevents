@@ -39,13 +39,8 @@ import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * An eclipse, in the daytime: the sky goes dark, monsters walk in the sun without burning, phantoms dive from the
- * sky and the eclipse wraith comes for the players. When the sun comes back, the monsters it brought burn again.
- */
 public final class EclipseEvent implements WorldEvent {
 	public static final String ID = "eclipse";
-	/** Mobs the eclipse brought, which the sun spares while it lasts. */
 	public static final String SHADED_TAG = WorldOmensMod.MOD_ID + ".shaded";
 	private static final String WRAITH_SPAWNED = "wraithSpawned";
 	private static final long EARLIEST_START = 1000;
@@ -60,7 +55,6 @@ public final class EclipseEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 6 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 6, 7200, 300);
 		json.addProperty("spawnInterval", 15);
 		json.addProperty("monstersPerPlayer", 2);
@@ -144,7 +138,6 @@ public final class EclipseEvent implements WorldEvent {
 	@Override
 	public void end(ServerLevel level, ActiveEvent active) {
 		EclipseState state = active.state(EclipseState::new);
-		// The sun is back: what the eclipse brought burns like any other monster.
 		for (Mob mob : state.shaded) {
 			if (!mob.isRemoved()) {
 				mob.removeEffect(MobEffects.FIRE_RESISTANCE);
@@ -162,13 +155,11 @@ public final class EclipseEvent implements WorldEvent {
 		state.wraith = null;
 	}
 
-	/** Spares {@code mob} from the sun: fire resistance, hidden, and no flames. */
 	public static void shadeFromSun(Mob mob) {
 		mob.addTag(SHADED_TAG);
 		mob.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
 	}
 
-	/** No flames on a shaded mob: the sun lights it again every tick. */
 	public static void keepShaded(Mob mob) {
 		if (mob.isOnFire()) {
 			mob.clearFire();
@@ -176,7 +167,6 @@ public final class EclipseEvent implements WorldEvent {
 		}
 	}
 
-	/** A zombie, skeleton or spider out of the dark near {@code center}, spared by the sun. */
 	public static Mob spawnMonster(ServerLevel level, BlockPos center) {
 		EntityType<? extends Mob> type = MONSTERS.get(level.getRandom().nextInt(MONSTERS.size()));
 		BlockPos spot = MobSpawning.spotNear(level, type, center, 10, 24, 6, 10);
@@ -195,7 +185,6 @@ public final class EclipseEvent implements WorldEvent {
 		return mob;
 	}
 
-	/** A phantom high above {@code center}, spared by the sun. */
 	public static Mob spawnPhantom(ServerLevel level, BlockPos center) {
 		BlockPos at = center.offset(level.getRandom().nextInt(17) - 8, 18 + level.getRandom().nextInt(6), level.getRandom().nextInt(17) - 8);
 		if (!level.isPositionEntityTicking(at) || !level.getBlockState(at).isAir()) {
@@ -212,7 +201,6 @@ public final class EclipseEvent implements WorldEvent {
 		return phantom;
 	}
 
-	/** Brings the wraith once the eclipse is under way. Its boss bar and pulses are its own. */
 	private void tickWraith(ServerLevel level, ActiveEvent active, EclipseState state, int elapsed) {
 		EventSettings settings = settings();
 		if (settings.getBoolean("wraith") && !active.data().getBoolean(WRAITH_SPAWNED) && elapsed >= settings.getInt("wraithDelay")) {
@@ -238,7 +226,6 @@ public final class EclipseEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns the wraith at {@code pos} now, for tests and admins. */
 	public Vex spawnWraith(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Vex wraith = EclipseWraith.spawn(level, pos, language, settings().getDouble("wraithHealth"));
 		if (wraith != null) {
@@ -248,7 +235,6 @@ public final class EclipseEvent implements WorldEvent {
 		return wraith;
 	}
 
-	/** The eclipse shard: night vision for its holder, and every monster around glows for a while. */
 	public static int useShard(ServerLevel level, ServerPlayer player) {
 		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 2400, 0));
 		int revealed = 0;

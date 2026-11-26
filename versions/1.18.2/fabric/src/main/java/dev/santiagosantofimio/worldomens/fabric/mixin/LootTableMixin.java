@@ -13,10 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Every loot roll goes through {@link Hooks#MODIFY_DROPS}, like Fabric API's loot table drops event in later
- * versions. Only the outermost table of a roll: tables that a table rolls inside it are part of its drops.
- */
 @Mixin(LootTable.class)
 public abstract class LootTableMixin {
 	@Unique

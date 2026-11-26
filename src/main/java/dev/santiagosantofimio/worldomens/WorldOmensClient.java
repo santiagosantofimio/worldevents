@@ -14,11 +14,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 
-/**
- * Only for games that have the mod on the client too (singleplayer, or players who install it): a creative tab with
- * the special items and the creature eggs. Vanilla clients never see it; on a server, the same items and eggs come
- * from {@code /worldomens give}, and creatures from {@code /worldomens summon}.
- */
 public class WorldOmensClient implements ClientModInitializer {
 	public static final ResourceKey<CreativeModeTab> TAB =
 			ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(WorldOmensMod.MOD_ID, "items"));
@@ -40,7 +35,6 @@ public class WorldOmensClient implements ClientModInitializer {
 				.build());
 	}
 
-	/** The game's language, for the items' fallback names. */
 	private static String language() {
 		return Lang.resolveLanguage(Minecraft.getInstance().getLanguageManager().getSelected());
 	}

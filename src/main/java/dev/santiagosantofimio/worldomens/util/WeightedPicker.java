@@ -7,12 +7,6 @@ public final class WeightedPicker {
 	private WeightedPicker() {
 	}
 
-	/**
-	 * Picks one entry with probability proportional to its weight. Entries with weight 0 or less are never picked.
-	 *
-	 * @param roll a uniform random value in [0, 1)
-	 * @return the picked entry, or {@code null} if no entry has a positive weight
-	 */
 	public static <T> T pick(List<T> entries, ToIntFunction<T> weight, double roll) {
 		long total = 0;
 		for (T entry : entries) {

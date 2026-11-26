@@ -31,7 +31,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-/** Forge entry point: sets the mod up and forwards Forge events to {@link Hooks}. */
 @Mod(WorldOmensMod.MOD_ID)
 public final class WorldOmensForge {
 	private static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS =
@@ -72,7 +71,6 @@ public final class WorldOmensForge {
 				event.setCanceled(true);
 			}
 		});
-		// The last listener: the amount is what the entity takes.
 		bus.addListener(EventPriority.LOWEST, (LivingDamageEvent event) -> {
 			if (!event.isCanceled() && !event.getEntityLiving().level.isClientSide()) {
 				Hooks.afterDamage(event.getEntityLiving(), event.getSource(), event.getAmount(), event.getAmount(), false);

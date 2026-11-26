@@ -25,19 +25,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Starts, ticks and ends events, one at a time per dimension.
- *
- * <p>Once the global cooldown is over, the next event is drawn by weight among those available in the dimension
- * and kept as the plan. The planned event starts as soon as its own conditions hold (night, players…). Drawing
- * before checking the time of day keeps weights meaningful: an event that can only start at night is not
- * crowded out by one that can start at any time.
- */
 public final class EventManager {
-	/** Active events tick once per second rather than every tick. */
 	public static final int ACTIVE_TICK_INTERVAL = 20;
 	private static final String CONVERGENCE = "convergence";
-	/** A planned event that has not started after this long (two in-game days) is dropped and drawn again. */
 	private static final long PLAN_TIMEOUT_TICKS = 48000;
 	private static final int RANKING_LINES = 3;
 
@@ -64,7 +54,6 @@ public final class EventManager {
 	private static void tickActive(ServerLevel level, WorldOmensData data, ActiveEvent active) {
 		WorldEvent event = active.event();
 		if (active.bossBar() == null) {
-			// First tick since the server started: the event was loaded from the save.
 			active.setBossBar(new EventBossBar(event));
 			event.resume(level, active);
 			WorldOmensMod.LOGGER.info("Resumed {} in {}", event.id(), level.dimension().identifier());
@@ -119,7 +108,6 @@ public final class EventManager {
 		}
 	}
 
-	/** Players get a moment to get ready before a drawn event starts. Events started by command skip this. */
 	private static void warn(ServerLevel level, WorldEvent event, int seconds) {
 		for (ServerPlayer player : level.players()) {
 			String name = Lang.text(Lang.language(player), "event." + event.id() + ".name");
@@ -140,13 +128,11 @@ public final class EventManager {
 		return count;
 	}
 
-	/** Ticks until {@code event} may start again in this dimension (0 if ready). */
 	public static long cooldownLeft(WorldOmensData data, WorldEvent event, long now) {
 		Long lastEnd = data.lastEnd(event.id());
 		return lastEnd == null ? 0 : Math.max(0, lastEnd + event.settings().cooldownTicks() - now);
 	}
 
-	/** Ticks until the next event may be drawn in this dimension (0 if ready). */
 	public static long globalCooldownLeft(WorldOmensData data, long now) {
 		Long lastEnd = data.lastEventEnd();
 		return lastEnd == null ? 0 : Math.max(0, lastEnd + ModConfig.get().globalCooldownTicks() - now);
@@ -161,21 +147,15 @@ public final class EventManager {
 		return active != null && active.event() == event;
 	}
 
-	/** The event planned to run next in {@code level}, or {@code null}. */
 	public static WorldEvent planned(ServerLevel level) {
 		WorldOmensData.Plan plan = WorldOmensData.get(level).plan();
 		return plan != null ? EventRegistry.get(plan.eventId()) : null;
 	}
 
-	/** Starts {@code event} now, ignoring cooldowns and conditions. Returns false if another event is running. */
 	public static boolean start(ServerLevel level, WorldEvent event) {
 		return start(level, event, false);
 	}
 
-	/**
-	 * Starts {@code event} now; a convergence lasts half as long again and doubles points and seals. Returns false if
-	 * another event is running.
-	 */
 	public static boolean start(ServerLevel level, WorldEvent event, boolean convergence) {
 		WorldOmensData data = WorldOmensData.get(level);
 		if (data.active() != null) {
@@ -205,7 +185,6 @@ public final class EventManager {
 		return true;
 	}
 
-	/** Ends the running event in {@code level}, if any. */
 	public static WorldEvent stop(ServerLevel level) {
 		WorldOmensData data = WorldOmensData.get(level);
 		ActiveEvent active = data.active();
@@ -237,12 +216,10 @@ public final class EventManager {
 		}
 	}
 
-	/** Whether {@code active} is a convergence: longer, with double points and seals. */
 	public static boolean isConvergence(ActiveEvent active) {
 		return active.data().getBooleanOr(CONVERGENCE, false);
 	}
 
-	/** Credits {@code player} for something done during {@code eventId}, if it is running in their dimension. */
 	public static void score(ServerPlayer player, String eventId, int points) {
 		ActiveEvent active = active(player.level());
 		if (active != null && active.event().id().equals(eventId)) {
@@ -250,7 +227,6 @@ public final class EventManager {
 		}
 	}
 
-	/** Shows the best players and hands out event seals to whoever took part and is still here. */
 	private static void announceRanking(ServerLevel level, ActiveEvent active) {
 		List<EventScores.Entry> ranking = EventScores.ranking(active);
 		ModConfig config = ModConfig.get();
@@ -283,7 +259,6 @@ public final class EventManager {
 		}
 	}
 
-	/** Tells a player who joins or changes dimension about the event already running there. */
 	public static void onPlayerEnteredLevel(ServerPlayer player) {
 		ActiveEvent active = active(player.level());
 		if (active != null) {
@@ -300,7 +275,6 @@ public final class EventManager {
 		}
 	}
 
-	/** The boss bar title {@code player} currently sees, or {@code null} if they see none. */
 	public static Component bossBarTitle(ServerPlayer player) {
 		ActiveEvent active = active(player.level());
 		return active != null && active.bossBar() != null ? active.bossBar().titleFor(player) : null;
@@ -315,7 +289,6 @@ public final class EventManager {
 		player.sendSystemMessage(Lang.component(player, prefix + "chat").withStyle(event.textColor()));
 	}
 
-	/** Shows a title and subtitle in the middle of the screen, with a sound if {@code sound} is not {@code null}. */
 	public static void showTitle(ServerPlayer player, Component title, Component subtitle, Holder<SoundEvent> sound) {
 		player.connection.send(new ClientboundSetTitlesAnimationPacket(10, 70, 20));
 		player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));

@@ -26,20 +26,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.horse.TraderLlama;
 import net.minecraft.world.entity.npc.WanderingTrader;
 
-/**
- * A merchant caravan: a nomad merchant and their llamas set up camp near players for ten minutes, selling the
- * events' rare items and other hard-to-find goods for emeralds. With players spread out, a second caravan can
- * come to the other group.
- */
 public final class MerchantCaravanEvent implements WorldEvent {
 	public static final String ID = "merchant_caravan";
 	private static final long EARLIEST_START = 1000;
 	private static final long LATEST_START = 8000;
-	/** Caravans arrive in the first minute; after that, no new ones. */
 	private static final int ARRIVAL_SECONDS = 60;
-	/** A player this close to a caravan does not get another one. */
 	private static final double CARAVAN_REACH = 64.0;
-	/** The merchant leaves on its own this long after the event, in case the event's cleanup never runs. */
 	private static final int STAY_MARGIN_TICKS = 2400;
 
 	@Override
@@ -49,7 +41,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 5 in-game days; lasts 10 minutes.
 		JsonObject json = EventSettings.defaults(true, 8, 6000, 600);
 		json.addProperty("maxCaravans", 2);
 		json.addProperty("llamas", 2);
@@ -72,13 +63,11 @@ public final class MerchantCaravanEvent implements WorldEvent {
 		return SoundEvents.WANDERING_TRADER_YES;
 	}
 
-	/** Caravans travel the overworld. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return DayCycle.hasDayCycle(level);
 	}
 
-	/** In the morning, so the caravan leaves before nightfall. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		return !level.isNight() && DayCycle.isBetween(level, EARLIEST_START, LATEST_START);
@@ -110,7 +99,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 	@Override
 	public void end(ServerLevel level, ActiveEvent active) {
 		CaravanState state = active.state(CaravanState::new);
-		// Llamas first: once the merchant is gone, their leads would drop as items.
 		for (TraderLlama llama : state.llamas) {
 			if (!llama.isRemoved()) {
 				leaveOrStay(level, llama);
@@ -125,7 +113,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 		state.merchants.clear();
 	}
 
-	/** A llama still with the caravan leaves with it; one a player has taken stays as an ordinary trader llama. */
 	private static void leaveOrStay(ServerLevel level, TraderLlama llama) {
 		boolean taken = llama.isTamed() || llama.isLeashed() && !(llama.getLeashHolder() instanceof WanderingTrader holder && NomadMerchant.is(holder));
 		llama.removeTag(NomadMerchant.LLAMA_TAG);
@@ -145,7 +132,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 		return false;
 	}
 
-	/** Sets up a caravan at {@code pos} now: the merchant and their llamas. Also for tests and admins. */
 	public WanderingTrader spawnCaravan(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		EventSettings settings = settings();
 		WanderingTrader merchant = NomadMerchant.spawn(level, pos, language, active.remainingTicks() + STAY_MARGIN_TICKS,
@@ -154,7 +140,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 			return null;
 		}
 		CaravanState state = active.state(CaravanState::new);
-		// Usually already tracked: the load callback also sees new entities.
 		if (!state.merchants.contains(merchant)) {
 			state.merchants.add(merchant);
 		}
@@ -166,7 +151,6 @@ public final class MerchantCaravanEvent implements WorldEvent {
 		return merchant;
 	}
 
-	/** The caravan llamas of the current run that are still around. */
 	public static List<TraderLlama> llamas(ActiveEvent active) {
 		CaravanState state = active.state(CaravanState::new);
 		state.llamas.removeIf(llama -> llama.isRemoved() || !llama.isAlive());
@@ -190,13 +174,11 @@ public final class MerchantCaravanEvent implements WorldEvent {
 					state.llamas.add(traderLlama);
 				}
 			} else if (merchant || !((TraderLlama) entity).isTamed()) {
-				// Back after the caravan left: it goes too.
 				DeferredDiscard.discard(entity);
 				entity.getPassengers().forEach(DeferredDiscard::discard);
 			}
 		});
 
-		// Nothing hurts the merchant but /kill, the void and players in creative (as with vanilla invulnerable mobs).
 		Hooks.ALLOW_DAMAGE.register((entity, source, amount) ->
 				!NomadMerchant.is(entity) || source.isBypassInvul() || source.isCreativePlayer());
 	}

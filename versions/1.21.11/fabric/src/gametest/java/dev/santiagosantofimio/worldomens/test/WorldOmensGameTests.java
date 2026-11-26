@@ -129,10 +129,6 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * In-game tests on a real server, run with {@code ./gradlew runGameTest}. Events are one per dimension, so every
- * test has its own test environment: environments run as separate batches, one after another.
- */
 public class WorldOmensGameTests {
 	private static final String MOCK_PLAYER_NAME = "test-mock-player";
 
@@ -165,7 +161,6 @@ public class WorldOmensGameTests {
 		ServerLevel level = helper.getLevel();
 		reset(level);
 		Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
-		// Compared to its own starting value: a zombie can spawn as a "leader" with extra health.
 		float healthBefore = zombie.getMaxHealth();
 
 		EventManager.start(level, event(BloodMoonEvent.ID));
@@ -192,13 +187,11 @@ public class WorldOmensGameTests {
 		reset(level);
 		ServerPlayer player = player(helper, new BlockPos(1, 1, 1), "en_us");
 		EventManager.start(level, event(BloodMoonEvent.ID));
-		// The evoker always drops one totem, so the doubled loot is easy to count.
 		Evoker evoker = helper.spawnWithNoFreeWill(EntityType.EVOKER, new BlockPos(4, 1, 4));
 		helper.assertTrue(evoker.getTags().contains(BloodMoonEvent.MOB_TAG), "evoker is not buffed");
 		evoker.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
 		helper.assertTrue(evoker.isDeadOrDying(), "evoker did not die");
 
-		// Vanilla drops the base XP when the death animation ends (20 ticks); orbs before that are the bonus.
 		helper.runAfterDelay(5, () -> {
 			helper.assertValueEqual(count(helper, Items.TOTEM_OF_UNDYING), 2, "totems from a blood moon kill");
 			int bonusXp = 0;
@@ -222,8 +215,6 @@ public class WorldOmensGameTests {
 		helper.getLevel().setDayTime(18000);
 		ServerPlayer player = player(helper, new BlockPos(4, 1, 4), "en_us");
 
-		// Extra mobs only spawn 24-44 blocks away in chunks that already tick entities. The test server runs ticks
-		// faster than it loads chunks, so keep the area loaded and wait for it before starting.
 		List<ChunkPos> forced = forceArea(level, player.chunkPosition(), 3);
 		boolean[] started = {false};
 		helper.onEachTick(() -> {
@@ -260,7 +251,6 @@ public class WorldOmensGameTests {
 		assertTitle(helper, english, "Gold Rush");
 		assertTitle(helper, spanish, "Fiebre del oro");
 
-		// Switching language moves the player to the other bar on the next update (once per second).
 		setLanguage(english, "es_es");
 		helper.runAfterDelay(25, () -> {
 			assertTitle(helper, english, "Fiebre del oro");
@@ -283,7 +273,6 @@ public class WorldOmensGameTests {
 		helper.setBlock(foot.north(), bed.defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD));
 		ServerPlayer player = player(helper, new BlockPos(3, 1, 4), "es_es");
 
-		// The bed rule (night or not) is worked out on the level tick after the time changes.
 		helper.runAfterDelay(2, () -> {
 			EventManager.start(level, event(BloodMoonEvent.ID));
 			BlockPos bedPos = helper.absolutePos(foot);
@@ -352,7 +341,6 @@ public class WorldOmensGameTests {
 		helper.getLevel().setDayTime(18000);
 		ServerPlayer player = player(helper, new BlockPos(4, 1, 4), "en_us");
 		List<ChunkPos> forced = forceArea(level, player.chunkPosition(), 4);
-		// Every shooting star becomes a meteor, one per player.
 		JsonObject meteorSettings = new JsonObject();
 		meteorSettings.addProperty("shootingStarInterval", 1);
 		meteorSettings.addProperty("impactChance", 1.0);
@@ -395,7 +383,6 @@ public class WorldOmensGameTests {
 		helper.assertFalse(eye.getTags().contains(BloodMoonEvent.MOB_TAG), "the eye got the blood moon buff meant for vanilla mobs");
 		helper.assertTrue(eye.getMainHandItem().isEmpty(), "the eye holds an item that would float next to it");
 
-		// Body parts must still be there a few ticks later, not just right after spawning.
 		helper.runAfterDelay(5, () -> {
 			assertCreature(helper, eye, "blood_eye");
 			EventManager.stop(level);
@@ -426,7 +413,6 @@ public class WorldOmensGameTests {
 			helper.assertValueEqual(countSpecial(helper, EventItems.BOTTLED_LIGHTNING), 1, "bottled lightning from the spirit");
 			helper.assertTrue(Advancements.has(player, "calm_the_storm"), "no advancement for the spirit");
 
-			// Bottled lightning strikes where the player looks: straight down, at the floor.
 			player.setXRot(90.0f);
 			player.setItemInHand(InteractionHand.MAIN_HAND, EventItems.BOTTLED_LIGHTNING.create("en_us", 1));
 			InteractionResult used = UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND);
@@ -455,7 +441,6 @@ public class WorldOmensGameTests {
 		helper.getLevel().setDayTime(1000);
 		WorldOmensData.get(level).setPlan(new WorldOmensData.Plan(BloodMoonEvent.ID, level.getGameTime()));
 
-		// The manager checks every 200 ticks: by then it must still be waiting for the night.
 		boolean[] night = {false};
 		boolean[] warned = {false};
 		helper.runAfterDelay(250, () -> {
@@ -529,10 +514,8 @@ public class WorldOmensGameTests {
 			}
 		}
 		helper.assertValueEqual(given, 3, "fragments in the inventory");
-		// The inventory advancement fires when the player's menu syncs, on their next tick.
 		helper.runAfterDelay(5, () -> {
 			helper.assertTrue(Advancements.has(player, "meteorite_fragment"), "no advancement for the fragment");
-			// Its base item must not count as a vanilla item that has an advancement of its own.
 			AdvancementHolder mint = level.getServer().getAdvancements().get(Identifier.withDefaultNamespace("end/dragon_breath"));
 			helper.assertFalse(player.getAdvancements().getOrStartProgress(mint).isDone(), "bottled lightning gave the End's dragon's breath advancement");
 			remove(player);
@@ -549,7 +532,6 @@ public class WorldOmensGameTests {
 		ServerPlayer player = player(helper, new BlockPos(1, 1, 1), "en_us");
 		player.setItemInHand(InteractionHand.MAIN_HAND, EventItems.BLOODY_TEAR.create("en_us", 2));
 		helper.getLevel().setDayTime(6000);
-		// Daylight is recalculated on the next tick.
 		helper.runAfterDelay(2, () -> {
 			InteractionResult day = UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND);
 			helper.assertTrue(day == InteractionResult.FAIL && EventManager.active(level) == null, "summoned at noon: " + day);
@@ -724,7 +706,6 @@ public class WorldOmensGameTests {
 		helper.assertValueEqual(mine(helper, ripe, Blocks.WHEAT.defaultBlockState().setValue(CropBlock.AGE, CropBlock.MAX_AGE), player,
 				ItemStack.EMPTY, Items.WHEAT), 2, "wheat during the blessed harvest");
 
-		// A golden seed used on the farmland in the middle ripens all the young wheat around it.
 		plantWheat(helper, 1, 5);
 		player.setItemInHand(InteractionHand.MAIN_HAND, EventItems.GOLDEN_SEED.create("en_us", 2));
 		InteractionResult used = useOn(helper, player, new BlockPos(3, 1, 3));
@@ -741,10 +722,8 @@ public class WorldOmensGameTests {
 		helper.assertTrue(spirit != null && HarvestSpirit.is(spirit), "no harvest spirit");
 		assertCreature(helper, spirit, "harvest_spirit");
 		helper.assertTrue(player.getUUID().equals(HarvestSpirit.friend(spirit)), "the spirit does not follow the player");
-		// Only /kill, the void and players in creative (the mock player is one) can hurt it.
 		helper.assertFalse(spirit.hurtServer(level, level.damageSources().generic(), 100.0f), "the spirit took damage");
 
-		// Young wheat grows by itself around the player (here, as fast as it can).
 		JsonObject growth = new JsonObject();
 		growth.addProperty("growthRadius", 3);
 		growth.addProperty("growthAttemptsPerPlayer", 300);
@@ -787,17 +766,14 @@ public class WorldOmensGameTests {
 		MerchantOffers offers = merchant.getOffers();
 		helper.assertValueEqual(offers.size(), 10, "offers");
 		helper.assertTrue(offers.stream().filter(offer -> EventItems.identify(offer.getResult()) != null).count() == 6, "the merchant does not sell six event items");
-		// Relics cost event seals, and only real seals pay for them.
 		MerchantOffer relic = offers.stream().filter(offer -> offer.getBaseCostA().is(EventItems.EVENT_SEAL.base())).findFirst().orElseThrow();
 		helper.assertTrue(relic.satisfiedBy(EventItems.EVENT_SEAL.create("en_us", 64), ItemStack.EMPTY), "seals do not pay for a relic");
 		helper.assertFalse(relic.satisfiedBy(new ItemStack(EventItems.EVENT_SEAL.base(), 64), ItemStack.EMPTY), "plain pottery sherds pay for a relic");
 		List<TraderLlama> llamas = MerchantCaravanEvent.llamas(EventManager.active(level));
 		helper.assertFalse(llamas.isEmpty(), "the caravan has no llamas");
 		helper.assertTrue(llamas.stream().allMatch(llama -> llama.getLeashHolder() == merchant), "a llama is not leashed to the merchant");
-		// Only /kill, the void and players in creative (the mock player is one) can hurt it.
 		helper.assertFalse(merchant.hurtServer(level, level.damageSources().generic(), 100.0f), "the merchant took damage");
 
-		// A trade, as the trading screen makes it (notifyTrade counts the use).
 		merchant.setTradingPlayer(player);
 		merchant.notifyTrade(offers.get(0));
 		helper.runAfterDelay(3, () -> {
@@ -841,7 +817,6 @@ public class WorldOmensGameTests {
 			ActiveEvent active = EventManager.active(level);
 			if (active != null) {
 				lastWave[0] = HordeEvent.wave(active);
-				// The player fights back: every monster of the wave falls as soon as it comes.
 				for (Mob mob : HordeEvent.waveMobs(active)) {
 					helper.assertTrue(mob.getTarget() == null || mob.getTarget() == player, "a monster went after something else");
 					mob.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
@@ -884,19 +859,16 @@ public class WorldOmensGameTests {
 			helper.assertTrue(Creature.parts(warlord).stream().allMatch(Entity::isRemoved), "the warlord's model was left behind");
 			EventManager.stop(level);
 
-			// Stripping a log with the axe must not use up its war cry.
 			player.setItemInHand(InteractionHand.MAIN_HAND, weapon);
 			BlockPos log = new BlockPos(6, 1, 1);
 			helper.setBlock(log, Blocks.OAK_LOG);
 			BlockPos logPos = helper.absolutePos(log);
 			weapon.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(logPos), Direction.UP, logPos, false)));
 			helper.assertBlockPresent(Blocks.STRIPPED_OAK_LOG, log);
-			// Mock players skip the player tick that counts cooldowns down: a few ticks by hand.
 			tickCooldowns(player, 3);
 			helper.assertFalse(player.getCooldowns().isOnCooldown(weapon), "stripping a log used up the war cry");
 		});
 		helper.runAfterDelay(8, () -> {
-			// The war cry: Strength for the player, Weakness for the monster next to them, then a cooldown.
 			Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
 			InteractionResult cry = UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND);
 			helper.assertTrue(cry instanceof InteractionResult.Success, "no war cry: " + cry);
@@ -940,7 +912,6 @@ public class WorldOmensGameTests {
 		Vex spirit = spirits.get(0);
 		helper.assertTrue(Creature.isSummoned(spirit), "the spirit is not marked as summoned");
 
-		// Outside its event, nothing takes the lord away, and it has its own boss bar (updated once a second).
 		helper.runAfterDelay(25, () -> {
 			helper.assertFalse(lord.isRemoved() || spirit.isRemoved(), "a summoned creature was removed outside its event");
 			Component title = Creature.bossBarTitle(lord, player);
@@ -1001,7 +972,6 @@ public class WorldOmensGameTests {
 		hunt.placeTreasure(level, active, helper.absolutePos(chest), "es_es");
 		helper.assertBlockPresent(Blocks.CHEST, chest);
 
-		// Touching the chest wakes the captain, and it stays shut.
 		helper.assertTrue(useOn(helper, player, chest) == InteractionResult.FAIL, "the guarded chest opened");
 		Vindicator captain = TreasureHuntEvent.captain(active);
 		helper.assertTrue(captain != null && SpectralCaptain.is(captain), "no captain");
@@ -1009,7 +979,6 @@ public class WorldOmensGameTests {
 		helper.assertTrue(EventItems.CAPTAINS_CUTLASS.is(captain.getMainHandItem()), "the captain does not hold its cutlass");
 		helper.assertTrue(Math.abs(captain.getMaxHealth() - 120.0f) < 1e-3, "captain health should be 120, is " + captain.getMaxHealth());
 
-		// A chest placed next to it would make a double chest: it stays shut too.
 		BlockPos chestAt = helper.absolutePos(chest);
 		BlockState left = level.getBlockState(chestAt).setValue(ChestBlock.TYPE, ChestType.LEFT);
 		BlockPos neighbour = chestAt.relative(ChestBlock.getConnectedDirection(left));
@@ -1026,7 +995,6 @@ public class WorldOmensGameTests {
 			helper.assertTrue(opened == InteractionResult.PASS, "the free chest did not open: " + opened);
 			helper.assertTrue(Advancements.has(player, "find_treasure"), "no advancement for the treasure");
 		});
-		// The hunt ends within a second, and the chest stays with its loot for whoever found it.
 		helper.runAfterDelay(30, () -> {
 			helper.assertTrue(EventManager.active(level) == null, "the hunt did not end when the treasure was found");
 			helper.assertBlockPresent(Blocks.CHEST, chest);
@@ -1058,14 +1026,12 @@ public class WorldOmensGameTests {
 		helper.assertFalse(PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(level, player, at, level.getBlockState(at), level.getBlockEntity(at)),
 				"the treasure could be broken during the hunt");
 
-		// The cutlass: right-click to lunge forward, then a cooldown.
 		ItemStack cutlass = EventItems.CAPTAINS_CUTLASS.create("en_us", 1);
 		player.setItemInHand(InteractionHand.MAIN_HAND, cutlass);
 		player.setYRot(0.0f);
 		player.setXRot(0.0f);
 		helper.assertTrue(UseItemCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success, "no lunge");
 		helper.assertTrue(player.getDeltaMovement().horizontalDistance() > 1.0, "the lunge did not push the player: " + player.getDeltaMovement());
-		// The player's own client moves the player: without this the push never reaches it.
 		helper.assertTrue(player.hurtMarked, "the lunge is not sent to the player's client");
 		helper.assertTrue(player.getCooldowns().isOnCooldown(cutlass), "the cutlass has no cooldown");
 
@@ -1133,11 +1099,8 @@ public class WorldOmensGameTests {
 		ServerLevel level = helper.getLevel();
 		reset(level);
 		buildGround(helper);
-		// The helper's mock players are always in creative, which monsters leave alone.
 		ServerPlayer player = survivalPlayer(helper, new BlockPos(1, 4, 1));
-		// Takes no damage, so it stays the colossus's prey for the whole test.
 		player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 200, 4));
-		// A wall between them, and warped fungus by the colossus, which calms a vanilla hoglin down.
 		for (int y = 4; y <= 7; y++) {
 			for (int z = 0; z <= 7; z++) {
 				helper.setBlock(new BlockPos(3, y, z), Blocks.STONE);
@@ -1145,14 +1108,12 @@ public class WorldOmensGameTests {
 		}
 		helper.setBlock(new BlockPos(7, 4, 7), Blocks.WARPED_FUNGUS);
 
-		// Summoned, as with an egg: outside an eruption, the event takes other colossi away.
 		Mob colossus = Creature.summon(MagmaColossus.KIND, level, helper.absolutePos(new BlockPos(5, 4, 5)), "en_us", null);
 		helper.assertTrue(colossus != null, "no colossus");
 		helper.assertTrue(level.noCollision(colossus), "the colossus spawned inside blocks");
 		float health = colossus.getHealth();
 		colossus.igniteForSeconds(5.0f);
 		colossus.hurtServer(level, level.damageSources().lava(), 4.0f);
-		// Every tick for over a second, as the hoglin looks for warped fungus around it once a second.
 		helper.runAfterDelay(5, () -> everyTick(helper, 30, () -> {
 			helper.assertTrue(colossus.getTarget() == player, "the colossus is not after the player behind the wall");
 			helper.assertFalse(colossus.isOnFire(), "the colossus is on fire");
@@ -1166,11 +1127,8 @@ public class WorldOmensGameTests {
 
 	@GameTest(environment = "worldomens-test:colossus", maxTicks = 100)
 	public void magmaColossusFindsRoomAndGetsOutOfBlocks(GameTestHelper helper) {
-		// No reset: it would take away the player of the other colossus test, which runs at the same time (tests of
-		// one environment run together; the colossus environment keeps these two apart from the eruption test's).
 		ServerLevel level = helper.getLevel();
 		buildGround(helper);
-		// A hill over most of the floor, with a lane along one side.
 		for (int x = 0; x < 8; x++) {
 			for (int y = 4; y < 8; y++) {
 				for (int z = 0; z < 5; z++) {
@@ -1179,12 +1137,10 @@ public class WorldOmensGameTests {
 			}
 		}
 
-		// Summoned inside the hill, as a command can.
 		Mob colossus = Creature.summon(MagmaColossus.KIND, level, helper.absolutePos(new BlockPos(3, 4, 1)), "en_us", null);
 		helper.assertTrue(colossus != null, "no colossus");
 		helper.runAfterDelay(1, () -> {
 			helper.assertTrue(level.noCollision(colossus), "the colossus is inside the hill");
-			// Walled in where it stands, it gets out within a second.
 			BlockPos at = colossus.blockPosition();
 			for (BlockPos pos : BlockPos.betweenClosed(at.offset(-1, 0, -1), at.offset(1, 2, 1))) {
 				level.setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
@@ -1325,7 +1281,6 @@ public class WorldOmensGameTests {
 			helper.assertTrue(Advancements.has(player, "defeat_void_stalker"), "no advancement for the stalker");
 			EventManager.stop(level);
 
-			// The pearl: straight ahead, stopping short of the wall.
 			helper.killAllEntitiesOfClass(ItemEntity.class);
 			for (int y = 4; y < 8; y++) {
 				helper.setBlock(new BlockPos(1, y, 7), Blocks.STONE);
@@ -1360,10 +1315,6 @@ public class WorldOmensGameTests {
 		return EventRegistry.get(id);
 	}
 
-	/**
-	 * Leaves the dimension clean even if an earlier test failed halfway, including its mock player: they all share
-	 * one name, so a leftover one would get the items given by name.
-	 */
 	private static void reset(ServerLevel level) {
 		EventManager.stop(level);
 		WorldOmensData.get(level).setPlan(null);
@@ -1374,7 +1325,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	// The only helper that puts a real ServerPlayer in the level, which events need to see.
 	@SuppressWarnings("removal")
 	private static ServerPlayer player(GameTestHelper helper, BlockPos relative, String language) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
@@ -1384,7 +1334,6 @@ public class WorldOmensGameTests {
 		return player;
 	}
 
-	/** Runs {@code check} now and on each of the next {@code ticks} ticks, then {@code then}. */
 	private static void everyTick(GameTestHelper helper, int ticks, Runnable check, Runnable then) {
 		check.run();
 		if (ticks <= 0) {
@@ -1394,7 +1343,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/** A player in survival, put in the level like a real one (the helper's mock players are always in creative). */
 	private static ServerPlayer survivalPlayer(GameTestHelper helper, BlockPos relative) {
 		ServerLevel level = helper.getLevel();
 		CommonListenerCookie cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), MOCK_PLAYER_NAME), false);
@@ -1422,7 +1370,6 @@ public class WorldOmensGameTests {
 				"boss bar for " + player.clientInformation().language() + " was " + (title == null ? null : title.getString()));
 	}
 
-	/** Breaks a fresh block as if a player mined it with {@code tool}, and counts the matching drops. */
 	private static int mine(GameTestHelper helper, BlockPos relative, Block block, ServerPlayer player, ItemStack tool, Item expected) {
 		return mine(helper, relative, block.defaultBlockState(), player, tool, expected);
 	}
@@ -1444,7 +1391,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/** Farmland with young wheat on it, from {@code from} to {@code to} on both axes. */
 	private static void plantWheat(GameTestHelper helper, int from, int to) {
 		for (int x = from; x <= to; x++) {
 			for (int z = from; z <= to; z++) {
@@ -1454,7 +1400,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/** Right-clicks the top of a block with the item in the player's main hand. */
 	private static InteractionResult useOn(GameTestHelper helper, ServerPlayer player, BlockPos relative) {
 		return useOnAbsolute(helper, player, helper.absolutePos(relative));
 	}
@@ -1474,7 +1419,6 @@ public class WorldOmensGameTests {
 		return total;
 	}
 
-	/** The mob is invisible and wears exactly these body parts (by model id), in this order. */
 	private static void assertCreature(GameTestHelper helper, Mob mob, String... models) {
 		helper.assertTrue(mob.hasEffect(MobEffects.INVISIBILITY), "the creature's vanilla mob is visible");
 		List<Display.ItemDisplay> parts = Creature.parts(mob);
@@ -1496,7 +1440,6 @@ public class WorldOmensGameTests {
 		return total;
 	}
 
-	/** Three layers of dirt with grass on top, filling the test area up to y = 3. */
 	private static void buildGround(GameTestHelper helper) {
 		for (int x = 0; x < 8; x++) {
 			for (int z = 0; z < 8; z++) {
@@ -1508,10 +1451,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/**
-	 * Keeps the chunks around {@code center} loaded. Events only act in chunks that already tick entities, and the
-	 * test server runs ticks faster than it loads chunks.
-	 */
 	private static List<ChunkPos> forceArea(ServerLevel level, ChunkPos center, int radius) {
 		List<ChunkPos> forced = new ArrayList<>();
 		for (int dx = -radius; dx <= radius; dx++) {
@@ -1540,12 +1479,10 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/** Merges {@code values} into one event's section of the config file and reloads; the result undoes it. */
 	private static Runnable overrideEventSettings(String eventId, JsonObject values) {
 		return overrideSettings(eventId, values);
 	}
 
-	/** Merges {@code values} into the top of the config file and reloads; the result undoes it. */
 	private static Runnable overrideGlobalSettings(JsonObject values) {
 		return overrideSettings(null, values);
 	}
@@ -1574,7 +1511,6 @@ public class WorldOmensGameTests {
 		}
 	}
 
-	/** Runs {@code action} with {@code blockDamage: false} in the config file, then restores the file. */
 	private static void withBlockDamageOff(Runnable action) {
 		Path path = ModConfig.path();
 		try {

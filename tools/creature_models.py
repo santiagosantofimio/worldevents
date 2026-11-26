@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""Builds the creatures' models in a vanilla style: a few boxes each, with pixel textures painted here.
-
-    python3 tools/creature_models.py [OUTPUT_RESOURCES_DIR] [--only NAME...]
-
-Writes assets/worldomens/models/item/<name>.json and assets/worldomens/textures/item/<name>.png under the
-resources folder (src/main/resources by default). Every model faces north (-z), as the item displays expect.
-Normal parts fill about 16 units (0 to 16), "big" ones 32 (-8 to 24); see Creature.Part in the Java code. The
-texture density is chosen per creature so a texel is about 1/16 of a block in game, like vanilla mobs.
-
-Preview without the game: python3 tools/render_model.py MODEL.json TEXTURE.png OUT.png
-"""
 import json
 import os
 import random
@@ -18,11 +7,7 @@ import sys
 
 from PIL import Image
 
-# ---------------------------------------------------------------------------------------------------------------
-# Palettes and surface styles
-
 STYLES = {
-    # name: (colours from dark to light, weights)
     'rock': ([(28, 25, 31), (36, 32, 39), (45, 40, 48), (55, 49, 58)], [0.2, 0.55, 0.2, 0.05]),
     'moon': ([(96, 8, 12), (128, 14, 18), (156, 24, 26), (184, 40, 36)], [0.15, 0.45, 0.3, 0.1]),
     'gold': ([(156, 104, 18), (204, 150, 30), (240, 196, 60), (255, 236, 140)], [0.15, 0.45, 0.3, 0.1]),
@@ -74,7 +59,6 @@ def shade(c, k):
 
 
 class Face:
-    """One face's rectangle in the texture, drawn in its own pixel coordinates (0,0 top left)."""
 
     def __init__(self, img, x0, y0, w, h, rng):
         self.img, self.x0, self.y0, self.w, self.h, self.rng = img, x0, y0, w, h, rng
@@ -89,9 +73,6 @@ class Face:
             for xx in range(int(x), int(x + w)):
                 self.put(xx, yy, c)
 
-
-# ---------------------------------------------------------------------------------------------------------------
-# Surface patterns: called after the base noise, for every face of a box with that style
 
 def pattern(face, style, side):
     rng, w, h = face.rng, face.w, face.h
@@ -204,9 +185,6 @@ def vein(face, colour):
             y += rng.choice((-1, 1))
 
 
-# ---------------------------------------------------------------------------------------------------------------
-# Face decorations: eyes, mouths and emblems, drawn on one face of one box
-
 def deco(face, name):
     w, h, rng = face.w, face.h, face.rng
     mx = w / 2
@@ -228,7 +206,6 @@ def deco(face, name):
             for y in range(min(2, h)):
                 face.put(x, y, LAVA if rng.random() < 0.7 else LAVA_HOT)
     elif name == 'angry_face':
-        # Slanted glowing eyes and a jagged frown, on the blood moon.
         ey = int(h * 0.32)
         for i in range(5):
             face.put(mx - 7 + i, ey + i // 2, (255, 210, 60))
@@ -348,9 +325,6 @@ def deco(face, name):
         raise ValueError(name)
 
 
-# ---------------------------------------------------------------------------------------------------------------
-# The creatures. Box: (from, to, style, {face: decoration}); north (-z) is the front.
-
 C = {}
 CLASSIC = ('harvest_spirit', 'nomad_merchant', 'horde_warlord', 'spectral_captain')
 
@@ -373,7 +347,6 @@ C['magma_colossus'] = dict(tpu=2, boxes=[
     ((4, 15, 9), (8, 18, 13), 'rock', {'up': 'spike_top', 'north': 'spike_side', 'south': 'spike_side', 'east': 'spike_side', 'west': 'spike_side'}),
 ])
 
-# A blood-red moon with an angry face: three crossed boxes round it off.
 C['blood_moon_lord'] = dict(tpu=2, boxes=[
     ((2, 2, 0), (14, 14, 16), 'moon', {'north': 'angry_face'}),
     ((0, 2, 2), (16, 14, 14), 'moon', {}),
@@ -426,7 +399,6 @@ C['void_stalker'] = dict(tpu=1, boxes=[
     ((11.5, -5, 6.5), (14.5, -2, 9.5), 'claw', {}),
 ])
 
-# The shadow of the eclipsed sun: a dark core in a ring of light, with wings of shadow.
 C['eclipse_wraith'] = dict(tpu=2, boxes=[
     ((3, 3, 4), (13, 13, 12), 'void', {'north': 'wraith_face'}),
     ((4, 13, 5), (12, 15, 7), 'corona', {}),
@@ -442,7 +414,6 @@ C['eclipse_wraith'] = dict(tpu=2, boxes=[
     ((6, 6, 12), (10, 10, 17), 'void', {}),
 ])
 
-# A shaggy white giant with a blue face and horns of ice: the colossus's frame, in fur.
 C['frost_yeti'] = dict(tpu=2, boxes=[
     ((2, -3, 8), (7, 8, 14), 'fur', {}),
     ((9, -3, 8), (14, 8, 14), 'fur', {}),
@@ -461,8 +432,6 @@ C['frost_yeti'] = dict(tpu=2, boxes=[
     ((5, 21, -2), (9, 24, 2), 'ice', {}),
     ((7, 15, 4), (10, 18, 7), 'ice', {}),
 ])
-
-# ---------------------------------------------------------------------------------------------------------------
 
 SIZES = {'north': lambda d: (d[0], d[1]), 'south': lambda d: (d[0], d[1]), 'east': lambda d: (d[2], d[1]),
          'west': lambda d: (d[2], d[1]), 'up': lambda d: (d[0], d[2]), 'down': lambda d: (d[0], d[2])}

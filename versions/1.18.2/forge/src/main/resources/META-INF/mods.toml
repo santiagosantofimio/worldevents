@@ -13,7 +13,6 @@ logoFile = "assets/worldomens/icon.png"
 description = '''
 Random world events for servers, with their own creatures and bosses: blood moons, meteor showers, hordes, treasure hunts, Nether eruptions and more. Server-side only: vanilla clients can join.
 '''
-# Server-side only: clients without the mod can join, and the mod list does not ask for it.
 displayTest = "IGNORE_ALL_VERSION"
 
 [[dependencies.worldomens]]

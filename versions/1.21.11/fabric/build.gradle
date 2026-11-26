@@ -3,7 +3,6 @@ plugins {
 }
 
 fabricApi {
-	// Game tests in src/gametest. Server tests: ../gradlew :fabric:runGameTest. Client tests: :fabric:runClientGameTest.
 	configureTests {
 		createSourceSet = true
 		modId = "worldomens-test"

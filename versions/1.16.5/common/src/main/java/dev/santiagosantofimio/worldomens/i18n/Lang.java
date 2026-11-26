@@ -16,20 +16,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Server-side translation. Vanilla clients do not have our language files, so we pick the text by the
- * player's client language and send it as a literal component.
- */
 public final class Lang {
 	private static Translations translations = new Translations(Map.of());
 
 	private Lang() {
 	}
 
-	/**
-	 * Loads the server-side texts ({@code worldomens/lang}) and the client-side ones ({@code assets/worldomens/lang},
-	 * item and mob names also used by the resource pack), so the server can produce fallback names in any language.
-	 */
 	public static void load() {
 		Map<String, Map<String, String>> tables = new HashMap<>();
 		for (String folder : new String[] {WorldOmensMod.MOD_ID + "/lang", "assets/" + WorldOmensMod.MOD_ID + "/lang"}) {
@@ -67,7 +59,6 @@ public final class Lang {
 		return resolveLanguage(Platform.INSTANCE.language(player));
 	}
 
-	/** The language we have texts for that is closest to a game language code (es_mx gets es_es…). */
 	public static String resolveLanguage(String code) {
 		return translations.resolveLanguage(code);
 	}
@@ -77,7 +68,6 @@ public final class Lang {
 		return player != null ? language(player) : Translations.DEFAULT_LANGUAGE;
 	}
 
-	/** Language of the player nearest to {@code pos} within {@code maxDistance}, or the default. */
 	public static String languageNear(ServerLevel level, Vec3 pos, double maxDistance) {
 		ServerPlayer nearest = null;
 		double best = maxDistance * maxDistance;
@@ -91,7 +81,6 @@ public final class Lang {
 		return nearest != null ? language(nearest) : Translations.DEFAULT_LANGUAGE;
 	}
 
-	/** Language of {@code player} if it is a server player, otherwise the default. */
 	public static String languageOf(Player player) {
 		return player instanceof ServerPlayer serverPlayer ? language(serverPlayer) : Translations.DEFAULT_LANGUAGE;
 	}

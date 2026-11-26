@@ -1,9 +1,3 @@
-"""Orthographic preview of a Minecraft item model (elements with per-face UVs, no element rotation).
-
-    python3 tools/render_model.py MODEL.json TEXTURE.png OUT.png [yaw pitch scale]...
-
-Model space: x east, y up, z south. Yaw turns the model around y (0: looking at the south face, i.e. from +z).
-"""
 import json
 import math
 import sys
@@ -16,10 +10,9 @@ SHADE = {'up': 1.0, 'down': 0.5, 'north': 0.8, 'south': 0.8, 'west': 0.6, 'east'
 
 
 def face_corners(name, f, t):
-    """The face's corners in the order that matches its UV: (u0,v0) (u1,v0) (u1,v1) (u0,v1), as Minecraft maps them."""
     x0, y0, z0 = f
     x1, y1, z1 = t
-    if name == 'north':   # looking at -z face from outside: left is east (x1), right is west (x0)
+    if name == 'north':
         return [(x1, y1, z0), (x0, y1, z0), (x0, y0, z0), (x1, y0, z0)]
     if name == 'south':
         return [(x0, y1, z1), (x1, y1, z1), (x1, y0, z1), (x0, y0, z1)]
@@ -47,7 +40,6 @@ def render(model, texture, yaw, pitch, scale, size=(640, 640)):
 
     def view(p):
         x, y, z = p[0] - 8, p[1] - 8, p[2] - 8
-        # Turn around y, then tilt around x (camera looks along -z of view space).
         x, z = x * cy + z * sy, -x * sy + z * cy
         y, z = y * cp - z * sp, y * sp + z * cp
         return x, y, z
@@ -58,11 +50,10 @@ def render(model, texture, yaw, pitch, scale, size=(640, 640)):
             n = FACE_NORMALS[name]
             nv = view((n[0] + 8, n[1] + 8, n[2] + 8))
             if nv[2] <= 1e-6:
-                continue  # facing away
+                continue
             u0, v0, u1, v1 = face['uv']
             corners = [view(c) for c in face_corners(name, f, t)]
             a, b, d = np.array(corners[0]), np.array(corners[1]), np.array(corners[3])
-            # Sample the face densely: one sample per screen pixel or texel, whichever is finer.
             span = max(np.linalg.norm(b - a), np.linalg.norm(d - a)) * scale
             tex_span = max(abs(u1 - u0) * tw / 16, abs(v1 - v0) * th / 16)
             steps = int(max(span, tex_span) * 1.5) + 2

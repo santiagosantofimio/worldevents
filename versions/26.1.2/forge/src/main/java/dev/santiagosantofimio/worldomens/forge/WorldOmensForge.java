@@ -29,7 +29,6 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/** Forge entry point: sets the mod up and forwards Forge events to {@link Hooks}. */
 @Mod(WorldOmensMod.MOD_ID)
 public final class WorldOmensForge {
 	private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS =
@@ -61,7 +60,6 @@ public final class WorldOmensForge {
 		});
 		LivingAttackEvent.BUS.addListener(event -> !event.getEntity().level().isClientSide()
 				&& !Hooks.allowDamage(event.getEntity(), event.getSource(), event.getAmount()));
-		// The last listener: the amount is what the entity takes.
 		LivingDamageEvent.BUS.addListener(Priority.LOWEST, event -> {
 			if (!event.getEntity().level().isClientSide()) {
 				Hooks.afterDamage(event.getEntity(), event.getSource(), event.getAmount(), event.getAmount(), false);

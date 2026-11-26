@@ -25,9 +25,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
-/** Shared helpers for the event mobs. None of them loads chunks. */
 public final class MobSpawning {
-	/** Where {@link #roomFor} looks around a spot, nearest first, by search radius. */
 	private static final Map<Integer, List<BlockPos>> ROOM_OFFSETS = new ConcurrentHashMap<>();
 
 	private MobSpawning() {
@@ -40,13 +38,11 @@ public final class MobSpawning {
 		}
 	}
 
-	/** Name shown above the mob: translated by clients with the resource pack, {@code language} for the rest. */
 	public static void name(Mob mob, String key, String language, ChatFormatting color) {
 		mob.setCustomName(Component.translatableWithFallback(key, Lang.text(language, key)).withStyle(color));
 		mob.setCustomNameVisible(true);
 	}
 
-	/** A surface spot {@code minDistance}-{@code maxDistance} blocks from {@code center} where {@code type} fits. */
 	public static BlockPos surfaceSpot(ServerLevel level, EntityType<?> type, BlockPos center, int minDistance, int maxDistance, int attempts) {
 		RandomSource random = level.getRandom();
 		for (int i = 0; i < attempts; i++) {
@@ -54,7 +50,6 @@ public final class MobSpawning {
 			double distance = Mth.nextDouble(random, minDistance, maxDistance);
 			int x = Mth.floor(center.getX() + Math.cos(angle) * distance);
 			int z = Mth.floor(center.getZ() + Math.sin(angle) * distance);
-			// Checked before the height lookup, which would load the chunk.
 			if (!level.isPositionEntityTicking(new BlockPos(x, center.getY(), z))) {
 				continue;
 			}
@@ -66,12 +61,10 @@ public final class MobSpawning {
 		return null;
 	}
 
-	/** A spot around {@code center}, within {@code vertical} blocks up or down, where {@code type} can stand. */
 	public static BlockPos spotNear(ServerLevel level, EntityType<?> type, BlockPos center, int minDistance, int maxDistance, int vertical, int attempts) {
 		return spotNear(level, type, center, minDistance, maxDistance, vertical, attempts, pos -> true);
 	}
 
-	/** Like {@link #spotNear(ServerLevel, EntityType, BlockPos, int, int, int, int)}, for spots that also pass {@code extra}. */
 	public static BlockPos spotNear(ServerLevel level, EntityType<?> type, BlockPos center, int minDistance, int maxDistance, int vertical, int attempts,
 			Predicate<BlockPos> extra) {
 		RandomSource random = level.getRandom();
@@ -88,7 +81,6 @@ public final class MobSpawning {
 		return null;
 	}
 
-	/** The highest spot in the column between {@code fromY} and {@code toY} where {@code type} can stand. */
 	public static BlockPos spotInColumn(ServerLevel level, EntityType<?> type, int x, int z, int fromY, int toY) {
 		return spotInColumn(level, type, x, z, fromY, toY, pos -> true);
 	}
@@ -106,11 +98,6 @@ public final class MobSpawning {
 		return null;
 	}
 
-	/**
-	 * The spot nearest to {@code start} where something of {@code size} fits standing on solid ground, out of
-	 * liquids; {@code null} if there is none. It looks {@code radius} blocks across and up (hillsides), and half as
-	 * far down. For creatures bigger than their vanilla mob, and to free one stuck in blocks.
-	 */
 	public static BlockPos roomFor(ServerLevel level, EntityDimensions size, BlockPos start, int radius) {
 		for (BlockPos offset : ROOM_OFFSETS.computeIfAbsent(radius, MobSpawning::roomOffsets)) {
 			BlockPos pos = start.offset(offset);
@@ -126,7 +113,6 @@ public final class MobSpawning {
 		return null;
 	}
 
-	/** Where {@link #roomFor} looks, nearest first. */
 	private static List<BlockPos> roomOffsets(int radius) {
 		List<BlockPos> offsets = new ArrayList<>();
 		for (int dy = -radius / 2; dy <= radius; dy++) {
@@ -140,7 +126,6 @@ public final class MobSpawning {
 		return offsets;
 	}
 
-	/** Players (spectators too) within {@code distance} of {@code mob}: who sees a boss's health bar. */
 	public static List<ServerPlayer> playersNear(Mob mob, double distance) {
 		List<ServerPlayer> players = new ArrayList<>();
 		if (mob.level() instanceof ServerLevel level) {

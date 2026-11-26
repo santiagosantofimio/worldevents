@@ -21,13 +21,6 @@ import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The harvest spirit: a small, friendly sprite of woven wheat that keeps a player company during a blessed harvest
- * and leaves golden seeds for them. It cannot be hurt or handed items.
- *
- * <p>Minecraft 1.18 has no allay, so the invisible mob under the model is a parrot without AI, which the spirit moves
- * itself: it floats next to its friend's shoulder and catches up when left behind.
- */
 public final class HarvestSpirit {
 	public static final Creature.Kind KIND = Creature.kind("harvest_spirit", Items.PARROT_SPAWN_EGG, HarvestSpirit::spawn)
 			.acting(HarvestSpirit::follow);
@@ -35,7 +28,6 @@ public final class HarvestSpirit {
 	public static final String NAME_KEY = KIND.nameKey();
 	public static final Creature.Part BODY = Creature.register(Creature.Part.of(Items.HAY_BLOCK, "harvest_spirit", 0.9f).bright()
 			.moving(Creature.Motion.FLOAT));
-	/** Entity tag that names the spirit's friend: {@code worldomens.friend:<uuid>}. */
 	private static final String FRIEND_TAG = WorldOmensMod.MOD_ID + ".friend:";
 	private static final double SPEED = 0.35;
 	private static final double TELEPORT_DISTANCE = 16.0;
@@ -43,7 +35,6 @@ public final class HarvestSpirit {
 	private HarvestSpirit() {
 	}
 
-	/** Spawns a spirit at {@code pos} that follows {@code friend}, if there is one. */
 	public static Parrot spawn(ServerLevel level, BlockPos pos, String language, ServerPlayer friend) {
 		Parrot spirit = EntityType.PARROT.create(level);
 		if (spirit == null) {
@@ -70,7 +61,6 @@ public final class HarvestSpirit {
 		return KIND.is(entity);
 	}
 
-	/** The player the spirit follows, or {@code null} if it has none. */
 	public static UUID friend(Parrot spirit) {
 		for (String tag : spirit.getTags()) {
 			if (tag.startsWith(FRIEND_TAG)) {
@@ -84,7 +74,6 @@ public final class HarvestSpirit {
 		return null;
 	}
 
-	/** Floats next to its friend's shoulder, a little at a time; jumps to them when left far behind. */
 	private static void follow(ServerLevel level, Mob mob, int tick) {
 		if (!(mob instanceof Parrot spirit)) {
 			return;
@@ -111,20 +100,17 @@ public final class HarvestSpirit {
 		spirit.setYHeadRot(yaw);
 	}
 
-	/** Leaves a golden seed at its friend's feet, with a sparkle around the spirit. */
 	public static void leaveSeed(ServerLevel level, Parrot spirit, ServerPlayer friend) {
 		Drops.spawn(level, friend.position().add(0.0, 0.5, 0.0), EventItems.GOLDEN_SEED.create(Lang.language(friend), 1));
 		level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spirit.getX(), spirit.getY() + 0.5, spirit.getZ(), 20, 0.5, 0.5, 0.5, 0.0);
 		level.playSound(null, friend.getX(), friend.getY(), friend.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0f, 1.3f);
 	}
 
-	/** A little greeting when a player touches it: hearts and a chime. */
 	public static void greet(ServerLevel level, Parrot spirit) {
 		level.sendParticles(ParticleTypes.HEART, spirit.getX(), spirit.getY() + 0.8, spirit.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
 		level.playSound(null, spirit.getX(), spirit.getY(), spirit.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0f, 1.6f);
 	}
 
-	/** Removes the spirit in a puff of leaves. */
 	public static void vanish(ServerLevel level, Parrot spirit) {
 		level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spirit.getX(), spirit.getY() + 0.5, spirit.getZ(), 15, 0.4, 0.4, 0.4, 0.0);
 		Creature.remove(spirit);

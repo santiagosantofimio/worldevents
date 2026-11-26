@@ -19,10 +19,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Fabric entry point: sets the mod up and forwards Fabric API events to {@link Hooks}. Fabric API for 1.18 has no
- * events for damage, death or loot, so the mixins in {@code fabric.mixin} call those hooks.
- */
 public class WorldOmensFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {

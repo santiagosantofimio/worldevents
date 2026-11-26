@@ -48,11 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A blizzard, while someone is in a snowy biome: snow and wind, strays out in the storm, and the frost yeti. Players
- * out in the open in the cold freeze little by little, as in powder snow, unless they shelter under a roof, stand by a
- * fire or wear leather. No block is touched.
- */
 public final class BlizzardEvent implements WorldEvent {
 	public static final String ID = "blizzard";
 	private static final String YETI_SPAWNED = "yetiSpawned";
@@ -66,7 +61,6 @@ public final class BlizzardEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 8, 4800, 300);
 		json.addProperty("freezing", true);
 		json.addProperty("strayInterval", 15);
@@ -98,7 +92,6 @@ public final class BlizzardEvent implements WorldEvent {
 		return level.dimension() == Level.OVERWORLD && level.getDifficulty() != Difficulty.PEACEFUL;
 	}
 
-	/** Only when someone is somewhere cold enough to snow: elsewhere it would just rain. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		for (ServerPlayer player : level.players()) {
@@ -137,7 +130,6 @@ public final class BlizzardEvent implements WorldEvent {
 				continue;
 			}
 			if (settings.getBoolean("freezing") && isExposed(level, player)) {
-				// 1.16 has no freezing: the cold slows the player and bites now and then.
 				chill(player, 60);
 				if (elapsed % 2 == 0) {
 					player.hurt(DamageSource.GENERIC, 1.0f);
@@ -166,7 +158,6 @@ public final class BlizzardEvent implements WorldEvent {
 		state.yeti = null;
 	}
 
-	/** Whether {@code player} is out in the cold: in a snowy biome, under the open sky, away from fire, not in leather. */
 	public static boolean isExposed(ServerLevel level, Player player) {
 		BlockPos pos = player.blockPosition();
 		return !wearsLeather(player) && isCold(level, pos) && level.canSeeSky(pos.above()) && !nearHeat(level, pos);
@@ -182,7 +173,6 @@ public final class BlizzardEvent implements WorldEvent {
 		return false;
 	}
 
-	/** Whether {@code entity} wears any leather, which keeps the cold out. */
 	public static boolean wearsLeather(LivingEntity entity) {
 		for (ItemStack stack : entity.getArmorSlots()) {
 			Item item = stack.getItem();
@@ -193,14 +183,12 @@ public final class BlizzardEvent implements WorldEvent {
 		return false;
 	}
 
-	/** Chills {@code entity}: slowness for {@code ticks}. Minecraft 1.16 has no freezing, so this is all the cold does. */
 	public static void chill(Entity entity, int ticks) {
 		if (entity instanceof LivingEntity living && !wearsLeather(living)) {
 			living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, 0));
 		}
 	}
 
-	/** A stray out of the storm near {@code center}. */
 	public static Mob spawnStray(ServerLevel level, BlockPos center) {
 		BlockPos spot = MobSpawning.spotNear(level, EntityType.STRAY, center, 10, 24, 6, 10);
 		if (spot == null) {
@@ -242,7 +230,6 @@ public final class BlizzardEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns the yeti at {@code pos} now, for tests and admins. */
 	public Ravager spawnYeti(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Ravager yeti = FrostYeti.spawn(level, pos, language, settings().getDouble("yetiHealth"));
 		if (yeti != null) {
@@ -293,7 +280,6 @@ public final class BlizzardEvent implements WorldEvent {
 			}
 		});
 
-		// Frostfang: every hit chills and slows its target.
 		Hooks.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
 			if (damageTaken > 0 && source.getDirectEntity() instanceof Player player && source.getEntity() == player
 					&& EventItems.FROSTFANG.is(player.getMainHandItem())) {
@@ -302,7 +288,6 @@ public final class BlizzardEvent implements WorldEvent {
 		});
 	}
 
-	/** What a Frostfang hit does to its target. */
 	public static void frostbite(LivingEntity target) {
 		target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
 		if (target.level instanceof ServerLevel level) {

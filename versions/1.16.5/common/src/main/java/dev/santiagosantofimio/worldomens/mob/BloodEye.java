@@ -12,10 +12,6 @@ import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/**
- * The blood eye: a giant floating eyeball that drifts through walls and charges at players during a blood moon.
- * Flies like a vex (the invisible mob under the model).
- */
 public final class BloodEye {
 	public static final Creature.Kind KIND = Creature.kind("blood_eye", Items.VEX_SPAWN_EGG,
 			(level, pos, language, summoner) -> spawn(level, pos, language));
@@ -33,7 +29,6 @@ public final class BloodEye {
 		}
 		vex.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		vex.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
-		// A vex spawns with a sword, which would float next to the eye.
 		vex.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(vex, Attributes.MAX_HEALTH, 20.0);
 		vex.setHealth(vex.getMaxHealth());

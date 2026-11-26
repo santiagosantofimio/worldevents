@@ -1,26 +1,4 @@
 #!/usr/bin/env python3
-"""Turns a textured 3D model (GLB, for example from Meshy) into a Minecraft item model made of cubes.
-
-Minecraft item models can only contain axis-aligned boxes, so the mesh is voxelised: its surface is sampled,
-each voxel takes the colour of the texture there, and runs of voxels with the same colour are merged into boxes.
-The colours go into a small palette texture.
-
-Kinds (how the model is placed and displayed):
-    tool   held like a vanilla sword or pickaxe: the long axis runs bottom-left to top-right, flat side facing
-           the camera, using the vanilla handheld display transforms.
-    head   worn on a mob's head like a carved pumpkin: one 16x16x16 box with a texture per face, front north.
-    crown  sits on top of a mob's head: centred, starting just below the top of the head.
-    held   a small object, for example in a fox's mouth (shown with the "ground" transform).
-    part   a creature's body part shown by an item display: fills 16 units, centred, placed by the display.
-           With --big it fills 32 units (-8 to 24) instead, for tall creatures: the display then needs half the
-           scale, so the vanilla block shown without the resource pack is half as big (Creature.Part#big).
-
-Usage:
-    python3 tools/import_model.py INPUT.glb KIND MODEL.json TEXTURE.png --texture-id worldomens:item/name_3d
-        [--resolution N] [--colors N] [--turn DEGREES] [--flip] [--big] [--dominant] [--preview PREVIEW.png]
-
-Requires Pillow and numpy (dev tool only; the mod does not use them).
-"""
 
 import argparse
 import io
@@ -51,13 +29,12 @@ BLOCK_DISPLAY = {
     "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
     "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
 }
-FACES = {  # name: (axis, direction)
+FACES = {
     "east": (0, 1), "west": (0, -1), "up": (1, 1), "down": (1, -1), "south": (2, 1), "north": (2, -1),
 }
 
 
 def load_glb(path):
-    """Triangles (positions, uvs, indices) of every mesh in the default scene, plus the base colour texture."""
     with open(path, "rb") as f:
         data = f.read()
     magic, _, length = struct.unpack_from("<4sII", data, 0)
@@ -146,7 +123,6 @@ def load_glb(path):
 
 
 def sample_surface(positions, uvs, triangles, spacing):
-    """Points spread over every triangle (at most `spacing` apart) and their texture coordinates."""
     v = positions[triangles]
     t = uvs[triangles]
     edges = np.max(np.linalg.norm(v - np.roll(v, 1, axis=1), axis=2), axis=1)
@@ -155,7 +131,6 @@ def sample_surface(positions, uvs, triangles, spacing):
     for n in np.unique(steps):
         tris, tuv = v[steps == n], t[steps == n]
         if n == 1:
-            # Triangles smaller than the spacing: their centre is enough (dense meshes have millions of them).
             weights = [(1 / 3, 1 / 3, 1 / 3)]
         else:
             weights = [(i / n, j / n, 1 - i / n - j / n) for i in range(n + 1) for j in range(n + 1 - i)]
@@ -174,15 +149,12 @@ def rotation(axis, degrees):
 
 
 def place(points, kind, turn, flip, big=False):
-    """Rotates and scales the model into Minecraft model space for its kind. Returns points and voxel size."""
     p = points - (points.min(axis=0) + points.max(axis=0)) / 2
     if flip:
         p = p @ rotation("z", 180).T
     p = p @ rotation("y", turn).T
     if kind == "tool":
-        # Long axis (Y) goes bottom-left to top-right, like the flat sprite of a vanilla sword or pickaxe.
         p = p @ rotation("z", -45).T
-    # Centre again: rotating moves the middle of the bounding box.
     p = p - (p.min(axis=0) + p.max(axis=0)) / 2
     if kind == "tool":
         extent = (p.max(axis=0) - p.min(axis=0))[:2].max()
@@ -198,19 +170,13 @@ def place(points, kind, turn, flip, big=False):
     elif kind == "part":
         p = p * ((32.0 if big else 16.0) / (p.max(axis=0) - p.min(axis=0)).max())
         p = p + np.array([8.0, 8.0, 8.0])
-    else:  # held
+    else:
         p = p * (11.0 / (p.max(axis=0) - p.min(axis=0)).max())
         p = p + np.array([8.0, 8.0, 8.0])
     return p
 
 
 def voxelise(points, coords, texture, resolution, low, high, dominant=False):
-    """Texture colour per voxel on a grid of `resolution` voxels per 16 units, inside [low, high].
-
-    The colour is the average of the surface samples in the voxel or, with `dominant`, the average of only the
-    samples of its most common colour: cleaner on textures made of many small patches of different colours,
-    where the plain average turns every voxel into a muddy mix.
-    """
     voxel = 16.0 / resolution
     origin = np.floor(points.min(axis=0) / voxel) * voxel
     origin = np.maximum(origin, low)
@@ -225,7 +191,6 @@ def voxelise(points, coords, texture, resolution, low, high, dominant=False):
     colours = tex[py, px]
     flat = np.ravel_multi_index(cells.T, shape)
     if dominant:
-        # Coarse colour bins (16 levels per channel); keep only each voxel's most common bin.
         bins = (colours[:, 0] // 16) * 256 + (colours[:, 1] // 16) * 16 + colours[:, 2] // 16
         keys = flat.astype(np.int64) * 4096 + bins.astype(np.int64)
         unique, inverse, counts_per_key = np.unique(keys, return_inverse=True, return_counts=True)
@@ -247,7 +212,6 @@ def voxelise(points, coords, texture, resolution, low, high, dominant=False):
 
 
 def solid_interior(filled):
-    """Voxels the outside cannot reach count as solid, so the hollow inside of the shell adds no faces."""
     shape = filled.shape
     outside = np.zeros(shape, bool)
     queue = deque()
@@ -268,7 +232,6 @@ def solid_interior(filled):
 
 
 def quantise(filled, average, colours):
-    """Reduces the voxel colours to a small palette. Returns palette (list of RGB) and an index grid (-1 = empty)."""
     values = average[filled].astype(np.uint8)
     strip = Image.fromarray(values.reshape(1, -1, 3), "RGB")
     reduced = strip.quantize(colors=colours, method=Image.Quantize.MEDIANCUT)
@@ -282,7 +245,6 @@ def quantise(filled, average, colours):
 
 
 def boxes(index, solid):
-    """Greedy merge of same-colour voxels into boxes."""
     shape = index.shape
     done = np.zeros(shape, bool)
     result = []
@@ -307,7 +269,6 @@ def boxes(index, solid):
 
 
 def face_hidden(solid, lo, hi, axis, direction):
-    """True if every voxel touching this face of the box is solid."""
     plane = hi[axis] if direction > 0 else lo[axis] - 1
     if plane < 0 or plane >= solid.shape[axis]:
         return False
@@ -332,7 +293,6 @@ def build_model(index, solid, palette, origin, voxel, texture_id, kind, big=Fals
                 "faces": faces,
             })
     display = HANDHELD_DISPLAY if kind == "tool" else BLOCK_DISPLAY if kind in ("head", "crown") else {
-        # As an item (spawn eggs, advancement icons) a creature is turned like a block, so its face shows.
         "gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [0.625, 0.625, 0.625]},
         "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.5, 0.5, 0.5]},
         "fixed": {"rotation": [0, 180, 0], "scale": [1, 1, 1]},
@@ -340,7 +300,6 @@ def build_model(index, solid, palette, origin, voxel, texture_id, kind, big=Fals
         "firstperson_righthand": {"rotation": [0, -90, 25], "translation": [1.13, 3.2, 1.13], "scale": [0.68, 0.68, 0.68]},
     }
     if big:
-        # Twice the size: half the scale wherever the model is shown as an item.
         display = {name: dict(t, scale=[v / 2 for v in t["scale"]]) for name, t in display.items()}
     return {
         "textures": {"palette": texture_id, "particle": texture_id},
@@ -350,16 +309,10 @@ def build_model(index, solid, palette, origin, voxel, texture_id, kind, big=Fals
 
 
 def build_cube_model(filled, average, origin, voxel, texture_id):
-    """One block-sized box whose six faces show the model as seen from each side, like a vanilla block.
-
-    Used for heads: a single box renders far cheaper than hundreds of voxels on every mob that wears it.
-    Returns the model and its 64x64 texture (one 16x16 tile per face).
-    """
     shape = filled.shape
     fallback = average[filled].mean(axis=0)
 
     def project(order):
-        """order: (depth axis, depth reversed, row axis, row reversed, column axis, column reversed)."""
         depth_axis, depth_rev, row_axis, row_rev, col_axis, col_rev = order
         rows, cols = shape[row_axis], shape[col_axis]
         tile = np.zeros((rows, cols, 3))
@@ -378,7 +331,6 @@ def build_cube_model(filled, average, origin, voxel, texture_id):
                 tile[r, c] = colour
         return Image.fromarray(tile.astype(np.uint8)).resize((16, 16), Image.NEAREST)
 
-    # Each face as seen from outside: side faces with up = +Y, the top with north up.
     tiles = {
         "north": project((2, False, 1, True, 0, True)),
         "south": project((2, True, 1, True, 0, False)),
@@ -405,7 +357,6 @@ def build_cube_model(filled, average, origin, voxel, texture_id):
 
 
 def palette_texture(palette):
-    """Each colour fills a 4x4 block of a 64x64 texture, so mipmaps do not blend neighbouring colours."""
     image = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
     for i, colour in enumerate(palette):
         bx, by = (i % 16) * 4, (i // 16) * 4
@@ -416,7 +367,6 @@ def palette_texture(palette):
 
 
 def preview(index, palette, path):
-    """Front (from the south), side (from the east) and top views of the voxels, side by side."""
     colours = np.array(palette + [(40, 40, 48)], dtype=np.uint8)
 
     def first_hit(grid):
@@ -426,9 +376,9 @@ def preview(index, palette, path):
             first = np.where((first < 0) & (layer >= 0), layer, first)
         return first
 
-    front = first_hit(index[:, :, ::-1]).T[::-1]                    # rows: Y top first, columns: X
-    side = first_hit(np.moveaxis(index, 0, -1)[:, :, ::-1])[::-1, ::-1]  # rows: Y top first, columns: Z from south to north
-    top = first_hit(np.moveaxis(index, 1, -1)[:, :, ::-1]).T        # rows: Z from north, columns: X
+    front = first_hit(index[:, :, ::-1]).T[::-1]
+    side = first_hit(np.moveaxis(index, 0, -1)[:, :, ::-1])[::-1, ::-1]
+    top = first_hit(np.moveaxis(index, 1, -1)[:, :, ::-1]).T
     views = [Image.fromarray(np.ascontiguousarray(colours[np.where(v < 0, len(palette), v)])) for v in (front, side, top)]
     scale = 8
     width = sum(v.width for v in views) * scale + 16 * (len(views) + 1)

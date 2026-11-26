@@ -1,5 +1,3 @@
-// World Omens for Minecraft 26.1.2: one subproject per loader. The game code lives in common/ and every loader
-// compiles it together with its own entry point and platform glue.
 def javaVersion = project.java_version as int
 
 subprojects {
@@ -21,7 +19,6 @@ subprojects {
 				java.srcDir(rootProject.file('common/src/main/java'))
 				resources.srcDir(rootProject.file('common/src/main/resources'))
 			}
-			// The unit tests only test the common code, so they run once, with Fabric.
 			if (project.name == 'fabric') {
 				test {
 					java.srcDir(rootProject.file('common/src/test/java'))
@@ -53,7 +50,6 @@ subprojects {
 	}
 }
 
-// Optional resource pack for players: looks and names for the mod's items, mobs and advancements.
 def resourcePackFormat = project.resource_pack_format as int
 def modVersion = project.version
 def mcVersion = project.minecraft_version
@@ -86,8 +82,6 @@ tasks.register("resourcePack", Zip) {
 	}
 }
 
-// The finished files, ready to upload: every loader's jar and the resource pack, in dist/<minecraft version>/ at the
-// top of the repository. Run with: ./gradlew -p versions/<minecraft version> dist
 def distVersion = project.minecraft_version
 def distModVersion = project.version
 tasks.register("dist", Sync) {
@@ -101,7 +95,6 @@ tasks.register("dist", Sync) {
 		}
 	}
 	from(layout.buildDirectory.dir("libs")) {
-		// Only this version's pack: build/libs keeps the packs of earlier versions of the mod.
 		include("worldomens-${distModVersion}+${distVersion}-resourcepack.zip", "worldomens-${distModVersion}+${distVersion}-resourcepack.zip.sha1")
 	}
 	into(rootProject.file("../../dist/${distVersion}"))

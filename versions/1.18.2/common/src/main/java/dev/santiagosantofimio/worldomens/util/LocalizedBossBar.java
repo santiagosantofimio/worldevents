@@ -13,10 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 
-/**
- * A boss bar shown in each player's language. A vanilla boss bar has one title for everyone, so this keeps one
- * bar per client language and puts each player in the bar for theirs.
- */
 public final class LocalizedBossBar {
 	private final BossEvent.BossBarColor color;
 	private final BossEvent.BossBarOverlay overlay;
@@ -29,7 +25,6 @@ public final class LocalizedBossBar {
 		this.darkenSky = darkenSky;
 	}
 
-	/** Shows the bar to exactly {@code viewers}, with the title for each language and the given progress. */
 	public void update(Collection<ServerPlayer> viewers, Function<String, Component> title, float progress) {
 		for (Map.Entry<String, ServerBossEvent> entry : bars.entrySet()) {
 			for (ServerPlayer player : new ArrayList<>(entry.getValue().getPlayers())) {
@@ -51,7 +46,6 @@ public final class LocalizedBossBar {
 		}
 	}
 
-	/** The title of the bar {@code player} is in, or {@code null}. */
 	public Component titleFor(ServerPlayer player) {
 		for (ServerBossEvent bar : bars.values()) {
 			if (bar.getPlayers().contains(player)) {

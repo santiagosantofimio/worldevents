@@ -30,11 +30,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Visual check on a real client, run with {@code ./gradlew runClientGameTest} (not part of the build: it opens a
- * window). Gives the special items and shows each event mob during its event, and saves screenshots to
- * {@code build/run/clientGameTest/screenshots} to look at by eye.
- */
 public class WorldOmensClientGameTests implements FabricClientGameTest {
 	private static final String[] ITEMS = {"meteorite_fragment", "lucky_nugget", "bloody_tear", "blood_scythe", "starfall_pickaxe", "bottled_lightning",
 			"golden_seed", "warlord_axe", "captains_cutlass", "colossus_hammer", "magma_heart", "unstable_pearl", "event_seal"};
@@ -54,10 +49,8 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			for (String item : ITEMS) {
 				singleplayer.getServer().runCommand("worldomens give @a " + item);
 			}
-			// Let the advancement toasts for the new items go away.
 			context.waitTicks(220);
 
-			// A weapon comes up as its attack recharges: wait until it is all the way up.
 			context.getInput().pressKey(options -> options.keyHotbarSlots[3]);
 			context.waitTicks(30);
 			context.takeScreenshot("worldomens_hotbar_scythe");
@@ -65,7 +58,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			context.waitTicks(30);
 			context.takeScreenshot("worldomens_hand_pickaxe");
 			context.getInput().pressKey(options -> options.keyHotbarSlots[7]);
-			// A slow weapon comes up as its attack recharges: a full second for this axe.
 			context.waitTicks(30);
 			context.takeScreenshot("worldomens_hand_warlord_axe");
 			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
@@ -81,7 +73,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			context.takeScreenshot("worldomens_third_person_warlord_axe");
 			context.getInput().pressKey(options -> options.keyTogglePerspective);
 
-			// The cutlass's lunge: the client moves its player, so the push has to reach it.
 			context.getInput().pressKey(options -> options.keyHotbarSlots[8]);
 			context.waitTicks(30);
 			Vec3 before = context.computeOnClient(client -> client.player.position());
@@ -92,7 +83,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 				throw new AssertionError("the cutlass's lunge did not move the player: " + before + " -> " + after);
 			}
 
-			// Event creatures only exist while their event runs, so each one gets its own event.
 			showMob(context, singleplayer, BloodMoonEvent.ID, "worldomens_creature_lord", 4,
 					(event, level, active, pos) -> ((BloodMoonEvent) event).spawnLord(level, active, pos, "es_es"));
 			showMob(context, singleplayer, BloodMoonEvent.ID, "worldomens_creature_blood_eye", 3,
@@ -116,7 +106,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			showMob(context, singleplayer, VoidStormEvent.ID, "worldomens_creature_void_stalker", 4,
 					(event, level, active, pos) -> ((VoidStormEvent) event).spawnStalker(level, active, pos, "es_es"));
 
-			// The creative tab, with the special items and the creature eggs.
 			singleplayer.getServer().runCommand("gamemode creative @a");
 			context.waitTicks(5);
 			context.getInput().pressKey(options -> options.keyInventory);
@@ -138,7 +127,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			EventManager.start(level, event);
 			Mob mob = spawner.spawn(event, level, EventManager.active(level), player.blockPosition().offset(0, 0, distance));
 			if (mob != null) {
-				// Posed facing the player, and not after them: some creatures act on their own while they have a target.
 				mob.setNoAi(true);
 				mob.setTarget(null);
 				mob.setYRot(180.0f);
@@ -150,7 +138,6 @@ public class WorldOmensClientGameTests implements FabricClientGameTest {
 			client.player.setYRot(0.0f);
 			client.player.setXRot(12.0f);
 		});
-		// Wait for the event title to fade out.
 		context.waitTicks(110);
 		context.takeScreenshot(screenshot);
 		singleplayer.getServer().runOnServer(server -> EventManager.stop(server.getPlayerList().getPlayers().get(0).level()));

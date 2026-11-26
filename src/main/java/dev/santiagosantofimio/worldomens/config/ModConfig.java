@@ -17,10 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
 
-/**
- * config/worldomens.json. Missing keys are filled in from the defaults in code; the user's values are kept.
- * Durations are in seconds.
- */
 public final class ModConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	private static final String EVENTS = "events";
@@ -43,12 +39,6 @@ public final class ModConfig {
 		return FabricLoader.getInstance().getConfigDir().resolve(WorldOmensMod.MOD_ID + ".json");
 	}
 
-	/**
-	 * Loads the config, writing back any missing keys. If the file cannot be parsed it is left untouched and
-	 * the previous config (or the defaults, on first load) stays in use.
-	 *
-	 * @return whether the file was read successfully
-	 */
 	public static boolean load() {
 		JsonObject defaults = buildDefaults();
 		Path path = path();
@@ -119,57 +109,46 @@ public final class ModConfig {
 		return new EventSettings(values, defaults);
 	}
 
-	/** How often (in ticks) each dimension checks whether a new event should start. */
 	public int checkIntervalTicks() {
 		return Math.max(20, root().getInt("checkIntervalTicks"));
 	}
 
-	/** Chance per check, once the global cooldown is over, that the next event gets drawn. */
 	public double startChance() {
 		return Math.clamp(root().getDouble("startChance"), 0.0, 1.0);
 	}
 
-	/** Minimum time between the end of one event and drawing the next, per dimension. */
 	public long globalCooldownTicks() {
 		return Math.max(0L, (long) root().getInt("globalCooldown") * 20L);
 	}
 
-	/** Players needed in a dimension before an event can start there. */
 	public int minPlayers() {
 		return Math.max(1, root().getInt("minPlayers"));
 	}
 
-	/** Master switch for any event that changes blocks. */
 	public boolean blockDamage() {
 		return root().getBoolean("blockDamage");
 	}
 
-	/** How long before a drawn event starts players are warned. 0 starts it right away. */
 	public int warningTicks() {
 		return Math.max(0, root().getInt("warningSeconds") * 20);
 	}
 
-	/** Whether the best players are announced when an event ends, and seals handed out. */
 	public boolean ranking() {
 		return root().getBoolean("ranking");
 	}
 
-	/** Event seals for everyone who took part, when an event ends. */
 	public int sealsPerEvent() {
 		return Math.max(0, root().getInt("sealsPerEvent"));
 	}
 
-	/** Extra seals for the player who did the most. */
 	public int sealsForWinner() {
 		return Math.max(0, root().getInt("sealsForWinner"));
 	}
 
-	/** Points that count as taking part in an event. */
 	public int minScoreForSeal() {
 		return Math.max(1, root().getInt("minScoreForSeal"));
 	}
 
-	/** Chance that a drawn event comes as a convergence: longer, with double points and seals. */
 	public double convergenceChance() {
 		return Math.clamp(root().getDouble("convergenceChance"), 0.0, 1.0);
 	}

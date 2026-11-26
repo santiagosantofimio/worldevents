@@ -10,7 +10,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
-/** Every loot roll goes through {@link Hooks#MODIFY_DROPS}, like Fabric's loot table drops event. */
 public class HookLootModifier extends LootModifier {
 	public HookLootModifier(LootItemCondition[] conditions) {
 		super(conditions);

@@ -62,10 +62,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-/**
- * A night with more hostile mobs, which are also tougher and drop more loot and XP.
- * Ends at dawn. Mobs buffed by the event carry an entity tag so the buff can be undone afterwards.
- */
 public final class BloodMoonEvent implements WorldEvent {
 	public static final String ID = "blood_moon";
 	public static final String MOB_TAG = WorldOmensMod.MOD_ID + ".blood_moon";
@@ -88,7 +84,6 @@ public final class BloodMoonEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 5 in-game days; lasts until dawn, capped at 500 s.
 		JsonObject json = EventSettings.defaults(true, 10, 6000, 500);
 		json.addProperty("healthMultiplier", 1.5);
 		json.addProperty("damageMultiplier", 1.3);
@@ -137,7 +132,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		return DayCycle.hasDayCycle(level) && level.getDifficulty() != Difficulty.PEACEFUL && level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING);
 	}
 
-	/** Only at the start of the night, so the event covers the whole night. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		return level.isNight() && DayCycle.isBetween(level, DayCycle.NIGHT_START, LATEST_START);
@@ -150,7 +144,6 @@ public final class BloodMoonEvent implements WorldEvent {
 
 	@Override
 	public void start(ServerLevel level, ActiveEvent active) {
-		// Started at night (randomly or by command): end at dawn. Started by command in daytime: run the full duration.
 		active.data().putBoolean(ENDS_AT_DAWN, DayCycle.hasDayCycle(level) && level.isNight());
 		for (Mob mob : Entities.of(level, Mob.class, BloodMoonEvent::canBuff)) {
 			buff(mob);
@@ -196,10 +189,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		}
 	}
 
-	/**
-	 * Starts a blood moon right now if it is night and nothing else is running: what the bloody tear does.
-	 * Ignores cooldowns, like {@code /worldomens start}.
-	 */
 	public boolean summon(ServerLevel level) {
 		if (!settings().getBoolean("bloodyTearSummons") || EventManager.active(level) != null || !isAvailable(level) || !level.isNight()) {
 			return false;
@@ -211,7 +200,6 @@ public final class BloodMoonEvent implements WorldEvent {
 	public void tick(ServerLevel level, ActiveEvent active) {
 		if (settings().getBoolean("particles")) {
 			for (ServerPlayer player : level.players()) {
-				// A faint red mist around each player, sent only to them.
 				level.sendParticles(player, MIST, false, player.getX(), player.getY() + 2.0, player.getZ(), 10, 8.0, 3.0, 8.0, 0.0);
 			}
 		}
@@ -246,7 +234,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		}
 	}
 
-	/** Every so often, a blood eye appears in the sky near each player, up to a few per player. */
 	private void tickEyes(ServerLevel level, SpawnState state) {
 		state.eyes.removeIf(eye -> eye.removed || !eye.isAlive());
 		EventSettings settings = settings();
@@ -268,7 +255,6 @@ public final class BloodMoonEvent implements WorldEvent {
 				BlockPos sky = ground.above(Mth.nextInt(level.getRandom(), 6, 10));
 				if (level.noCollision(EntityType.VEX.getAABB(sky.getX() + 0.5, sky.getY(), sky.getZ() + 0.5))) {
 					Vex eye = BloodEye.spawn(level, sky, Lang.language(player));
-					// Usually already tracked: the load callback also sees new entities.
 					if (eye != null && !state.eyes.contains(eye)) {
 						state.eyes.add(eye);
 					}
@@ -277,7 +263,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns a blood eye at {@code pos} now, for tests and admins. */
 	public Vex spawnEye(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Vex eye = BloodEye.spawn(level, pos, language);
 		if (eye != null && !active.state(SpawnState::new).eyes.contains(eye)) {
@@ -286,7 +271,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		return eye;
 	}
 
-	/** Brings the lord in once the night is under way. Its boss bar and minions are its own (see BloodMoonLord). */
 	private void tickLord(ServerLevel level, ActiveEvent active, SpawnState state) {
 		EventSettings settings = settings();
 		int elapsedSeconds = (active.totalTicks() - active.remainingTicks()) / 20;
@@ -327,7 +311,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		WorldOmensMod.LOGGER.info("Blood Moon Lord spawned at {}", spot);
 	}
 
-	/** Spawns the lord at {@code pos} now, for tests and admins. */
 	public WitherSkeleton spawnLord(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		SpawnState state = active.state(SpawnState::new);
 		WitherSkeleton lord = BloodMoonLord.spawn(level, pos, language, settings().getDouble("lordHealth"));
@@ -338,14 +321,12 @@ public final class BloodMoonEvent implements WorldEvent {
 		return lord;
 	}
 
-	/** One spawn attempt on the surface around {@code player}, using the biome's monster list and vanilla spawn rules. */
 	private static Mob trySpawnNear(ServerLevel level, ServerPlayer player) {
 		Random random = level.getRandom();
 		double angle = random.nextDouble() * Math.PI * 2;
 		double distance = Mth.nextDouble(random, MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE);
 		int x = Mth.floor(player.getX() + Math.cos(angle) * distance);
 		int z = Mth.floor(player.getZ() + Math.sin(angle) * distance);
-		// Only spawn where entities already tick. Checked before any height lookup, which would load the chunk.
 		if (!Entities.isTicking(level, new BlockPos(x, Mth.floor(player.getY()), z))) {
 			return null;
 		}
@@ -383,12 +364,10 @@ public final class BloodMoonEvent implements WorldEvent {
 	@Override
 	public void registerHooks() {
 		Hooks.ENTITY_LOAD.register((entity, level) -> {
-			// A summoned creature is nobody's event creature, and keeps its own strength.
 			if (!(entity instanceof Mob mob) || Creature.isSummoned(mob)) {
 				return;
 			}
 			if (BloodMoonLord.is(mob)) {
-				// Back from a save or a chunk reload: keep tracking it during the blood moon, remove it otherwise.
 				ActiveEvent active = EventManager.active(level);
 				if (active != null && active.event() == this && mob instanceof WitherSkeleton lord) {
 					SpawnState state = active.state(SpawnState::new);
@@ -490,7 +469,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		Hooks.ALLOW_SLEEPING.register((player, pos) -> {
 			if (player instanceof ServerPlayer serverPlayer && EventManager.isActive(serverPlayer.getLevel(), this)
 					&& !settings().getBoolean("allowSleeping")) {
-				// 1.18 has no custom reasons for not sleeping: the player gets the message, and the bed says nothing.
 				serverPlayer.displayClientMessage(Lang.component(serverPlayer, "event.blood_moon.no_sleep"), true);
 				return Player.BedSleepingProblem.OTHER_PROBLEM;
 			}
@@ -498,7 +476,6 @@ public final class BloodMoonEvent implements WorldEvent {
 		});
 	}
 
-	/** Vanilla monsters only: the mod's creatures have their own strength. */
 	private static boolean canBuff(Mob mob) {
 		return mob instanceof Enemy && !mob.getTags().contains(MOB_TAG) && Creature.kindOf(mob) == null
 				&& !Tags.isBoss(mob.getType());
@@ -538,14 +515,12 @@ public final class BloodMoonEvent implements WorldEvent {
 		}
 	}
 
-	/** How many extra mobs spawned by this run are still alive. */
 	public static int extraMobCount(ActiveEvent active) {
 		SpawnState state = active.state(SpawnState::new);
 		state.spawned.removeIf(mob -> mob.removed || !mob.isAlive());
 		return state.spawned.size();
 	}
 
-	/** The lord of the current run, if it is loaded and alive. */
 	public static WitherSkeleton lord(ActiveEvent active) {
 		WitherSkeleton lord = active.state(SpawnState::new).lord;
 		return lord != null && lord.isAlive() ? lord : null;

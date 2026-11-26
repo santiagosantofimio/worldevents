@@ -21,10 +21,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-/**
- * The game events the mod listens to, independent of the mod loader. Each loader module forwards its own events here
- * (Fabric API callbacks, NeoForge or Forge events), and the common code registers its listeners on these.
- */
 public final class Hooks {
 	private Hooks() {
 	}
@@ -42,14 +38,10 @@ public final class Hooks {
 	public static final Event<ModifyDrops> MODIFY_DROPS = new Event<>();
 	public static final Event<BeforeBlockBreak> BEFORE_BLOCK_BREAK = new Event<>();
 	public static final Event<AllowSleeping> ALLOW_SLEEPING = new Event<>();
-	/** A player joins the server. */
 	public static final Event<Consumer<ServerPlayer>> PLAYER_JOIN = new Event<>();
-	/** A player leaves the server. */
 	public static final Event<Consumer<ServerPlayer>> PLAYER_LEAVE = new Event<>();
-	/** A player moves to another dimension. */
 	public static final Event<Consumer<ServerPlayer>> PLAYER_CHANGED_LEVEL = new Event<>();
 
-	/** Listeners, in the order they were registered. */
 	public static final class Event<T> {
 		private final List<T> listeners = new CopyOnWriteArrayList<>();
 
@@ -69,7 +61,6 @@ public final class Hooks {
 
 	@FunctionalInterface
 	public interface AllowDamage {
-		/** False cancels the damage. */
 		boolean allowDamage(LivingEntity entity, DamageSource source, float amount);
 	}
 
@@ -100,23 +91,18 @@ public final class Hooks {
 
 	@FunctionalInterface
 	public interface ModifyDrops {
-		/** The drops of a loot table roll, which listeners may change. The first argument is unused (the table). */
 		void modifyDrops(Object table, LootContext context, List<ItemStack> drops);
 	}
 
 	@FunctionalInterface
 	public interface BeforeBlockBreak {
-		/** False stops the player from breaking the block. */
 		boolean beforeBreak(Level level, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity);
 	}
 
 	@FunctionalInterface
 	public interface AllowSleeping {
-		/** A problem stops the player from sleeping; null lets them. */
 		Player.BedSleepingProblem allowSleep(Player player, BlockPos pos);
 	}
-
-	// Dispatch, called by the loader modules.
 
 	public static void endServerTick(MinecraftServer server) {
 		END_SERVER_TICK.listeners.forEach(l -> l.accept(server));

@@ -37,11 +37,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A void storm, in the End only: void stalkers hunt the players, and pulses of the void lift them off the ground
- * for a moment and let them float back down. The pulses only ever push straight up, so nobody is thrown off an
- * island. Stalkers may drop unstable pearls.
- */
 public final class VoidStormEvent implements WorldEvent {
 	public static final String ID = "void_storm";
 	private static final int PULSE_LIFT_TICKS = 30;
@@ -57,7 +52,6 @@ public final class VoidStormEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 300);
 		json.addProperty("stalkersPerPlayer", 2);
 		json.addProperty("maxStalkers", 8);
@@ -81,7 +75,6 @@ public final class VoidStormEvent implements WorldEvent {
 		return SoundEvents.ENDERMAN_STARE;
 	}
 
-	/** Stalkers are monsters, and monsters do not exist on peaceful. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return level.dimension() == Level.END && level.getDifficulty() != Difficulty.PEACEFUL;
@@ -116,7 +109,6 @@ public final class VoidStormEvent implements WorldEvent {
 		state.stalkers.clear();
 	}
 
-	/** Lifts the player straight up for a moment, and lets them float back down. */
 	private static void pulse(ServerLevel level, ServerPlayer player) {
 		player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, PULSE_LIFT_TICKS, 0, false, false));
 		player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, PULSE_FALL_TICKS, 0, false, false));
@@ -143,23 +135,17 @@ public final class VoidStormEvent implements WorldEvent {
 	}
 
 	private static void track(StormState state, Vindicator stalker) {
-		// Usually already tracked: the load callback also sees new entities.
 		if (stalker != null && !state.stalkers.contains(stalker)) {
 			state.stalkers.add(stalker);
 		}
 	}
 
-	/** Spawns a stalker at {@code pos} now, for tests and admins. */
 	public Vindicator spawnStalker(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Vindicator stalker = VoidStalker.spawn(level, pos, language);
 		track(active.state(StormState::new), stalker);
 		return stalker;
 	}
 
-	/**
-	 * The unstable pearl: moves the player forward in a blink, stopping short of whatever is in the way. Aimed at the
-	 * void it still goes, which is why they float for a few seconds afterwards. Returns whether they moved.
-	 */
 	public static boolean blink(ServerLevel level, ServerPlayer player) {
 		Vec3 start = player.position();
 		Vec3 look = player.getLookAngle();
@@ -211,7 +197,6 @@ public final class VoidStormEvent implements WorldEvent {
 			}
 		});
 
-		// Its touch blinds for a moment.
 		Hooks.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
 			if (damageTaken > 0 && source.getEntity() instanceof Vindicator stalker && VoidStalker.is(stalker) && source.getDirectEntity() == stalker) {
 				entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0));

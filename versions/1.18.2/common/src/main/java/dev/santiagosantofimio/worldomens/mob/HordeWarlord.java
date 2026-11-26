@@ -31,11 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The Horde Warlord: a hulking brute in dark horned armour and a tattered war cape who leads the last wave of a
- * horde, swinging the warlord's axe. Its war cry spurs on the monsters around it. It has its own boss bar. Moves
- * and fights like a vindicator (the invisible mob under the model, whose axe stays visible).
- */
 public final class HordeWarlord {
 	public static final Creature.Kind KIND = Creature.kind("horde_warlord", Items.VINDICATOR_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
@@ -59,10 +54,8 @@ public final class HordeWarlord {
 		}
 		warlord.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		warlord.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
-		// Not part of any raid that happens to be nearby.
 		warlord.setCanJoinRaid(false);
 		MobSpawning.setBase(warlord, Attributes.MAX_HEALTH, health);
-		// The axe it holds adds +9, for 11 damage per hit.
 		MobSpawning.setBase(warlord, Attributes.ATTACK_DAMAGE, 2.0);
 		MobSpawning.setBase(warlord, Attributes.ARMOR, 8.0);
 		MobSpawning.setBase(warlord, Attributes.KNOCKBACK_RESISTANCE, 0.9);
@@ -81,19 +74,16 @@ public final class HordeWarlord {
 		return KIND.is(entity);
 	}
 
-	/** The health set in the horde's config, for summoned warlords too. */
 	private static double configuredHealth() {
 		return ModConfig.get().event(HordeEvent.ID).getDouble("warlordHealth");
 	}
 
-	/** While it is after someone, the warlord lets out a war cry every few seconds. */
 	private static void act(ServerLevel level, Mob warlord, int tick) {
 		if (Creature.everySeconds(warlord, tick, WAR_CRY_SECONDS) && warlord.getTarget() != null) {
 			warCry(level, warlord);
 		}
 	}
 
-	/** A roar that gives the monsters around the warlord Strength and Speed for a few seconds. */
 	public static void warCry(ServerLevel level, Mob warlord) {
 		level.playSound(null, warlord.getX(), warlord.getY(), warlord.getZ(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 2.0f, 0.8f);
 		level.sendParticles(ParticleTypes.ANGRY_VILLAGER, warlord.getX(), warlord.getY() + warlord.getBbHeight(), warlord.getZ(), 6, 0.5, 0.3, 0.5, 0.0);

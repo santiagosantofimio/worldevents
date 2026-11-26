@@ -19,4 +19,3 @@ pluginManagement {
 
 rootProject.name = 'worldomens-1.16.5'
 include 'fabric'
-// Forge is a build of its own (forge/): ForgeGradle 6, which 1.16 needs, runs on Gradle 8.

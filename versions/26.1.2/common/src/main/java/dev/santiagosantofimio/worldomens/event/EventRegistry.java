@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** The events this mod offers. Internal list, not a Minecraft registry. */
 public final class EventRegistry {
 	private static final Map<String, WorldEvent> EVENTS = new LinkedHashMap<>();
 

@@ -19,11 +19,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.item.Items;
 
-/**
- * The harvest spirit: a small, friendly sprite of woven wheat that keeps a player company during a blessed harvest
- * and leaves golden seeds for them. Flies after its friend like an allay (the invisible mob under the model), and
- * cannot be hurt or handed items.
- */
 public final class HarvestSpirit {
 	public static final Creature.Kind KIND = Creature.kind("harvest_spirit", Items.ALLAY_SPAWN_EGG, HarvestSpirit::spawn);
 	public static final String TAG = KIND.tag();
@@ -34,7 +29,6 @@ public final class HarvestSpirit {
 	private HarvestSpirit() {
 	}
 
-	/** Spawns a spirit at {@code pos} that follows {@code friend}, if there is one. */
 	public static Allay spawn(ServerLevel level, BlockPos pos, String language, ServerPlayer friend) {
 		Allay spirit = EntityType.ALLAY.create(level, EntitySpawnReason.EVENT);
 		if (spirit == null) {
@@ -44,7 +38,6 @@ public final class HarvestSpirit {
 		spirit.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
 		MobSpawning.setBase(spirit, Attributes.SCALE, 1.4);
 		if (friend != null) {
-			// The allay's own memory of the player it likes: it stays close to them.
 			spirit.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, friend.getUUID());
 		}
 		spirit.setInvulnerable(true);
@@ -60,25 +53,21 @@ public final class HarvestSpirit {
 		return KIND.is(entity);
 	}
 
-	/** The player the spirit follows, or {@code null} if it has none. */
 	public static UUID friend(Allay spirit) {
 		return spirit.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER).orElse(null);
 	}
 
-	/** Leaves a golden seed at its friend's feet, with a sparkle around the spirit. */
 	public static void leaveSeed(ServerLevel level, Allay spirit, ServerPlayer friend) {
 		Drops.spawn(level, friend.position().add(0.0, 0.5, 0.0), EventItems.GOLDEN_SEED.create(Lang.language(friend), 1));
 		level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spirit.getX(), spirit.getY() + 0.5, spirit.getZ(), 20, 0.5, 0.5, 0.5, 0.0);
 		level.playSound(null, friend.getX(), friend.getY(), friend.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0f, 1.3f);
 	}
 
-	/** A little greeting when a player touches it: hearts and a chirp. */
 	public static void greet(ServerLevel level, Allay spirit) {
 		level.sendParticles(ParticleTypes.HEART, spirit.getX(), spirit.getY() + 0.8, spirit.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
 		level.playSound(null, spirit.getX(), spirit.getY(), spirit.getZ(), SoundEvents.ALLAY_AMBIENT_WITHOUT_ITEM, SoundSource.NEUTRAL, 1.0f, 1.2f);
 	}
 
-	/** Removes the spirit in a puff of leaves. */
 	public static void vanish(ServerLevel level, Allay spirit) {
 		level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spirit.getX(), spirit.getY() + 0.5, spirit.getZ(), 15, 0.4, 0.4, 0.4, 0.0);
 		Creature.remove(spirit);

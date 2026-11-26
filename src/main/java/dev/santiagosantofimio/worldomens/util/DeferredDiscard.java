@@ -5,10 +5,6 @@ import java.util.List;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.world.entity.Entity;
 
-/**
- * Removes entities at the end of the server tick. Used for event entities that load from a save after their event
- * is over: they cannot be removed inside the load callback, while they are still being added to the level.
- */
 public final class DeferredDiscard {
 	private static final List<Entity> PENDING = new ArrayList<>();
 

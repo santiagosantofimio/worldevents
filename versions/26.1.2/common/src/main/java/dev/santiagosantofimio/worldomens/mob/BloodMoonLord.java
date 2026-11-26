@@ -25,11 +25,6 @@ import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The Blood Moon Lord: a crowned blood-red moon with an angry face that floats after players, swinging the blood
- * scythe and calling minions. It has its own boss bar. Moves and fights like a wither skeleton (the invisible mob
- * under the model, whose scythe stays visible). Comes once per blood moon and leaves at dawn, unless summoned.
- */
 public final class BloodMoonLord {
 	public static final Creature.Kind KIND = Creature.kind("blood_moon_lord", Items.WITHER_SKELETON_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
@@ -37,7 +32,6 @@ public final class BloodMoonLord {
 			.boss(BossEvent.BossBarColor.RED, ChatFormatting.DARK_RED);
 	public static final String TAG = KIND.tag();
 	public static final String NAME_KEY = KIND.nameKey();
-	/** Zombies and skeletons the lord called; it keeps a few around it at most. */
 	public static final String MINION_TAG = WorldOmensMod.MOD_ID + ".lord_minion";
 	public static final Creature.Part ORB = Creature.register(Creature.Part.of(Items.REDSTONE_BLOCK, "blood_moon_lord", 1.7f).bright().outline(0xC01010)
 			.moving(Creature.Motion.PULSE));
@@ -60,7 +54,6 @@ public final class BloodMoonLord {
 		lord.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
 		MobSpawning.setBase(lord, Attributes.SCALE, 1.3);
 		MobSpawning.setBase(lord, Attributes.MAX_HEALTH, health);
-		// The scythe it holds adds +8, for 10 damage per hit (plus the wither effect of its kind).
 		MobSpawning.setBase(lord, Attributes.ATTACK_DAMAGE, 2.0);
 		MobSpawning.setBase(lord, Attributes.MOVEMENT_SPEED, 0.3);
 		MobSpawning.setBase(lord, Attributes.KNOCKBACK_RESISTANCE, 0.8);
@@ -71,7 +64,6 @@ public final class BloodMoonLord {
 		MobSpawning.name(lord, NAME_KEY, language, ChatFormatting.DARK_RED);
 		Creature.mark(lord, KIND);
 		level.addFreshEntityWithPassengers(lord);
-		// The orb's outline glows so players can find it in the dark.
 		Creature.dress(lord, ORB, CROWN);
 		return lord;
 	}
@@ -80,19 +72,16 @@ public final class BloodMoonLord {
 		return KIND.is(entity);
 	}
 
-	/** The health set in the blood moon's config, for summoned lords too. */
 	private static double configuredHealth() {
 		return ModConfig.get().event(BloodMoonEvent.ID).getDouble("lordHealth");
 	}
 
-	/** While it is after someone, the lord calls minions every few seconds. */
 	private static void act(ServerLevel level, Mob lord, int tick) {
 		if (Creature.everySeconds(lord, tick, MINION_INTERVAL_SECONDS) && lord.getTarget() != null) {
 			summonMinions(level, lord);
 		}
 	}
 
-	/** Calls up to two zombies or skeletons next to the lord, keeping at most {@link #MAX_MINIONS} around it. */
 	public static void summonMinions(ServerLevel level, Mob lord) {
 		int around = level.getEntitiesOfClass(Mob.class, lord.getBoundingBox().inflate(MINION_RANGE),
 				mob -> mob.isAlive() && mob.entityTags().contains(MINION_TAG)).size();

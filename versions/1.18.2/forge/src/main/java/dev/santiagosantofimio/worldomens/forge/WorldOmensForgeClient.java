@@ -9,10 +9,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Only for games that have the mod on the client too (singleplayer, or players who install it): a creative tab with
- * the special items and the creature eggs. Vanilla clients never see it.
- */
 final class WorldOmensForgeClient {
 	private WorldOmensForgeClient() {
 	}
@@ -37,7 +33,6 @@ final class WorldOmensForgeClient {
 		};
 	}
 
-	/** The game's language, for the items' names. */
 	private static String language() {
 		return Lang.resolveLanguage(Minecraft.getInstance().getLanguageManager().getSelected().getCode());
 	}

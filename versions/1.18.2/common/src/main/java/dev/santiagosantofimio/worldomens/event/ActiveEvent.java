@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.function.Supplier;
 import net.minecraft.nbt.CompoundTag;
 
-/** A running event in one dimension. Time and {@link #data()} are saved; {@link #state} is rebuilt after restarts. */
 public final class ActiveEvent {
 	private static final Codec<WorldEvent> EVENT_CODEC = Codec.STRING.comapFlatMap(
 			id -> {
@@ -53,12 +52,10 @@ public final class ActiveEvent {
 		remainingTicks = Math.max(0, remainingTicks - ticks);
 	}
 
-	/** Event-specific values that survive restarts. Mark the saved data dirty after changing it. */
 	public CompoundTag data() {
 		return data;
 	}
 
-	/** Event-specific runtime state (tracked mobs, timers…). Lost on restart, so {@code factory} recreates it. */
 	@SuppressWarnings("unchecked")
 	public <T> T state(Supplier<T> factory) {
 		if (state == null) {

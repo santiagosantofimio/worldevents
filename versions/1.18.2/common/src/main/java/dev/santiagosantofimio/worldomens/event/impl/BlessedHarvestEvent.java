@@ -43,22 +43,13 @@ import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-/**
- * A blessed harvest: for a few minutes, crops around players grow by themselves and ripe crops drop double. Each
- * player gets a harvest spirit that follows them and leaves golden seeds, which ripen the crops around them at once.
- * It only ever makes crops grow: no blocks are placed or broken.
- */
 public final class BlessedHarvestEvent implements WorldEvent {
 	public static final String ID = "blessed_harvest";
 	private static final long EARLIEST_START = 1000;
 	private static final long LATEST_START = 9000;
-	/** How far above and below a player the harvest looks for crops. */
 	private static final int GROWTH_HEIGHT = 3;
-	/** A golden seed ripens the crops this far around the block it is used on. */
 	private static final int SEED_RADIUS = 3;
-	/** Enough steps for any crop to ripen, and for a ripe stem to grow its fruit. */
 	private static final int MAX_GROWTH_STEPS = 16;
-	/** A spirit this far from its friend goes away; a new one comes once the friend is back in loaded land. */
 	private static final double MAX_FRIEND_DISTANCE = 48.0;
 
 	@Override
@@ -68,7 +59,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 300);
 		json.addProperty("growthRadius", 12);
 		json.addProperty("growthAttemptsPerPlayer", 16);
@@ -95,13 +85,11 @@ public final class BlessedHarvestEvent implements WorldEvent {
 		return SoundEvents.AMETHYST_BLOCK_CHIME;
 	}
 
-	/** Crops need the sun: the overworld, not the Nether or the End. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return DayCycle.hasDayCycle(level);
 	}
 
-	/** In the morning, so the whole event happens in daylight. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		return !level.isNight() && DayCycle.isBetween(level, EARLIEST_START, LATEST_START);
@@ -129,10 +117,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 		state.spirits.clear();
 	}
 
-	/**
-	 * Gives a few random crops around {@code center} one step of growth, like bone meal. Only looks at loaded,
-	 * ticking chunks, a few columns per call.
-	 */
 	private static void growAround(ServerLevel level, BlockPos center, int radius, int attempts) {
 		Random random = level.getRandom();
 		for (int i = 0; i < attempts; i++) {
@@ -152,7 +136,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 		}
 	}
 
-	/** Ripens every crop around {@code center} at once, as a golden seed does. Returns how many crops grew. */
 	public static int ripenAround(ServerLevel level, BlockPos center) {
 		int ripened = 0;
 		for (BlockPos mutable : BlockPos.betweenClosed(center.offset(-SEED_RADIUS, -1, -SEED_RADIUS), center.offset(SEED_RADIUS, 1, SEED_RADIUS))) {
@@ -173,26 +156,22 @@ public final class BlessedHarvestEvent implements WorldEvent {
 		return ripened;
 	}
 
-	/** Farm crops (wheat, carrots, stems…), sweet berries and cocoa. */
 	private static boolean isCrop(BlockState state) {
 		return state.is(BlockTags.CROPS) || state.is(Blocks.SWEET_BERRY_BUSH) || state.is(Blocks.COCOA);
 	}
 
-	/** One step of growth, like a use of bone meal; a ripe stem tries to grow its fruit. Returns whether it grew. */
 	private static boolean grow(ServerLevel level, BlockPos pos, BlockState state) {
 		if (state.getBlock() instanceof BonemealableBlock crop && crop.isValidBonemealTarget(level, pos, state, false)) {
 			crop.performBonemeal(level, level.getRandom(), pos, state);
 			return true;
 		}
 		if (state.getBlock() instanceof StemBlock) {
-			// A ripe stem grows a melon or pumpkin on its random ticks, if there is room next to it.
 			state.randomTick(level, pos, level.getRandom());
 			return level.getBlockState(pos) != state;
 		}
 		return false;
 	}
 
-	/** Ripe crops, whose drops the harvest doubles. Fruit blocks are left out: they can be placed again. */
 	private static boolean isRipe(BlockState state) {
 		if (state.getBlock() instanceof CropBlock crop) {
 			return crop.isMaxAge(state);
@@ -224,7 +203,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 			}
 			BlockPos spot = MobSpawning.spotNear(level, EntityType.PARROT, player.blockPosition(), 2, 5, 2, 8);
 			if (spot != null) {
-				// Hovering a block up, if there is room.
 				BlockPos air = spot.above();
 				boolean room = level.noCollision(EntityType.PARROT.getAABB(air.getX() + 0.5, air.getY(), air.getZ() + 0.5));
 				spawnSpirit(level, state, room ? air : spot, player, settings);
@@ -232,13 +210,11 @@ public final class BlessedHarvestEvent implements WorldEvent {
 		}
 	}
 
-	/** Every so often, the spirit leaves its friend a golden seed, up to a few per player and event. */
 	private static void tickSeeds(ServerLevel level, HarvestState state, EventSettings settings, Parrot spirit, ServerPlayer friend) {
 		UUID id = friend.getUUID();
 		int interval = Math.max(1, settings.getInt("seedInterval"));
 		Integer seconds = state.secondsToSeed.get(id);
 		if (seconds == null) {
-			// A spirit back from a save starts counting again: no seed straight away.
 			state.secondsToSeed.put(id, interval);
 			return;
 		}
@@ -262,14 +238,12 @@ public final class BlessedHarvestEvent implements WorldEvent {
 			return null;
 		}
 		state.spirits.put(friend.getUUID(), spirit);
-		// The seed count belongs to the player: a spirit that comes back does not start over.
 		if (state.secondsToSeed.putIfAbsent(friend.getUUID(), Math.max(1, settings.getInt("seedInterval"))) == null) {
 			friend.sendMessage(Lang.component(friend, "mob.harvest_spirit.appeared").withStyle(ChatFormatting.GREEN), net.minecraft.Util.NIL_UUID);
 		}
 		return spirit;
 	}
 
-	/** Spawns a harvest spirit for {@code friend} at {@code pos} now, for tests and admins. */
 	public Parrot spawnSpirit(ServerLevel level, ActiveEvent active, BlockPos pos, ServerPlayer friend) {
 		HarvestState state = active.state(HarvestState::new);
 		Parrot old = state.spirits.get(friend.getUUID());
@@ -296,11 +270,9 @@ public final class BlessedHarvestEvent implements WorldEvent {
 			}
 		});
 
-		// Nothing hurts a spirit but /kill, the void and players in creative (as with vanilla invulnerable mobs).
 		Hooks.ALLOW_DAMAGE.register((entity, source, amount) ->
 				!HarvestSpirit.is(entity) || source.isBypassInvul() || source.isCreativePlayer());
 
-		// No handing it items (it would hold them in the air, or duplicate itself with amethyst): it just says hello.
 		Hooks.USE_ENTITY.register((player, world, hand, entity, hitResult) -> {
 			if (!(entity instanceof Parrot spirit) || !HarvestSpirit.is(spirit) || !(world instanceof ServerLevel level)) {
 				return InteractionResult.PASS;
@@ -309,7 +281,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 			return InteractionResult.SUCCESS;
 		});
 
-		// Golden seed: the crops around the clicked block ripen at once. Works any time, not only during the event.
 		Hooks.USE_BLOCK.register((player, world, hand, hitResult) -> {
 			ItemStack stack = player.getItemInHand(hand);
 			if (!EventItems.GOLDEN_SEED.is(stack) || !(player instanceof ServerPlayer serverPlayer) || !(world instanceof ServerLevel level)) {
@@ -341,7 +312,6 @@ public final class BlessedHarvestEvent implements WorldEvent {
 	}
 
 	private static final class HarvestState {
-		/** Each player's spirit, by player. */
 		private final Map<UUID, Parrot> spirits = new HashMap<>();
 		private final Map<UUID, Integer> secondsToSeed = new HashMap<>();
 		private final Map<UUID, Integer> seedsGiven = new HashMap<>();

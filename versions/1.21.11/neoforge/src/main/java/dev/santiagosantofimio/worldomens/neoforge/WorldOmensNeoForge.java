@@ -29,7 +29,6 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/** NeoForge entry point: sets the mod up and forwards NeoForge events to {@link Hooks}. */
 @Mod(WorldOmensMod.MOD_ID)
 public class WorldOmensNeoForge {
 	private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS =

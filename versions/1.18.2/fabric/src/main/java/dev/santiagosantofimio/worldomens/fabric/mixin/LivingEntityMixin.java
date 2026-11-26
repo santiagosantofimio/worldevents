@@ -10,10 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** The damage and death hooks, which Fabric API for 1.18 does not have. */
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
-	/** Health and absorption before the hit, to work out how much it took. */
 	@Unique
 	private float worldomens$healthBefore;
 

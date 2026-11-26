@@ -7,13 +7,11 @@ import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
-/** What each player did during a running event. Saved with the event, so a restart does not lose it. */
 public final class EventScores {
 	private static final String KEY = "scores";
 	private static final String NAME = "name";
 	private static final String POINTS = "points";
 
-	/** A player's standing; the name is kept so the ranking still shows players who have left. */
 	public record Entry(UUID player, String name, int points) {
 	}
 
@@ -30,7 +28,6 @@ public final class EventScores {
 		active.data().put(KEY, scores);
 	}
 
-	/** Every player who scored, best first. */
 	public static List<Entry> ranking(ActiveEvent active) {
 		CompoundTag scores = active.data().getCompound(KEY);
 		List<Entry> entries = new ArrayList<>();

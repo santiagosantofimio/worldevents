@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Forge has no event for right-clicking an entity (only for the armor stand's precise click), so this adds one. */
 @Mixin(Player.class)
 public abstract class PlayerMixin {
 	@Inject(method = "interactOn", at = @At("HEAD"), cancellable = true)

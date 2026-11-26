@@ -12,12 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
-/**
- * Per-dimension event state: the running event, the next planned one, and when each event last ended
- * (in game time).
- */
 public final class WorldOmensData extends SavedData {
-	/** The event drawn to run next, waiting for the right moment to start. */
 	public record Plan(String eventId, long plannedAt, long warnedAt) {
 		private static final long NOT_WARNED = -1;
 		private static final Codec<Plan> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -40,14 +35,12 @@ public final class WorldOmensData extends SavedData {
 	}
 
 	private static final Codec<WorldOmensData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			// Lenient so a save with an event id that no longer exists loads as "no event" instead of failing.
 			ActiveEvent.CODEC.lenientOptionalFieldOf("active").forGetter(data -> Optional.ofNullable(data.active)),
 			Plan.CODEC.lenientOptionalFieldOf("planned").forGetter(data -> Optional.ofNullable(data.plan)),
 			Codec.LONG.optionalFieldOf("lastEventEnd").forGetter(data -> Optional.ofNullable(data.lastEventEnd)),
 			Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("lastEnds", Map.of()).forGetter(data -> data.lastEnds)
 	).apply(instance, WorldOmensData::new));
 
-	// No DataFixTypes: Fabric API allows null and skips data fixing for mod data.
 	private static final SavedDataType<WorldOmensData> TYPE = new SavedDataType<>(
 			Identifier.fromNamespaceAndPath(WorldOmensMod.MOD_ID, "state"), WorldOmensData::new, CODEC, null);
 
@@ -115,7 +108,6 @@ public final class WorldOmensData extends SavedData {
 		setDirty();
 	}
 
-	/** Game time when the last event in this dimension ended, or {@code null} if none has run yet. */
 	public Long lastEventEnd() {
 		return lastEventEnd;
 	}
@@ -130,7 +122,6 @@ public final class WorldOmensData extends SavedData {
 		setDirty();
 	}
 
-	/** Starts the global cooldown from now, so a freshly installed mod does not fire an event right away. */
 	public void initCooldownIfNew(long gameTime) {
 		if (lastEventEnd == null) {
 			lastEventEnd = gameTime;

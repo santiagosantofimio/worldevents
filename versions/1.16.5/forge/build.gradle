@@ -3,7 +3,6 @@ plugins {
 	id 'xyz.wagyourtail.jvmdowngrader' version '2.0.1'
 }
 
-// The versions every loader of 1.16.5 shares.
 def shared = new Properties()
 file('../gradle.properties').withInputStream { shared.load(it) }
 def mcVersion = shared.minecraft_version
@@ -30,7 +29,6 @@ loom {
 	silentMojangMappingsLicense()
 	accessWidenerPath = file('src/main/resources/worldomens.accesswidener')
 	forge {
-		// Forge reads access transformers: the access widener is turned into one, with Forge's runtime names.
 		convertAccessWideners = true
 		extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 	}
@@ -69,8 +67,6 @@ jar {
 	}
 }
 
-// 1.16.5 runs on Java 8: the code is compiled with Java 17, its classes are turned into Java 8 ones (with the Java
-// library parts they use copied in), and only then remapped to the names Forge has at runtime.
 jvmdg.downgradeTo = JavaVersion.VERSION_1_8
 remapJar {
 	inputFile = tasks.named('shadeDowngradedApi').flatMap { it.archiveFile }

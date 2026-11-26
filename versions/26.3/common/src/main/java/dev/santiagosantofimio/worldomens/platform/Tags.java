@@ -6,7 +6,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
-/** The shared {@code c:} tags, which Fabric, NeoForge and Forge all fill in. */
 public final class Tags {
 	private Tags() {
 	}

@@ -23,10 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The storm spirit: a small angry thundercloud that drifts through walls during a thunderstorm and calls lightning
- * down on players. Flies like a vex (the invisible mob under the model).
- */
 public final class StormSpirit {
 	public static final Creature.Kind KIND = Creature.kind("storm_spirit", Items.VEX_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language))
@@ -54,7 +50,6 @@ public final class StormSpirit {
 		}
 		vex.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		vex.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
-		// A vex spawns with a sword, which would float next to the cloud.
 		vex.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(vex, Attributes.SCALE, 1.6);
 		MobSpawning.setBase(vex, Attributes.MAX_HEALTH, 24.0);
@@ -70,14 +65,12 @@ public final class StormSpirit {
 		return KIND.is(entity);
 	}
 
-	/** Calls lightning on the spirit's target if it is a player in range. Returns whether it struck. */
 	public static boolean strike(ServerLevel level, Mob spirit) {
 		LivingEntity target = spirit.getTarget();
 		if (!(target instanceof ServerPlayer player) || player.isCreative() || player.isSpectator()
 				|| player.distanceToSqr(spirit) > STRIKE_RANGE * STRIKE_RANGE) {
 			return false;
 		}
-		// A visual-only bolt (no fire, no block changes) plus our own damage, so storms never burn bases.
 		LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
 		if (bolt != null) {
 			bolt.snapTo(player.getX(), player.getY(), player.getZ());

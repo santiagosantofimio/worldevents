@@ -25,10 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The mimic sack: a living sack of gold that hops away from players during a gold rush. One hit and it bursts into
- * gold; if nobody catches it in time, it escapes. Moves like a rabbit (the invisible mob under the model).
- */
 public final class MimicSack {
 	public static final Creature.Kind KIND = Creature.kind("mimic_sack", Items.RABBIT_SPAWN_EGG,
 			(level, pos, language, summoner) -> spawn(level, pos, language));
@@ -62,7 +58,6 @@ public final class MimicSack {
 		return KIND.is(entity);
 	}
 
-	/** {@code player} hit the sack: it bursts into gold. */
 	public static void caught(ServerLevel level, Rabbit sack, ServerPlayer player) {
 		Random random = level.getRandom();
 		Vec3 at = sack.position().add(0.0, 0.5, 0.0);
@@ -80,7 +75,6 @@ public final class MimicSack {
 		Advancements.award(player, "catch_mimic_sack");
 	}
 
-	/** Nobody caught it in time. */
 	public static void escape(ServerLevel level, Rabbit sack) {
 		level.sendParticles(ParticleTypes.CLOUD, sack.getX(), sack.getY() + 0.5, sack.getZ(), 15, 0.3, 0.3, 0.3, 0.02);
 		Creature.remove(sack);

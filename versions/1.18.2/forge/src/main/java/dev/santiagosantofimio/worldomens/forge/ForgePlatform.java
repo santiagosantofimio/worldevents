@@ -22,7 +22,6 @@ public class ForgePlatform implements Platform {
 
 	@Override
 	public String language(ServerPlayer player) {
-		// Forge keeps the player's game language; vanilla 1.18 does not.
 		return player.getLanguage();
 	}
 

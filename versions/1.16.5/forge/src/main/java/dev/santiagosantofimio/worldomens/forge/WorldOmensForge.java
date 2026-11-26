@@ -35,7 +35,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
-/** Forge entry point: sets the mod up and forwards Forge events to {@link Hooks}. */
 @Mod(WorldOmensMod.MOD_ID)
 public final class WorldOmensForge {
 	private static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS =
@@ -46,7 +45,6 @@ public final class WorldOmensForge {
 	}
 
 	public WorldOmensForge() {
-		// Server-side only: clients without the mod can join, and the mod list does not ask for it.
 		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST,
 				() -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (version, fromServer) -> true));
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -79,7 +77,6 @@ public final class WorldOmensForge {
 				event.setCanceled(true);
 			}
 		});
-		// The last listener: the amount is what the entity takes.
 		bus.addListener(EventPriority.LOWEST, (LivingDamageEvent event) -> {
 			if (!event.isCanceled() && !event.getEntityLiving().level.isClientSide()) {
 				Hooks.afterDamage(event.getEntityLiving(), event.getSource(), event.getAmount(), event.getAmount(), false);

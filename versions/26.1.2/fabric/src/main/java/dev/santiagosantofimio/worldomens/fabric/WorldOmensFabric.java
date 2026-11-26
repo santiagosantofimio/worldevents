@@ -18,7 +18,6 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 
-/** Fabric entry point: sets the mod up and forwards Fabric API events to {@link Hooks}. */
 public class WorldOmensFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {

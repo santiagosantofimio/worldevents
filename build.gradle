@@ -8,8 +8,6 @@ base {
 }
 
 fabricApi {
-	// Game tests in src/gametest. Server tests: ./gradlew runGameTest (also part of ./gradlew build).
-	// Client tests: ./gradlew runClientGameTest (opens a window and saves screenshots; not part of the build).
 	configureTests {
 		createSourceSet = true
 		modId = "worldomens-test"
@@ -54,8 +52,6 @@ test {
 	useJUnitPlatform()
 }
 
-// Optional resource pack for players: looks and names for the mod's items, mobs and advancements.
-// Built from src/main/resources/assets, which the mod also loads by itself in singleplayer.
 def resourcePackFormat = project.resource_pack_format as int
 def modVersion = project.version
 def resourcePack = tasks.register("resourcePack", Zip) {
@@ -99,8 +95,6 @@ tasks.named("assemble") {
 	dependsOn(resourcePack)
 }
 
-// The finished files, ready to upload, named like the other Minecraft versions' (versions/): dist/26.3/ at the top
-// of the repository. Run with: ./gradlew dist
 def distVersion = project.minecraft_version
 tasks.register("dist", Copy) {
 	group = "build"

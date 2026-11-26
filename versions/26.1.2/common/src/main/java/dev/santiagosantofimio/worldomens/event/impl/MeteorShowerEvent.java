@@ -56,14 +56,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A night of shooting stars. A few meteors fall near players and leave a small crater lined with ores, or just
- * drop the ores if block damage is off. Craters only dig natural terrain (dirt, sand, stone…), never blocks with
- * a block entity, liquids or anything inside spawn protection, so player builds are left alone.
- *
- * <p>Shooting stars are particles only. Meteors are falling magma blocks that we track every tick: we predict the
- * impact one tick ahead and handle it ourselves, so the block never lands on its own.
- */
 public final class MeteorShowerEvent implements WorldEvent {
 	public static final String ID = "meteor_shower";
 	private static final String METEOR_TAG = WorldOmensMod.MOD_ID + ".meteor";
@@ -100,7 +92,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			new Ore(43, Blocks.NETHER_QUARTZ_ORE, Blocks.NETHER_QUARTZ_ORE),
 			new Ore(2, Blocks.ANCIENT_DEBRIS, Blocks.ANCIENT_DEBRIS));
 
-	/** What a meteor leaves when it cannot make a crater. */
 	private static final List<Loot> LOOT = List.of(
 			new Loot(35, Items.RAW_IRON, 1, 3),
 			new Loot(25, Items.RAW_COPPER, 2, 4),
@@ -117,7 +108,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 3 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 180);
 		json.addProperty("shootingStarInterval", 1);
 		json.addProperty("impactChance", 0.03);
@@ -146,7 +136,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.FIREWORK_ROCKET_LARGE_BLAST_FAR);
 	}
 
-	/** Needs an open sky with a day cycle: the overworld, not the Nether or the End. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return level.dimensionType().hasSkyLight() && !level.dimensionType().hasFixedTime() && !level.dimensionType().hasCeiling();
@@ -199,14 +188,12 @@ public final class MeteorShowerEvent implements WorldEvent {
 			if (entity.isRemoved()) {
 				meteors.remove();
 				if (entity.getRemovalReason() == Entity.RemovalReason.DISCARDED) {
-					// It landed before we caught it and may have placed its block.
 					landedOnItsOwn(level, entity);
 					state.landed++;
 				}
 				continue;
 			}
 			Vec3 pos = entity.position();
-			// A long fiery tail behind the rock, so it reads as a comet from far away, and a roar as it falls.
 			Vec3 tail = entity.getDeltaMovement().scale(-1.0);
 			for (int i = 0; i < 4; i++) {
 				Vec3 at = pos.add(tail.scale(i * 0.9));
@@ -218,7 +205,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 				level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.WEATHER, 5.0f, 0.5f);
 			}
 
-			// Where the falling block will be next tick (gravity is applied before it moves).
 			Vec3 next = pos.add(entity.getDeltaMovement().add(0.0, -0.04, 0.0).scale(1.5));
 			BlockHitResult hit = level.clip(new ClipContext(pos, next, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, entity));
 			if (hit.getType() == HitResult.Type.BLOCK || entity.onGround() || entity.isInWater()) {
@@ -249,9 +235,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 
 	@Override
 	public void registerHooks() {
-		// Meteors are only tracked in memory. One loaded from a save (after a restart or a chunk reload) is removed
-		// instead of landing as a plain block. Removal waits for the end of the tick: the entity is still being
-		// added to the level when the load callback runs.
 		Hooks.ENTITY_LOAD.register((entity, level) -> {
 			if (!(entity instanceof FallingBlockEntity) || !entity.entityTags().contains(METEOR_TAG)) {
 				return;
@@ -263,7 +246,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			}
 		});
 
-		// Living meteorites only live during the shower: one loaded afterwards crumbles.
 		Hooks.ENTITY_LOAD.register((entity, level) -> {
 			if (!(entity instanceof MagmaCube meteorite) || !LivingMeteorite.is(meteorite) || Creature.isSummoned(meteorite)) {
 				return;
@@ -294,7 +276,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			}
 		});
 
-		// Its burning fists set whatever it hits on fire.
 		Hooks.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
 			if (damageTaken > 0 && source.getEntity() instanceof MagmaCube meteorite && LivingMeteorite.is(meteorite) && source.getDirectEntity() == meteorite) {
 				entity.igniteForSeconds(4.0f);
@@ -309,7 +290,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			double distance = Mth.nextDouble(random, MIN_IMPACT_DISTANCE, MAX_IMPACT_DISTANCE);
 			int x = Mth.floor(player.getX() + Math.cos(angle) * distance);
 			int z = Mth.floor(player.getZ() + Math.sin(angle) * distance);
-			// Checked before any height lookup, which would load the chunk.
 			if (!level.isPositionEntityTicking(new BlockPos(x, player.getBlockY(), z))) {
 				continue;
 			}
@@ -318,7 +298,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			if (Protection.isSpawnProtected(level, target) || !level.getFluidState(target).isEmpty() || isNearPlayer(level, target)) {
 				continue;
 			}
-			// Come in at an angle from a random direction so the trail is visible.
 			double heading = random.nextDouble() * Math.PI * 2;
 			Vec3 velocity = new Vec3(Math.cos(heading) * 0.7, -0.6, Math.sin(heading) * 0.7);
 			Vec3 drift = horizontalDrift(velocity, FALL_HEIGHT);
@@ -326,7 +305,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			if (start.getY() >= level.getMaxY() || !level.isPositionEntityTicking(start) || !level.getBlockState(start).isAir()) {
 				continue;
 			}
-			// fall() replaces the block at its position with air, which is why we checked it is already air.
 			FallingBlockEntity meteor = FallingBlockEntity.fall(level, start, Blocks.MAGMA_BLOCK.defaultBlockState());
 			meteor.setDeltaMovement(velocity);
 			meteor.disableDrop();
@@ -338,7 +316,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		return false;
 	}
 
-	/** Horizontal distance a falling block travels while dropping {@code height}, using its own physics. */
 	private static Vec3 horizontalDrift(Vec3 velocity, double height) {
 		double x = 0;
 		double y = 0;
@@ -370,23 +347,17 @@ public final class MeteorShowerEvent implements WorldEvent {
 			return;
 		}
 		if (level.getBlockState(pos).is(Blocks.MAGMA_BLOCK)) {
-			// Remove the block it placed; the crater (or the loot) replaces it.
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 		}
 		impact(level, pos.below());
 	}
 
-	/**
-	 * A meteor hits the top of {@code ground}: effects, then a crater with ores, or loot if craters are disabled
-	 * or nothing around could be dug.
-	 */
 	public void impact(ServerLevel level, BlockPos ground) {
 		Vec3 center = Vec3.atCenterOf(ground).add(0.0, 0.6, 0.0);
 		level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, true, false, center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
 		level.sendParticles(ParticleTypes.LAVA, true, false, center.x, center.y, center.z, 20, 1.2, 0.6, 1.2, 0.0);
 		level.sendParticles(ParticleTypes.LARGE_SMOKE, true, false, center.x, center.y, center.z, 30, 1.5, 1.0, 1.5, 0.02);
 		level.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0f, 0.7f);
-		// A crack of thunder carries much farther than the blast, and a ring of flame and dust marks the spot.
 		level.playSound(null, center.x, center.y, center.z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 6.0f, 1.3f);
 		level.sendParticles(ParticleTypes.FLAME, true, false, center.x, center.y, center.z, 60, 1.0, 1.5, 1.0, 0.15);
 		for (int i = 0; i < 24; i++) {
@@ -420,7 +391,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 	}
 
-	/** A living meteorite climbs out of the crater (or off the impact site when there is no crater). */
 	private void raiseMeteorite(ServerLevel level, BlockPos ground, String language) {
 		BlockPos spot = MobSpawning.spotInColumn(level, EntityType.MAGMA_CUBE, ground.getX(), ground.getZ(), ground.getY() + 2, ground.getY() - 4);
 		if (spot == null) {
@@ -431,7 +401,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			return;
 		}
 		ActiveEvent active = EventManager.active(level);
-		// Usually already tracked: the load callback also sees new entities.
 		if (active != null && active.event() == this && !active.state(ShowerState::new).meteorites.contains(meteorite)) {
 			active.state(ShowerState::new).meteorites.add(meteorite);
 		}
@@ -442,11 +411,9 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 	}
 
-	/** Digs a shallow bowl in natural terrain and lines it with ores. Returns how many blocks were removed. */
 	private static int carveCrater(ServerLevel level, BlockPos ground, double radius, double oreChance) {
 		double r = Math.clamp(radius, MIN_CRATER_RADIUS, MAX_CRATER_RADIUS);
 		int reach = Mth.ceil(r) + 1;
-		// Sphere center slightly above the surface: about 5 blocks wide and 2 deep for the default radius.
 		double cx = ground.getX() + 0.5;
 		double cy = ground.getY() + 0.5 + r * 0.35;
 		double cz = ground.getZ() + 0.5;
@@ -483,7 +450,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 		BlockPos core = null;
 		if (lowestCenterY != Integer.MAX_VALUE) {
-			// The meteorite itself, glowing at the bottom of the crater.
 			BlockPos below = new BlockPos(ground.getX(), lowestCenterY - 1, ground.getZ());
 			if (canChange(level, below) && isNaturalGround(level.getBlockState(below))) {
 				level.setBlock(below, Blocks.MAGMA_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
@@ -503,7 +469,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		return level.isLoaded(pos) && !state.hasBlockEntity() && state.getFluidState().isEmpty() && !Protection.isSpawnProtected(level, pos);
 	}
 
-	/** Terrain a crater may dig. Building blocks (planks, bricks, glass, terracotta…) are never touched. */
 	public static boolean isNaturalGround(BlockState state) {
 		return state.is(BlockTags.SUBSTRATE_OVERWORLD)
 				|| state.is(BlockTags.SAND)
@@ -536,7 +501,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 	}
 
-	/** How many meteors of this run have hit the ground so far. */
 	public static int landedCount(ActiveEvent active) {
 		return active.state(ShowerState::new).landed;
 	}
@@ -561,7 +525,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 	private record Meteor(FallingBlockEntity entity) {
 	}
 
-	/** A shooting star: a short line of particles crossing the sky, visible from far away. */
 	private static final class Streak {
 		private Vec3 pos;
 		private final Vec3 step;
@@ -589,8 +552,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 		}
 
 		private void render(ServerLevel level) {
-			// A thick glowing line, not dots: a white core with a flame around it every third of a block along this
-			// tick's step, and sparks at the head. Thin dots all but vanish at this height.
 			int points = Math.max(3, (int) Math.ceil(step.length() / 0.35));
 			for (int i = 0; i < points; i++) {
 				Vec3 at = pos.add(step.scale(i / (double) points));
@@ -600,7 +561,6 @@ public final class MeteorShowerEvent implements WorldEvent {
 			level.sendParticles(ParticleTypes.FIREWORK, true, false, pos.x, pos.y, pos.z, 4, 0.15, 0.15, 0.15, 0.03);
 		}
 
-		/** Moves the star forward; returns true once it has burnt out. */
 		private boolean advance() {
 			pos = pos.add(step);
 			return --ticksLeft <= 0;

@@ -44,14 +44,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A treasure hunt: a chest full of loot appears on the surface somewhere near players, and whoever gets to it first
- * takes it. The action bar tells each player how warm they are, and a faint column of light rises from the chest. A
- * spectral captain rises to guard it when someone comes close, and the chest stays shut until the captain falls.
- *
- * <p>The chest only takes the place of air or plants. If nobody finds it, it goes away with the event; if its chunk
- * is not loaded by then, it stays there for someone to stumble upon.
- */
 public final class TreasureHuntEvent implements WorldEvent {
 	public static final String ID = "treasure_hunt";
 	private static final String CHEST = "chest";
@@ -64,7 +56,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 	private static final long LATEST_START = 9000;
 	private static final int MIN_CHEST_DISTANCE = 32;
 	private static final int MAX_CHEST_DISTANCE = 64;
-	/** The captain rises when someone comes this close to the chest. */
 	private static final double GUARD_RANGE = 10.0;
 	private static final double WARM_RANGE = 64.0;
 	private static final double HOT_RANGE = 32.0;
@@ -79,7 +70,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 5 in-game days; lasts 8 minutes, or until someone finds the treasure.
 		JsonObject json = EventSettings.defaults(true, 8, 6000, 480);
 		json.addProperty("guardian", true);
 		json.addProperty("captainHealth", 120.0);
@@ -102,13 +92,11 @@ public final class TreasureHuntEvent implements WorldEvent {
 		return SoundEvents.UI_TOAST_CHALLENGE_COMPLETE;
 	}
 
-	/** Needs a surface and daylight: the overworld, not the Nether or the End. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return DayCycle.hasDayCycle(level);
 	}
 
-	/** In the morning, so the hunt happens in daylight. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		return !level.isNight() && DayCycle.isBetween(level, EARLIEST_START, LATEST_START);
@@ -173,7 +161,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 		}
 	}
 
-	/** Where the chest is, or {@code null} if it has not appeared yet. */
 	public static BlockPos treasure(ActiveEvent active) {
 		long chest = active.data().contains(CHEST) ? active.data().getLong(CHEST) : NO_CHEST;
 		return chest == NO_CHEST ? null : BlockPos.of(chest);
@@ -199,7 +186,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 		}
 	}
 
-	/** Puts the chest at {@code pos}, with its loot named in {@code language}. Also for tests and admins. */
 	public void placeTreasure(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		level.setBlock(pos, Blocks.CHEST.defaultBlockState(), 3);
 		if (level.getBlockEntity(pos) instanceof ChestBlockEntity chest) {
@@ -229,7 +215,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 		}
 	}
 
-	/** How warm the player is: a nudge in the right direction, without giving the chest away. */
 	private static void hint(ServerPlayer player, BlockPos chest) {
 		double distance = Math.sqrt(player.distanceToSqr(Vec3.atCenterOf(chest)));
 		String key = distance < BURNING_RANGE ? "burning" : distance < HOT_RANGE ? "hot" : distance < WARM_RANGE ? "warm" : "cold";
@@ -252,18 +237,15 @@ public final class TreasureHuntEvent implements WorldEvent {
 		}
 	}
 
-	/** The captain of the current run, if it is loaded and alive. */
 	public static Vindicator captain(ActiveEvent active) {
 		Vindicator captain = active.state(HuntState::new).captain;
 		return captain != null && captain.isAlive() ? captain : null;
 	}
 
-	/** Whether the captain still keeps players away from the chest. Monsters do not exist on peaceful. */
 	private boolean guarded(ServerLevel level, ActiveEvent active) {
 		return settings().getBoolean("guardian") && level.getDifficulty() != Difficulty.PEACEFUL && !active.data().getBoolean(CAPTAIN_DOWN);
 	}
 
-	/** Whether {@code pos} opens the treasure: the chest itself, or a chest placed next to it to make a double one. */
 	private static boolean isTreasure(ServerLevel level, ActiveEvent active, BlockPos pos) {
 		BlockPos chest = treasure(active);
 		if (chest == null) {
@@ -324,7 +306,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 			}
 		});
 
-		// The first one to open the chest ends the hunt; while the captain stands, it stays shut.
 		Hooks.USE_BLOCK.register((player, world, hand, hit) -> {
 			if (!(world instanceof ServerLevel level) || !(player instanceof ServerPlayer hunter) || player.isSpectator()) {
 				return InteractionResult.PASS;
@@ -345,7 +326,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 			return InteractionResult.PASS;
 		});
 
-		// Nobody gets the loot by breaking the chest before the hunt is over.
 		Hooks.BEFORE_BLOCK_BREAK.register((world, player, pos, state, blockEntity) -> {
 			if (!(world instanceof ServerLevel level)) {
 				return true;
@@ -354,7 +334,6 @@ public final class TreasureHuntEvent implements WorldEvent {
 			return active == null || active.event() != this || active.data().getBoolean(CLAIMED) || !pos.equals(treasure(active));
 		});
 
-		// The captain's cutlass: right-click to lunge forward.
 		Hooks.USE_ITEM.register((player, world, hand) -> {
 			ItemStack stack = player.getItemInHand(hand);
 			if (!EventItems.CAPTAINS_CUTLASS.is(stack) || !(player instanceof ServerPlayer) || !(world instanceof ServerLevel level)

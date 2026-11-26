@@ -25,10 +25,6 @@ import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The frost yeti: a shaggy white giant with horns of ice, the boss of a blizzard. It charges like a ravager (the
- * invisible mob under the model) and every few seconds lets out a roar that chills and slows everyone near it.
- */
 public final class FrostYeti {
 	public static final Creature.Kind KIND = Creature.kind("frost_yeti", Items.RAVAGER_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
@@ -74,7 +70,6 @@ public final class FrostYeti {
 		}
 	}
 
-	/** Chills and slows every player near the yeti. Returns how many it reached. */
 	public static int roar(ServerLevel level, Mob yeti) {
 		level.playSound(null, yeti.getX(), yeti.getY(), yeti.getZ(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 2.0f, 0.7f);
 		level.sendParticles(ParticleTypes.ITEM_SNOWBALL, yeti.getX(), yeti.getY() + 1.5, yeti.getZ(), 120, ROAR_RANGE / 2, 1.0, ROAR_RANGE / 2, 0.05);

@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
-/** For a few minutes, ores mined by players drop more. */
 public final class GoldRushEvent implements WorldEvent {
 	public static final String ID = "gold_rush";
 	private static final DustParticleOptions SPARKLE = Particles.dust(0xFFD700, 1.0f);
@@ -64,7 +63,6 @@ public final class GoldRushEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 300);
 		json.addProperty("dropMultiplier", 2.0);
 		json.addProperty("particles", true);
@@ -100,7 +98,6 @@ public final class GoldRushEvent implements WorldEvent {
 				continue;
 			}
 			UUID id = player.getUUID();
-			// Each player gets one roll per gold rush, even if they join late.
 			if (state.rolled.add(id) && random.nextDouble() < settings.getDouble("mimicSackChance")) {
 				state.dueAt.put(id, elapsed + Mth.nextInt(random, 10, 60));
 			}
@@ -141,7 +138,6 @@ public final class GoldRushEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns a mimic sack at {@code pos} now, for tests and admins. */
 	public Rabbit spawnSack(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Rabbit sack = MimicSack.spawn(level, pos, language);
 		if (sack != null) {
@@ -163,7 +159,6 @@ public final class GoldRushEvent implements WorldEvent {
 
 	@Override
 	public void registerHooks() {
-		// One hit from a player and the sack bursts into gold instead of taking damage.
 		Hooks.ALLOW_DAMAGE.register((entity, source, amount) -> {
 			if (entity instanceof Rabbit sack && MimicSack.is(sack) && source.getEntity() instanceof ServerPlayer player
 					&& sack.level instanceof ServerLevel level) {
@@ -195,8 +190,6 @@ public final class GoldRushEvent implements WorldEvent {
 			if (!(context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player) || !EventManager.isActive(context.getLevel(), this)) {
 				return;
 			}
-			// Silk touch would just duplicate the block, and so would ancient debris, which always drops itself.
-			// (In 1.16 iron and gold ores drop themselves too, so the drops cannot tell silk touch apart.)
 			ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
 			if (state.is(Blocks.ANCIENT_DEBRIS)
 					|| tool != null && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
@@ -212,7 +205,6 @@ public final class GoldRushEvent implements WorldEvent {
 			}
 			Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
 			if (origin != null && settings().getBoolean("particles")) {
-				// Golden sparkle and a chime so players notice the bonus.
 				ServerLevel level = context.getLevel();
 				level.sendParticles(SPARKLE, origin.x, origin.y, origin.z, 12, 0.35, 0.35, 0.35, 0.0);
 				level.playSound(null, origin.x, origin.y, origin.z, SoundEvents.NOTE_BLOCK_CHIME, SoundSource.BLOCKS, 0.8f, 1.4f);

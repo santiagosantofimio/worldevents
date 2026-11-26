@@ -1,20 +1,3 @@
-"""Converts the mod's resources (the 1.21.4+ formats) for Minecraft 1.18.2 or 1.16.5.
-
-    python3 tools/legacy_resources.py <modern resources dir> <vanilla client jar> <output resources dir> <1.18|1.16>
-
-The output folder is replaced. What changes:
-
-- Item looks: 1.21.4+ picks models in assets/minecraft/items/*.json by a string custom_model_data. Old versions pick
-  them with numeric CustomModelData "overrides" in the vanilla item model (assets/minecraft/models/item). The number
-  is EventItems.modelNumber in Java: a hash of "worldomens:<id>", worked out the same way here. Tools and weapons
-  use their 2D model everywhere: old versions cannot pick a model by where the item is shown.
-- Creature models get a "head" transform: on old versions each creature part is worn on an armor stand's head
-  (Creature.java), and the transform gives it the size the part has in Java (PART_SCALES below).
-- Advancements: data/worldomens/advancements, with icons and item conditions in NBT, and plain English titles
-  (old versions have no translatable text with a fallback, and vanilla clients do not have the mod's translations).
-- Base items that do not exist in the old version are swapped (ITEM_SWAPS), as in EventItems.java.
-- The creative tab's name gets the key old Fabric and Forge versions look for.
-"""
 import json
 import os
 import shutil
@@ -23,7 +6,6 @@ import zipfile
 
 MOD_ID = "worldomens"
 
-# How big each creature part is, in blocks per 16 model units: the Creature.Part scale in the mob classes.
 PART_SCALES = {
     "blood_moon_lord": 1.7,
     "blood_moon_lord_crown": 1.0,
@@ -40,7 +22,6 @@ PART_SCALES = {
     "eclipse_wraith": 1.6,
     "frost_yeti": 1.4,
 }
-# A worn head item is drawn at 0.625 of its model's size.
 HEAD_ITEM_SCALE = 0.625
 
 ITEM_SWAPS = {
@@ -62,7 +43,6 @@ ITEM_SWAPS = {
 
 
 def java_hash(text):
-    """Java's String.hashCode."""
     h = 0
     for ch in text:
         h = (31 * h + ord(ch)) & 0xFFFFFFFF
@@ -70,7 +50,6 @@ def java_hash(text):
 
 
 def model_number(model_id):
-    """EventItems.modelNumber: Math.floorMod(("worldomens:" + id).hashCode(), 9_000_000) + 1_000_000."""
     return java_hash(MOD_ID + ":" + model_id) % 9_000_000 + 1_000_000
 
 
@@ -79,7 +58,6 @@ def strip_namespace(ref):
 
 
 def first_model(node):
-    """The model a 1.21.4 item model definition shows; for a choice by display context, the GUI's."""
     if node.get("type") == "minecraft:model":
         return node["model"]
     if node.get("type") == "minecraft:select" and node.get("property") == "minecraft:display_context":
@@ -92,7 +70,6 @@ def first_model(node):
 
 
 def convert_items(modern, client, out, version, swaps):
-    """Vanilla item models with an override for each of the mod's looks of that item."""
     items_dir = os.path.join(modern, "assets", "minecraft", "items")
     overrides = {}
     numbers = {}
@@ -112,7 +89,6 @@ def convert_items(modern, client, out, version, swaps):
             vanilla = json.loads(jar.read("assets/minecraft/models/item/%s.json" % item))
         except KeyError:
             sys.exit("%s has no item %s: add it to ITEM_SWAPS" % (version, item))
-        # Overrides are checked in order and the last one that matches wins: "custom_model_data": n matches n and up.
         vanilla["overrides"] = [{"predicate": {"custom_model_data": number}, "model": model}
                                 for number, model in sorted(cases.items())]
         write_json(os.path.join(out, "assets", "minecraft", "models", "item", item + ".json"), vanilla)
@@ -120,7 +96,6 @@ def convert_items(modern, client, out, version, swaps):
 
 
 def add_head_transforms(out):
-    """Creature models, as worn on an armor stand's head, at the part's size."""
     models = os.path.join(out, "assets", MOD_ID, "models", "item")
     for model_id, scale in PART_SCALES.items():
         path = os.path.join(models, model_id + ".json")
@@ -176,7 +151,6 @@ def convert_advancements(modern, out, version, swaps):
 
 
 def add_tab_name(out):
-    """Old Fabric and Forge versions name the creative tab itemGroup.worldomens.items."""
     lang = os.path.join(out, "assets", MOD_ID, "lang")
     for name in os.listdir(lang):
         path = os.path.join(lang, name)

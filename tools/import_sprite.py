@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-"""Turns a pixel-art sprite from an AI image tool into a Minecraft item texture.
-
-The image must show a single sprite on a flat, solid background (pure green works best). The script finds the
-sprite's pixel grid, takes one colour per cell, makes the background transparent and writes a PNG at the grid's
-own resolution (16 or 32 pixels per side, the sprite centred). AI tools rarely draw exactly 16x16, so keeping
-the grid they drew avoids blurring the art.
-
-Usage:
-    python3 tools/import_sprite.py INPUT OUTPUT [--grid PIXELS] [--preview PREVIEW.png]
-
-If the grid it finds is wrong (the texture comes out bigger than the drawing, with doubled pixels), measure one
-pixel of the drawing in the image and pass it with --grid.
-
-Requires Pillow and numpy (dev tool only; the mod does not use them).
-"""
 
 import argparse
 
@@ -24,7 +9,6 @@ BACKGROUND_TOLERANCE = 90.0
 
 
 def background_colour(rgb):
-    """Median colour of the four corners."""
     patch = 24
     corners = np.concatenate([
         rgb[:patch, :patch].reshape(-1, 3), rgb[:patch, -patch:].reshape(-1, 3),
@@ -33,13 +17,11 @@ def background_colour(rgb):
 
 
 def edge_profile(rgb, axis):
-    """How much the colour changes between neighbouring columns (axis=1) or rows (axis=0)."""
     diff = np.abs(np.diff(rgb.astype(np.int32), axis=axis)).sum(axis=2)
     return diff.mean(axis=0 if axis == 1 else 1)
 
 
 def cell_size(profile):
-    """Grid period: the first strong peak of the edge profile's autocorrelation."""
     centred = profile - profile.mean()
     lags = range(8, len(profile) // 4)
     scores = [float(np.dot(centred[:-lag], centred[lag:])) / (len(profile) - lag) for lag in lags]
@@ -51,7 +33,6 @@ def cell_size(profile):
 
 
 def grid_lines(profile, period):
-    """Positions of the cell boundaries along one axis, snapped to the strongest nearby edges."""
     length = len(profile) + 1
     best_offset, best_score = 0, -1.0
     for offset in range(period):
@@ -74,7 +55,6 @@ def grid_lines(profile, period):
 
 
 def sample(rgb, background, xs, ys):
-    """One colour per cell (median of its centre), or transparent where the cell is mostly background."""
     rows = []
     for j in range(len(ys) - 1):
         row = []
@@ -95,7 +75,6 @@ def sample(rgb, background, xs, ys):
 
 
 def to_texture(cells):
-    """Crops to the sprite and centres it on a 16 or 32 pixel square canvas."""
     filled = [(j, i) for j, row in enumerate(cells) for i, c in enumerate(row) if c is not None]
     if not filled:
         raise SystemExit("No sprite found: is the background a flat, solid colour?")

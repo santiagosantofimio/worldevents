@@ -1,5 +1,3 @@
-// Forge for 1.16.5 is a build of its own. It uses Architectury Loom: Forge 1.16.5's own toolchain only has Mojang's
-// names for methods and fields, not for classes, and the shared code in ../common is written with all of them.
 pluginManagement {
 	repositories {
 		maven {

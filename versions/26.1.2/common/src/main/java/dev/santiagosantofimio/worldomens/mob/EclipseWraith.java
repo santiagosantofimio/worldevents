@@ -27,11 +27,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The eclipse wraith: a shadow of the darkened sun that circles the sky and swoops at players, the boss of an
- * eclipse. Every few seconds it pulses darkness over the players below and calls phantoms. It does not burn in the
- * daylight. Flies like a vex (the invisible mob under the model: a phantom's glowing eyes would show through), three times as big.
- */
 public final class EclipseWraith {
 	public static final Creature.Kind KIND = Creature.kind("eclipse_wraith", Items.VEX_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
@@ -55,7 +50,6 @@ public final class EclipseWraith {
 		}
 		wraith.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		wraith.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
-		// A vex spawns with a sword, which would float next to the wraith.
 		wraith.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(wraith, Attributes.SCALE, 3.0);
 		MobSpawning.setBase(wraith, Attributes.MAX_HEALTH, health);
@@ -84,7 +78,6 @@ public final class EclipseWraith {
 		}
 	}
 
-	/** Darkness over the players below and fresh phantoms at its side. Returns how many players it reached. */
 	public static int pulse(ServerLevel level, Mob wraith) {
 		int reached = 0;
 		for (ServerPlayer player : level.players()) {

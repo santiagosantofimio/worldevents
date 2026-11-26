@@ -52,12 +52,6 @@ import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A horde: three waves of monsters come out of the dark for the players, each bigger than the last, and the Horde
- * Warlord leads the third. Clearing a wave brings the next after a short break; beating the warlord and the last
- * wave wins. Whatever is left of the horde leaves at dawn, so no monsters stay behind. Zombies in a horde never
- * break doors, and there are no creepers.
- */
 public final class HordeEvent implements WorldEvent {
 	public static final String ID = "horde";
 	public static final String MOB_TAG = WorldOmensMod.MOD_ID + ".horde";
@@ -74,20 +68,15 @@ public final class HordeEvent implements WorldEvent {
 	private static final int FIRST_WAVE_DELAY = 10;
 	private static final int MIN_SPAWN_DISTANCE = 14;
 	private static final int MAX_SPAWN_DISTANCE = 26;
-	/** Monsters only come out of the dark: never inside a lit base. */
 	private static final int MAX_SPAWN_LIGHT = 7;
 	private static final int SPAWNS_PER_PLAYER_PER_SECOND = 2;
-	/** If no monster finds a spot for this long, the wave goes on with those that came. */
 	private static final int GIVE_UP_SPAWNING_SECONDS = 20;
 	private static final double FOLLOW_RANGE = 48.0;
-	/** The last few monsters of a wave glow, so players can find them. */
 	private static final int GLOW_WHEN_LEFT = 3;
-	/** After a restart, monsters take a moment to load: a wave is not judged cleared before. */
 	private static final int RESUME_GRACE_SECONDS = 10;
 	private static final double PLAYER_CRY_RANGE = 10.0;
 	private static final int PLAYER_CRY_TICKS = 200;
 
-	/** A kind of monster in the horde, from which wave on it comes, and how often. */
 	private record Attacker(EntityType<? extends Mob> type, int fromWave, int weight) {
 	}
 
@@ -106,7 +95,6 @@ public final class HordeEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 5 in-game days; lasts until dawn, capped at 10 minutes.
 		JsonObject json = EventSettings.defaults(true, 8, 6000, 600);
 		json.addProperty("mobsPerPlayer", 4);
 		json.addProperty("extraMobsPerWave", 2);
@@ -146,7 +134,6 @@ public final class HordeEvent implements WorldEvent {
 		return DayCycle.hasDayCycle(level) && level.getDifficulty() != Difficulty.PEACEFUL && level.getGameRules().get(GameRules.SPAWN_MOBS);
 	}
 
-	/** Early in the night, so there is time for all three waves before dawn. */
 	@Override
 	public boolean canStart(ServerLevel level) {
 		return level.isDarkOutside() && DayCycle.isBetween(level, DayCycle.NIGHT_START, LATEST_START);
@@ -198,7 +185,6 @@ public final class HordeEvent implements WorldEvent {
 			return;
 		}
 		boolean timedOut = wave > 0 && elapsedSeconds(active) - data.getIntOr(WAVE_STARTED, 0) >= settings.getInt("waveTimeout");
-		// With nobody around, the next wave waits.
 		if (wave < WAVES && (wave == 0 || cleared || timedOut) && !fighters(level).isEmpty()) {
 			if (cleared && !state.announcedClear) {
 				state.announcedClear = true;
@@ -220,7 +206,6 @@ public final class HordeEvent implements WorldEvent {
 	@Override
 	public void end(ServerLevel level, ActiveEvent active) {
 		HordeState state = active.state(HordeState::new);
-		// Whatever is left of the horde leaves with it (a summoned warlord is not part of it).
 		for (Mob mob : level.getEntities(EntityTypeTest.forClass(Mob.class),
 				mob -> mob.getTags().contains(MOB_TAG) || HordeWarlord.is(mob) && !Creature.isSummoned(mob))) {
 			level.sendParticles(ParticleTypes.LARGE_SMOKE, mob.getX(), mob.getY() + mob.getBbHeight() / 2, mob.getZ(), 10, 0.3, 0.5, 0.3, 0.02);
@@ -228,7 +213,6 @@ public final class HordeEvent implements WorldEvent {
 		}
 		state.mobs.clear();
 		state.warlord = null;
-		// Fought off by nobody (no monster could reach anyone) is no victory.
 		if (!active.data().getBooleanOr(VICTORY, false) || state.fighters.isEmpty()) {
 			return;
 		}
@@ -270,7 +254,6 @@ public final class HordeEvent implements WorldEvent {
 		WorldOmensMod.LOGGER.info("Horde wave {} in {}: {} monsters", wave, level.dimension().identifier(), total);
 	}
 
-	/** Players the horde goes after. */
 	private static List<ServerPlayer> fighters(ServerLevel level) {
 		List<ServerPlayer> players = new ArrayList<>();
 		for (ServerPlayer player : level.players()) {
@@ -281,7 +264,6 @@ public final class HordeEvent implements WorldEvent {
 		return players;
 	}
 
-	/** Brings a few more monsters of the current wave in, spread over the players. */
 	private static void spawnSome(ServerLevel level, HordeState state, CompoundTag data, int wave) {
 		List<ServerPlayer> players = fighters(level);
 		if (players.isEmpty()) {
@@ -292,7 +274,6 @@ public final class HordeEvent implements WorldEvent {
 		for (int i = 0; i < players.size() * SPAWNS_PER_PLAYER_PER_SECOND && toSpawn > 0; i++) {
 			Mob mob = spawnAttacker(level, players.get(i % players.size()), wave);
 			if (mob != null) {
-				// Usually already tracked: the load callback also sees new entities.
 				if (!state.mobs.contains(mob)) {
 					state.mobs.add(mob);
 				}
@@ -341,7 +322,6 @@ public final class HordeEvent implements WorldEvent {
 		return mob;
 	}
 
-	/** Brings the warlord in with the last wave. Its boss bar and war cries are its own (see HordeWarlord). */
 	private void tickWarlord(ServerLevel level, ActiveEvent active, HordeState state, int wave) {
 		CompoundTag data = active.data();
 		if (wave == WAVES && settings().getBoolean("warlord") && !data.getBooleanOr(WARLORD_SPAWNED, false)) {
@@ -363,7 +343,6 @@ public final class HordeEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns the warlord at {@code pos} now, for tests and admins. */
 	public Vindicator spawnWarlord(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		HordeState state = active.state(HordeState::new);
 		Vindicator warlord = HordeWarlord.spawn(level, pos, language, settings().getDouble("warlordHealth"));
@@ -374,22 +353,16 @@ public final class HordeEvent implements WorldEvent {
 		return warlord;
 	}
 
-	/** The wave the current run is on (0 before the first). */
 	public static int wave(ActiveEvent active) {
 		return active.data().getIntOr(WAVE, 0);
 	}
 
-	/** Monsters of the current wave that are still around. */
 	public static List<Mob> waveMobs(ActiveEvent active) {
 		HordeState state = active.state(HordeState::new);
 		state.mobs.removeIf(mob -> mob.isRemoved() || !mob.isAlive());
 		return List.copyOf(state.mobs);
 	}
 
-	/**
-	 * The warlord's axe: a war cry that gives the player and the players around them Strength and Speed, and
-	 * weakens and slows the monsters around them.
-	 */
 	private static void warCry(ServerLevel level, ServerPlayer player) {
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.RAVAGER_ROAR, SoundSource.PLAYERS, 1.5f, 1.1f);
 		AABB area = player.getBoundingBox().inflate(PLAYER_CRY_RANGE);
@@ -431,7 +404,6 @@ public final class HordeEvent implements WorldEvent {
 					state.mobs.add(mob);
 				}
 			} else {
-				// The horde left without it.
 				DeferredDiscard.discard(mob);
 				mob.getPassengers().forEach(DeferredDiscard::discard);
 			}
@@ -457,7 +429,6 @@ public final class HordeEvent implements WorldEvent {
 					active.data().putBoolean(WARLORD_DEFEATED, true);
 				}
 			}
-			// A warlord drops its loot wherever it came from.
 			if (warlord && killer != null) {
 				HordeWarlord.dropLoot(level, mob, killer, settings().getDouble("axeChance"));
 				Advancements.award(killer, "defeat_horde_warlord");
@@ -467,7 +438,6 @@ public final class HordeEvent implements WorldEvent {
 			}
 		});
 
-		// The warlord's axe: right-click for a war cry, then a cooldown shown on the axe.
 		Hooks.USE_ITEM.register((player, world, hand) -> {
 			ItemStack stack = player.getItemInHand(hand);
 			if (!EventItems.WARLORD_AXE.is(stack) || !(player instanceof ServerPlayer serverPlayer) || !(world instanceof ServerLevel level)
@@ -487,7 +457,6 @@ public final class HordeEvent implements WorldEvent {
 		private int failedSpawnSeconds;
 		private boolean announcedClear;
 		private int graceSeconds;
-		/** Players who killed part of the horde: they get the reward. */
 		private final Set<UUID> fighters = new HashSet<>();
 	}
 }

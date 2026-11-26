@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""Draws the special items' 16x16 icons in a vanilla style: shapes shaded with light from the top left and a
-darker outline, as vanilla items are.
-
-    python3 tools/item_icons.py [OUTPUT_TEXTURES_DIR] [--preview PREVIEW.png]
-
-Writes <id>.png into the folder (src/main/resources/assets/worldomens/textures/item by default). Tools and
-weapons lie on the diagonal like vanilla ones: handle at the bottom left, head at the top right.
-The lucky nugget is already a vanilla-size icon and is left alone.
-"""
 import math
 import os
 import sys
@@ -19,8 +10,8 @@ N = 16
 
 class Sprite:
     def __init__(self):
-        self.region = {}   # (x, y) -> region name
-        self.colour = {}   # (x, y) -> fixed colour, painted over the shading
+        self.region = {}
+        self.colour = {}
 
     def add(self, name, pixels):
         for p in pixels:
@@ -33,7 +24,6 @@ class Sprite:
                 self.colour[(int(p[0]), int(p[1]))] = c
 
     def render(self, ramps, outline=True):
-        """ramps: region -> (dark, mid, light). Light comes from the top left."""
         img = Image.new('RGBA', (N, N), (0, 0, 0, 0))
         for (x, y), name in self.region.items():
             dark, mid, light = ramps[name]
@@ -70,7 +60,6 @@ def thick(points, w=2):
 
 
 def poly(pts):
-    """Filled polygon (even-odd), sampled at pixel centres."""
     out = []
     for y in range(N):
         for x in range(N):
@@ -85,7 +74,6 @@ def poly(pts):
 
 
 def handle(s, x1=10, y1=5):
-    """A wooden handle on the diagonal, from the bottom left corner up to (x1, y1)."""
     s.add('wood', line(1, 14, x1, y1))
     s.add('wood', [(x + 1, y) for x, y in line(1, 14, x1, y1)][:-1])
 

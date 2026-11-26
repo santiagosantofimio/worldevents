@@ -4,10 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-/**
- * Typed view over one event's config section. Invalid or missing values fall back to the defaults from code.
- * Durations in the JSON are in seconds; the {@code *Ticks} accessors convert them.
- */
 public final class EventSettings {
 	public static final String ENABLED = "enabled";
 	public static final String WEIGHT = "weight";
@@ -22,7 +18,6 @@ public final class EventSettings {
 		this.defaults = defaults;
 	}
 
-	/** Starts a defaults object with the keys every event has. Durations are in seconds. */
 	public static JsonObject defaults(boolean enabled, int weight, int cooldownSeconds, int durationSeconds) {
 		JsonObject json = new JsonObject();
 		json.addProperty(ENABLED, enabled);

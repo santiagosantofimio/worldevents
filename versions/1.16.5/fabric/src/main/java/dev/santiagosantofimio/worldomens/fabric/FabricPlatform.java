@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class FabricPlatform implements Platform {
-	/** Each player's game language, which 1.18 servers do not keep: {@code ServerPlayerMixin} records it. */
 	private static final Map<UUID, String> LANGUAGES = new ConcurrentHashMap<>();
 
 	public static void rememberLanguage(ServerPlayer player, String language) {
@@ -32,7 +31,6 @@ public class FabricPlatform implements Platform {
 		LANGUAGES.remove(player.getUUID());
 	}
 
-	/** Ores other mods list in {@code c:ores}: 1.16 Fabric has no shared ore tag of its own. */
 	private static final Tag<Block> ORES = TagRegistry.block(new ResourceLocation("c", "ores"));
 
 	@Override

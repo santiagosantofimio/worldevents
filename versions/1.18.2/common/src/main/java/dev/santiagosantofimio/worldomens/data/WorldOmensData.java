@@ -12,12 +12,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
-/**
- * Per-dimension event state: the running event, the next planned one, and when each event last ended
- * (in game time).
- */
 public final class WorldOmensData extends SavedData {
-	/** The event drawn to run next, waiting for the right moment to start. */
 	public record Plan(String eventId, long plannedAt, long warnedAt) {
 		private static final long NOT_WARNED = -1;
 		private static final Codec<Plan> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -46,7 +41,6 @@ public final class WorldOmensData extends SavedData {
 			Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("lastEnds", Map.of()).forGetter(data -> data.lastEnds)
 	).apply(instance, WorldOmensData::new));
 
-	/** File name in the dimension's data folder. */
 	private static final String FILE = WorldOmensMod.MOD_ID + "_state";
 	private static final String LEGACY_FILE = "worldevents_state";
 
@@ -93,7 +87,6 @@ public final class WorldOmensData extends SavedData {
 		return data;
 	}
 
-	/** Reads the saved state; a save that cannot be read (an event id that no longer exists…) starts over empty. */
 	private static WorldOmensData load(CompoundTag tag) {
 		return CODEC.parse(NbtOps.INSTANCE, tag.getCompound("state"))
 				.resultOrPartial(error -> WorldOmensMod.LOGGER.warn("Could not read the world events state: {}", error))
@@ -126,7 +119,6 @@ public final class WorldOmensData extends SavedData {
 		setDirty();
 	}
 
-	/** Game time when the last event in this dimension ended, or {@code null} if none has run yet. */
 	public Long lastEventEnd() {
 		return lastEventEnd;
 	}
@@ -141,7 +133,6 @@ public final class WorldOmensData extends SavedData {
 		setDirty();
 	}
 
-	/** Starts the global cooldown from now, so a freshly installed mod does not fire an event right away. */
 	public void initCooldownIfNew(long gameTime) {
 		if (lastEventEnd == null) {
 			lastEventEnd = gameTime;

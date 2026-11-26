@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Remembers each player's game language, which the mod's texts are picked by. 1.18 servers do not keep it. */
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin {
 	@Inject(method = "updateOptions", at = @At("HEAD"))

@@ -38,11 +38,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * An intense thunderstorm: rain and thunder, lightning striking all around players, creepers charged by the storm
- * and storm spirits that call lightning down on players. The storm's own lightning is visual only, so it never
- * starts fires or changes blocks. The sky clears when it ends.
- */
 public final class ThunderstormEvent implements WorldEvent {
 	public static final String ID = "thunderstorm";
 	private static final int MIN_STRIKE_DISTANCE = 8;
@@ -56,7 +51,6 @@ public final class ThunderstormEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 4 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 240);
 		json.addProperty("strikeInterval", 3);
 		json.addProperty("chargeCreepers", true);
@@ -81,7 +75,6 @@ public final class ThunderstormEvent implements WorldEvent {
 		return SoundEvents.TRIDENT_THUNDER;
 	}
 
-	/** Needs weather: the overworld, not the Nether or the End. */
 	@Override
 	public boolean isAvailable(ServerLevel level) {
 		return level.dimensionType().hasSkyLight() && !level.dimensionType().hasFixedTime() && !level.dimensionType().hasCeiling();
@@ -98,7 +91,6 @@ public final class ThunderstormEvent implements WorldEvent {
 		EventSettings settings = settings();
 		RandomSource random = level.getRandom();
 		if (!level.isThundering()) {
-			// Something cleared the sky; the storm is not over yet.
 			level.getServer().setWeatherParameters(0, active.remainingTicks() + 200, true, true);
 		}
 		double strikeChance = 1.0 / Math.max(1, settings.getInt("strikeInterval"));
@@ -125,7 +117,6 @@ public final class ThunderstormEvent implements WorldEvent {
 		level.getServer().setWeatherParameters(CLEAR_SKY_TICKS, 0, false, false);
 	}
 
-	/** A visual-only bolt somewhere around the player; sometimes on a creeper, which the storm charges. */
 	private static void strikeNear(ServerLevel level, ServerPlayer player, boolean onCreeper) {
 		if (onCreeper) {
 			List<? extends Creeper> creepers = level.getEntities(EntityTypeTest.forClass(Creeper.class),
@@ -144,7 +135,6 @@ public final class ThunderstormEvent implements WorldEvent {
 		double distance = Mth.nextDouble(random, MIN_STRIKE_DISTANCE, MAX_STRIKE_DISTANCE);
 		int x = Mth.floor(player.getX() + Math.cos(angle) * distance);
 		int z = Mth.floor(player.getZ() + Math.sin(angle) * distance);
-		// Checked before the height lookup, which would load the chunk.
 		if (level.isPositionEntityTicking(new BlockPos(x, player.getBlockY(), z))) {
 			int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
 			visualBolt(level, new Vec3(x + 0.5, y, z + 0.5));
@@ -163,7 +153,6 @@ public final class ThunderstormEvent implements WorldEvent {
 	}
 
 	private void tickSpirits(ServerLevel level, StormState state, EventSettings settings) {
-		// Their lightning is their own (see StormSpirit); the storm only brings them.
 		state.spirits.removeIf(spirit -> spirit.isRemoved() || !spirit.isAlive());
 		if (level.getDifficulty() == Difficulty.PEACEFUL || state.spirits.size() >= settings.getInt("maxSpirits")) {
 			return;
@@ -181,7 +170,6 @@ public final class ThunderstormEvent implements WorldEvent {
 			if (ground != null) {
 				Vex spirit = StormSpirit.spawn(level, ground.above(Mth.nextInt(level.getRandom(), 3, 6)), Lang.language(player));
 				if (spirit != null) {
-					// Usually already tracked: the load callback also sees new entities.
 					if (!state.spirits.contains(spirit)) {
 						state.spirits.add(spirit);
 					}
@@ -190,7 +178,6 @@ public final class ThunderstormEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns a storm spirit at {@code pos} now, for tests and admins. */
 	public Vex spawnSpirit(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Vex spirit = StormSpirit.spawn(level, pos, language);
 		if (spirit != null && !active.state(StormState::new).spirits.contains(spirit)) {
@@ -232,7 +219,6 @@ public final class ThunderstormEvent implements WorldEvent {
 			}
 		});
 
-		// Bottled lightning: a real bolt where the player is looking.
 		Hooks.USE_ITEM.register((player, world, hand) -> {
 			ItemStack stack = player.getItemInHand(hand);
 			if (!EventItems.BOTTLED_LIGHTNING.is(stack) || !(player instanceof ServerPlayer serverPlayer) || !(world instanceof ServerLevel level)) {

@@ -38,11 +38,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-/**
- * An eruption, in the Nether only: geysers of fire burst from the ground around players, with a moment's warning to
- * step aside, and the magma colossus comes up to hunt them. Monsters killed meanwhile may leave a magma heart.
- * Nothing here touches a block: geysers and the colossus's slam only hurt what stands in them.
- */
 public final class EruptionEvent implements WorldEvent {
 	public static final String ID = "eruption";
 	private static final String COLOSSUS_SPAWNED = "colossusSpawned";
@@ -58,7 +53,6 @@ public final class EruptionEvent implements WorldEvent {
 
 	@Override
 	public JsonObject defaultSettings() {
-		// At most once every 4 in-game days; lasts 5 minutes.
 		JsonObject json = EventSettings.defaults(true, 10, 4800, 300);
 		json.addProperty("geyserInterval", 6);
 		json.addProperty("geyserDamage", 6.0);
@@ -132,14 +126,12 @@ public final class EruptionEvent implements WorldEvent {
 		state.colossus = null;
 	}
 
-	/** The warning: smoke and lava pops, so players have a moment to step aside. */
 	private static void rumble(ServerLevel level, BlockPos at) {
 		level.sendParticles(ParticleTypes.LARGE_SMOKE, at.getX() + 0.5, at.getY() + 0.1, at.getZ() + 0.5, 12, 0.5, 0.05, 0.5, 0.01);
 		level.sendParticles(ParticleTypes.LAVA, at.getX() + 0.5, at.getY() + 0.1, at.getZ() + 0.5, 6, 0.4, 0.05, 0.4, 0.0);
 		level.playSound(null, at, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 1.5f, 0.6f);
 	}
 
-	/** A column of fire at {@code at}: burns and throws whatever stands in it, and leaves blocks alone. */
 	public static void erupt(ServerLevel level, BlockPos at, float damage) {
 		double x = at.getX() + 0.5;
 		double z = at.getZ() + 0.5;
@@ -153,12 +145,10 @@ public final class EruptionEvent implements WorldEvent {
 			target.hurtServer(level, level.damageSources().hotFloor(), damage);
 			target.igniteForSeconds(3.0f);
 			target.push(0.0, 0.9, 0.0);
-			// A player moves on their own client, which only feels the push if the velocity is sent to it.
 			target.hurtMarked = true;
 		}
 	}
 
-	/** Brings the colossus up once the eruption is under way. Its boss bar and slams are its own. */
 	private void tickColossus(ServerLevel level, ActiveEvent active, EruptionState state) {
 		EventSettings settings = settings();
 		int elapsed = (active.totalTicks() - active.remainingTicks()) / 20;
@@ -187,7 +177,6 @@ public final class EruptionEvent implements WorldEvent {
 		}
 	}
 
-	/** Spawns the colossus at {@code pos} now, for tests and admins. */
 	public Hoglin spawnColossus(ServerLevel level, ActiveEvent active, BlockPos pos, String language) {
 		Hoglin colossus = MagmaColossus.spawn(level, pos, language, settings().getDouble("colossusHealth"));
 		if (colossus != null) {
@@ -241,7 +230,6 @@ public final class EruptionEvent implements WorldEvent {
 			}
 		});
 
-		// The colossus's hammer: every hit sets its target on fire.
 		Hooks.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
 			if (damageTaken > 0 && source.getDirectEntity() instanceof Player player && source.getEntity() == player
 					&& EventItems.COLOSSUS_HAMMER.is(player.getMainHandItem())) {
@@ -250,7 +238,6 @@ public final class EruptionEvent implements WorldEvent {
 		});
 	}
 
-	/** A geyser about to burst. */
 	private static final class Geyser {
 		private final BlockPos at;
 		private int seconds;

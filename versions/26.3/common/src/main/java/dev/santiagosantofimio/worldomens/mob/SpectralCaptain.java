@@ -31,12 +31,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The spectral captain: the ghost of a pirate who guards a treasure, in a tricorn hat and a tattered coat that fades
- * into mist. It fights with its cutlass and calls cannon fire on whoever it is after: a mark on the ground, then a
- * blast that hurts but leaves the terrain alone. It has its own boss bar. Moves and fights like a vindicator (the
- * invisible mob under the model, whose cutlass stays visible).
- */
 public final class SpectralCaptain {
 	public static final Creature.Kind KIND = Creature.kind("spectral_captain", Items.VINDICATOR_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language, configuredHealth()))
@@ -50,7 +44,6 @@ public final class SpectralCaptain {
 	private static final int CANNON_DELAY_TICKS = 40;
 	private static final float CANNON_POWER = 2.5f;
 	private static final int XP_REWARD = 100;
-	/** Cannon shots on their way, one per captain at most: where they will land, and on which server tick. */
 	private static final Map<Mob, Shot> SHOTS = new WeakHashMap<>();
 
 	private record Shot(Vec3 at, int tick) {
@@ -66,11 +59,9 @@ public final class SpectralCaptain {
 		}
 		captain.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		captain.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
-		// Not part of any raid that happens to be nearby.
 		captain.setCanJoinRaid(false);
 		MobSpawning.setBase(captain, Attributes.SCALE, 1.1);
 		MobSpawning.setBase(captain, Attributes.MAX_HEALTH, health);
-		// The cutlass it holds adds +6, for 8 damage per hit.
 		MobSpawning.setBase(captain, Attributes.ATTACK_DAMAGE, 2.0);
 		MobSpawning.setBase(captain, Attributes.KNOCKBACK_RESISTANCE, 0.6);
 		MobSpawning.setBase(captain, Attributes.FOLLOW_RANGE, 32.0);
@@ -89,12 +80,10 @@ public final class SpectralCaptain {
 		return KIND.is(entity);
 	}
 
-	/** The health set in the treasure hunt's config, for summoned captains too. */
 	private static double configuredHealth() {
 		return ModConfig.get().event(TreasureHuntEvent.ID).getDouble("captainHealth");
 	}
 
-	/** While it is after someone, the captain calls cannon fire every few seconds. */
 	private static void act(ServerLevel level, Mob captain, int tick) {
 		Shot shot = SHOTS.get(captain);
 		if (shot == null) {
@@ -103,14 +92,12 @@ public final class SpectralCaptain {
 			}
 		} else if (tick >= shot.tick()) {
 			SHOTS.remove(captain);
-			// No source: the captain is not hurt by its own cannon.
 			level.explode(null, shot.at().x, shot.at().y + 0.2, shot.at().z, CANNON_POWER, Level.ExplosionInteraction.NONE);
 		} else if (tick % 5 == 0) {
 			level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, shot.at().x, shot.at().y + 0.1, shot.at().z, 12, 1.0, 0.05, 1.0, 0.0);
 		}
 	}
 
-	/** Marks {@code at}: a cannon shot lands there in a moment. {@code tick} is the server's tick count. */
 	public static void aimCannon(ServerLevel level, Mob captain, Vec3 at, int tick) {
 		SHOTS.put(captain, new Shot(at, tick + CANNON_DELAY_TICKS));
 		level.playSound(null, at.x, at.y, at.z, SoundEvents.TNT_PRIMED, SoundSource.HOSTILE, 1.5f, 0.7f);

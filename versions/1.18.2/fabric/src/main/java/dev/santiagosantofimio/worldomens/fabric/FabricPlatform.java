@@ -16,7 +16,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricPlatform implements Platform {
-	/** Each player's game language, which 1.18 servers do not keep: {@code ServerPlayerMixin} records it. */
 	private static final Map<UUID, String> LANGUAGES = new ConcurrentHashMap<>();
 
 	public static void rememberLanguage(ServerPlayer player, String language) {

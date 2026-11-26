@@ -24,7 +24,6 @@ public class NeoForgePlatform implements Platform {
 		try {
 			ModList.get().getModFileById(WorldOmensMod.MOD_ID).getFile().getContents().visitContent(prefix, (path, resource) -> {
 				String name = path.substring(path.lastIndexOf('/') + 1);
-				// Only the files directly inside the folder.
 				if (!name.isEmpty() && path.equals(prefix + name)) {
 					try {
 						files.put(name, new String(resource.readAllBytes(), StandardCharsets.UTF_8));

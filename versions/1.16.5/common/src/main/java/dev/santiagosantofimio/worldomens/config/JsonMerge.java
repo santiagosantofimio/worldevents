@@ -9,13 +9,6 @@ public final class JsonMerge {
 	private JsonMerge() {
 	}
 
-	/**
-	 * Copies every key from {@code defaults} that is missing in {@code target}, recursing into nested objects.
-	 * Values the user already set are never overwritten, even if their type differs from the default.
-	 *
-	 * @return whether {@code target} changed
-	 */
-	/** A deep copy: 1.16's Gson keeps deepCopy to itself. */
 	public static JsonElement copy(JsonElement element) {
 		return new JsonParser().parse(element.toString());
 	}

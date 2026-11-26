@@ -13,10 +13,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * Only for games that have the mod on the client too (singleplayer, or players who install it): a creative tab with
- * the special items and the creature eggs. Vanilla clients never see it.
- */
 @Mod(value = WorldOmensMod.MOD_ID, dist = Dist.CLIENT)
 public class WorldOmensNeoForgeClient {
 	private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WorldOmensMod.MOD_ID);
@@ -41,7 +37,6 @@ public class WorldOmensNeoForgeClient {
 		TABS.register(modBus);
 	}
 
-	/** The game's language, for the items' fallback names. */
 	private static String language() {
 		return Lang.resolveLanguage(Minecraft.getInstance().getLanguageManager().getSelected());
 	}

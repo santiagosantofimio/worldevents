@@ -40,26 +40,12 @@ import net.minecraft.world.item.component.CustomModelData;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-/**
- * The mod's own creatures, made so vanilla clients can see them. An invisible vanilla mob does the moving, fighting
- * and colliding; item displays riding it show the creature's 3D model from the resource pack. Without the pack,
- * players see the display's base block floating where the creature is, with its name above it.
- *
- * <p>Each creature takes care of itself wherever it is: this class animates every loaded creature and runs its
- * abilities and boss bar, whether its event brought it or it was summoned with an egg or a command. Events only
- * decide when their creatures come and go.
- */
 public final class Creature {
 	public static final String PART_TAG = WorldOmensMod.MOD_ID + ".creature_part";
-	/** Creatures summoned with an egg or a command: no event tracks them, and they stay until defeated. */
 	public static final String SUMMONED_TAG = WorldOmensMod.MOD_ID + ".summoned";
 	private static final int ANIMATION_TICKS = 10;
 	private static final double BOSS_BAR_DISTANCE = 64.0;
 
-	/**
-	 * One visible part. {@code base} is the vanilla block shown without the resource pack; {@code offsetY} is the
-	 * height of the part's centre above the middle of the mob's hitbox, in blocks.
-	 */
 	public record Part(Item base, String modelId, float scale, float offsetY, boolean fullBright, int glowColor, boolean doubleSize, Motion motion) {
 		public static Part of(Item base, String modelId, float scale) {
 			return new Part(base, modelId, scale, 0.0f, false, -1, false, Motion.NONE);
@@ -69,20 +55,14 @@ public final class Creature {
 			return new Part(base, modelId, scale, offsetY, fullBright, glowColor, doubleSize, motion);
 		}
 
-		/** Ignores light, so it stands out at night (glowing eyes, lava…). */
 		public Part bright() {
 			return new Part(base, modelId, scale, offsetY, true, glowColor, doubleSize, motion);
 		}
 
-		/** Glowing outline in this colour, visible through walls. */
 		public Part outline(int rgb) {
 			return new Part(base, modelId, scale, offsetY, fullBright, rgb, doubleSize, motion);
 		}
 
-		/**
-		 * The model is twice the size of a block ({@code tools/import_model.py --big}), for tall creatures: at the
-		 * same size on screen, the vanilla block shown without the resource pack is half as big.
-		 */
 		public Part big() {
 			return new Part(base, modelId, scale, offsetY, fullBright, glowColor, true, motion);
 		}
@@ -91,29 +71,22 @@ public final class Creature {
 			return new Part(base, modelId, scale, offsetY, fullBright, glowColor, doubleSize, motion);
 		}
 
-		/** How tall the part looks with the resource pack, in blocks. */
 		public float height() {
 			return doubleSize ? scale * 2.0f : scale;
 		}
 	}
 
-	/** How a part moves on top of the mob. */
 	public enum Motion {
-		/** Stays put: for creatures whose mob already hops or walks. */
 		NONE,
-		/** Bobs gently up and down: for floating creatures. */
 		FLOAT,
-		/** Floats and pulses like a heartbeat. */
 		PULSE
 	}
 
-	/** Spawns a creature at {@code pos}, named in {@code language}. {@code summoner} is null for the console. */
 	@FunctionalInterface
 	public interface Summoner {
 		Mob summon(ServerLevel level, BlockPos pos, String language, ServerPlayer summoner);
 	}
 
-	/** What a creature does on its own, every tick ({@code tick} is the server's tick count). */
 	@FunctionalInterface
 	public interface Behaviour {
 		Behaviour NONE = (level, mob, tick) -> {
@@ -122,14 +95,9 @@ public final class Creature {
 		void tick(ServerLevel level, Mob mob, int tick);
 	}
 
-	/** A boss's health bar: its colour, and the colour of the creature's name on it. */
 	public record BossBar(BossEvent.BossBarColor color, ChatFormatting nameColor) {
 	}
 
-	/**
-	 * A kind of creature. Its id names its model, its entity tag ({@code worldomens.<id>}) and its name
-	 * ({@code entity.worldomens.<id>}); {@code egg} is the vanilla spawn egg it is built on, which spawns it.
-	 */
 	public record Kind(String id, Item egg, Summoner summoner, Behaviour behaviour, BossBar bossBar) {
 		public String tag() {
 			return WorldOmensMod.MOD_ID + "." + id;
@@ -152,13 +120,10 @@ public final class Creature {
 		}
 	}
 
-	/** Parts by model id, so the animation can find a part's settings again after a restart. */
 	private static final Map<String, Part> PARTS = new HashMap<>();
 	private static final Map<String, Kind> KINDS = new LinkedHashMap<>();
-	/** Every creature loaded right now, in any level. */
 	private static final Set<Mob> LOADED = Collections.newSetFromMap(new WeakHashMap<>());
 	private static final Map<Mob, LocalizedBossBar> BOSS_BARS = new WeakHashMap<>();
-	/** Set while a creature is summoned, so it is marked as summoned before it enters the world. */
 	private static boolean summoning;
 
 	private Creature() {
@@ -168,7 +133,6 @@ public final class Creature {
 		return new Kind(id, egg, summoner, Behaviour.NONE, null);
 	}
 
-	/** Makes the mod's kinds of creature known, in the order the creative tab shows their eggs. */
 	public static void registerKinds(Kind... kinds) {
 		for (Kind kind : kinds) {
 			KINDS.put(kind.id(), kind);
@@ -183,7 +147,6 @@ public final class Creature {
 		return Collections.unmodifiableCollection(KINDS.values());
 	}
 
-	/** The kind of creature {@code entity} is, or {@code null} if it is not one of the mod's creatures. */
 	public static Kind kindOf(Entity entity) {
 		for (Kind kind : KINDS.values()) {
 			if (kind.is(entity)) {
@@ -193,16 +156,11 @@ public final class Creature {
 		return null;
 	}
 
-	/** Makes a part known; creatures define their parts once, as constants. */
 	public static Part register(Part part) {
 		PARTS.put(part.modelId(), part);
 		return part;
 	}
 
-	/**
-	 * Summons a creature outside of any event, for eggs and {@code /worldomens summon}. Its event will neither
-	 * track it nor take it away: it stays until defeated.
-	 */
 	public static Mob summon(Kind kind, ServerLevel level, BlockPos pos, String language, ServerPlayer summoner) {
 		summoning = true;
 		try {
@@ -212,10 +170,6 @@ public final class Creature {
 		}
 	}
 
-	/**
-	 * Tags a new creature with its kind before it is added to the level, keeps it from despawning, and marks it as
-	 * summoned if it is: the load callbacks already see the tags.
-	 */
 	public static void mark(Mob mob, Kind kind) {
 		mob.setPersistenceRequired();
 		mob.addTag(kind.tag());
@@ -228,15 +182,10 @@ public final class Creature {
 		return entity.entityTags().contains(SUMMONED_TAG);
 	}
 
-	/** Whether {@code mob} acts now, once every {@code seconds}. Creatures of a kind take turns. */
 	public static boolean everySeconds(Entity mob, int tick, int seconds) {
 		return tick % 20 == 0 && Math.floorMod(tick / 20 + mob.getId(), seconds) == 0;
 	}
 
-	/**
-	 * Hides {@code mob} and puts the parts on it. Call after the mob has its final size (scale attribute) and has
-	 * been added to the level.
-	 */
 	public static void dress(Mob mob, Part... parts) {
 		if (!(mob.level() instanceof ServerLevel level)) {
 			return;
@@ -264,7 +213,6 @@ public final class Creature {
 			display.snapTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), 0.0f);
 			level.addFreshEntity(display);
 			display.startRiding(mob, true, true);
-			// Tagged only once it rides the mob: the load callback removes parts without a creature.
 			display.addTag(PART_TAG);
 			setPose(display, mob, part, 0.0f, 1.0f);
 		}
@@ -274,10 +222,6 @@ public final class Creature {
 		LOADED.add(mob);
 	}
 
-	/**
-	 * The creature's name, floating above its model and always facing the viewer. A vanilla name tag would not
-	 * show: the mob is invisible and carries passengers.
-	 */
 	private static void addNameLabel(ServerLevel level, Mob mob, Part... parts) {
 		Display.TextDisplay label = EntityType.TEXT_DISPLAY.create(level, EntitySpawnReason.EVENT);
 		if (label == null) {
@@ -299,7 +243,6 @@ public final class Creature {
 		label.setTransformation(new Transformation(new Vector3f(0.0f, y, 0.0f), new Quaternionf(), new Vector3f(1.0f, 1.0f, 1.0f), new Quaternionf()));
 	}
 
-	/** Every loaded creature: turns and animates its parts, runs its abilities and keeps its boss bar up to date. */
 	private static void tickAll(MinecraftServer server) {
 		int tick = server.getTickCount();
 		for (Mob mob : new ArrayList<>(LOADED)) {
@@ -320,7 +263,6 @@ public final class Creature {
 		}
 	}
 
-	/** Keeps the parts turned like the mob, and animates them every few ticks. */
 	private static void animate(Mob mob, long gameTime) {
 		boolean animate = gameTime % ANIMATION_TICKS == 0;
 		float phase = (gameTime + mob.getId() * 7L) * 0.08f;
@@ -355,13 +297,11 @@ public final class Creature {
 		}
 	}
 
-	/** The boss bar title {@code player} sees for {@code boss}, or {@code null}. */
 	public static Component bossBarTitle(Mob boss, ServerPlayer player) {
 		LocalizedBossBar bar = BOSS_BARS.get(boss);
 		return bar != null ? bar.titleFor(player) : null;
 	}
 
-	/** Removes the creature and its parts at once. */
 	public static void remove(Mob mob) {
 		discardParts(mob);
 		clearBossBar(mob);
@@ -387,7 +327,6 @@ public final class Creature {
 	}
 
 	public static void registerHooks() {
-		// The parts go with the creature: no floating model left behind.
 		Hooks.AFTER_DEATH.register((entity, source) -> {
 			clearBossBar(entity);
 			if (!parts(entity).isEmpty() && entity.level() instanceof ServerLevel level) {
@@ -396,7 +335,6 @@ public final class Creature {
 				discardParts(entity);
 			}
 		});
-		// A hit shows on the model too, since the mob itself is invisible.
 		Hooks.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
 			if (damageTaken > 0 && !parts(entity).isEmpty() && entity.level() instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.DAMAGE_INDICATOR, entity.getX(), entity.getY() + entity.getBbHeight() / 2, entity.getZ(),
@@ -404,7 +342,6 @@ public final class Creature {
 			}
 		});
 		Hooks.ENTITY_LOAD.register((entity, level) -> {
-			// A part whose creature is gone (an old save, a crash) is removed.
 			if (entity instanceof Display.ItemDisplay && entity.entityTags().contains(PART_TAG) && entity.getVehicle() == null) {
 				DeferredDiscard.discard(entity);
 			} else if (entity instanceof Mob mob && kindOf(mob) != null) {
@@ -412,7 +349,6 @@ public final class Creature {
 			}
 		});
 		Hooks.END_SERVER_TICK.register(Creature::tickAll);
-		// In singleplayer one game can host several worlds, one after another.
 		Hooks.SERVER_STOPPED.register(server -> {
 			LOADED.clear();
 			BOSS_BARS.values().forEach(LocalizedBossBar::clear);
@@ -430,7 +366,6 @@ public final class Creature {
 	}
 
 	private static void setPose(Display.ItemDisplay display, Mob mob, Part part, float bob, float pulse) {
-		// The display sits on the mob's passenger attachment point; move it to the middle of the hitbox.
 		float attach = (float) (mob.getPassengerRidingPosition(display).y - mob.getY());
 		float y = mob.getBbHeight() / 2.0f + part.offsetY() - attach + bob;
 		float scale = part.scale() * pulse;

@@ -13,7 +13,6 @@ public final class Drops {
 	private Drops() {
 	}
 
-	/** Multiplies every stack in {@code drops} in place, splitting into extra stacks past the max stack size. */
 	public static void multiply(List<ItemStack> drops, double multiplier, Random random) {
 		if (multiplier == 1.0) {
 			return;
@@ -40,7 +39,6 @@ public final class Drops {
 		drops.addAll(extra);
 	}
 
-	/** Drops {@code stack} at {@code at} with a small random hop, like a mob drop. */
 	public static void spawn(ServerLevel level, Vec3 at, ItemStack stack) {
 		if (stack.isEmpty()) {
 			return;

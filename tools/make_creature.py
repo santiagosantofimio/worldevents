@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-"""Builds voxel models for the mod's creatures from code, for creatures without a model from an AI tool yet.
-
-Each model is a 16x16x16 voxel grid (front facing north, like a carved pumpkin) turned into a Minecraft item model
-with tools/import_model.py's box merging and palette texture.
-
-Big creatures (tall ones, see Creature.Part#big) use a 32x32x32 grid that fills 32 model units instead.
-
-Usage:
-    python3 tools/make_creature.py NAME MODEL.json TEXTURE.png --texture-id worldomens:item/NAME [--preview PNG]
-Names: blood_moon_lord, blood_eye, storm_spirit, harvest_spirit, nomad_merchant (big), horde_warlord (big),
-spectral_captain (big), magma_colossus (big), void_stalker (big).
-"""
 
 import argparse
 import json
@@ -22,7 +10,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import import_model  # noqa: E402
+import import_model
 
 SIZE = 16
 BIG_SIZE = 32
@@ -33,7 +21,6 @@ def grid(size=SIZE):
 
 
 def sphere(filled, colours, centre, radius, colour_fn, squash=(1.0, 1.0, 1.0)):
-    """Fills an ellipsoid: a sphere of `radius` stretched by `squash` along x, y and z."""
     size = filled.shape[0]
     for x in range(size):
         for y in range(size):
@@ -45,7 +32,6 @@ def sphere(filled, colours, centre, radius, colour_fn, squash=(1.0, 1.0, 1.0)):
 
 
 def box(filled, colours, lo, hi, colour_fn):
-    """Fills the voxels from `lo` up to (not including) `hi`."""
     for x in range(max(lo[0], 0), min(hi[0], filled.shape[0])):
         for y in range(max(lo[1], 0), min(hi[1], filled.shape[1])):
             for z in range(max(lo[2], 0), min(hi[2], filled.shape[2])):
@@ -54,7 +40,6 @@ def box(filled, colours, lo, hi, colour_fn):
 
 
 def front_face(filled):
-    """For each (x, y), the first filled z from the north (z = 0) side."""
     face = {}
     size = filled.shape[0]
     for x in range(size):
@@ -76,7 +61,6 @@ def paint_front(filled, colours, pixels, colour):
 
 
 def blood_moon_lord():
-    """A blood-red moon with craters, angry glowing eyes and a jagged mouth."""
     rng = random.Random(7)
     filled, colours = grid()
     craters = [(rng.uniform(2, 14), rng.uniform(2, 14), rng.uniform(2, 14), rng.uniform(1.2, 2.4)) for _ in range(9)]
@@ -100,7 +84,6 @@ def blood_moon_lord():
 
 
 def blood_eye():
-    """A floating eyeball: veined white, a crimson iris and a black slit pupil, looking north."""
     rng = random.Random(3)
     filled, colours = grid()
 
@@ -123,7 +106,6 @@ def blood_eye():
 
 
 def storm_spirit():
-    """A dark thundercloud with two glowing eyes and a lightning bolt hanging under it."""
     rng = random.Random(11)
     filled, colours = grid()
 
@@ -143,7 +125,6 @@ def storm_spirit():
 
 
 def harvest_spirit():
-    """A round little sprite of woven straw with a leafy sprout on top, rosy cheeks and a smile."""
     rng = random.Random(5)
     filled, colours = grid()
 
@@ -171,7 +152,6 @@ def harvest_spirit():
 
 
 def nomad_merchant():
-    """A hooded traveller in an indigo robe, bent under a towering pack of goods, with a lantern hung out in front."""
     rng = random.Random(9)
     filled, colours = grid(BIG_SIZE)
     indigo = np.array([62, 50, 116])
@@ -220,7 +200,6 @@ def nomad_merchant():
 
 
 def horde_warlord():
-    """A hulking brute in dark iron armour: horned helmet with a glowing eye slit, spiked pauldrons and a war cape."""
     rng = random.Random(13)
     filled, colours = grid(BIG_SIZE)
     dark = np.array([42, 42, 50])
@@ -264,7 +243,6 @@ def horde_warlord():
 
 
 def spectral_captain():
-    """A ghost pirate: tricorn hat, pale skull face, and a long tattered coat that fades into mist."""
     rng = random.Random(21)
     filled, colours = grid(BIG_SIZE)
     teal = np.array([44, 104, 118])
@@ -299,7 +277,6 @@ def spectral_captain():
 
 
 def magma_colossus():
-    """A hulking boar-like beast of black rock with lava running through its cracks and obsidian tusks."""
     rng = random.Random(33)
     filled, colours = grid(BIG_SIZE)
     bone = np.array([70, 40, 90])
@@ -331,7 +308,6 @@ def magma_colossus():
 
 
 def void_stalker():
-    """A tall, thin shadow: long arms with pale claws, a tattered cloak and two burning eyes."""
     rng = random.Random(44)
     filled, colours = grid(BIG_SIZE)
     shadow = np.array([20, 12, 32])
@@ -382,7 +358,6 @@ def main():
     average = np.clip(average, 0, 255)
     palette, index = import_model.quantise(filled, average, args.colors)
     big = args.name in BIG
-    # A big creature's 32-voxel grid spans model units -8 to 24, centred like a normal one.
     origin = np.full(3, -8.0 if big else 0.0)
     model = import_model.build_model(index, import_model.solid_interior(filled), palette, origin, 1.0, args.texture_id, "part", big)
     with open(args.model, "w") as f:

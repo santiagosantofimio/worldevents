@@ -9,10 +9,6 @@ public final class Protection {
 	private Protection() {
 	}
 
-	/**
-	 * Whether {@code pos} is inside the server's spawn protection. Unlike vanilla, this does not depend on the
-	 * operator list: events stay out of the protected area either way. Singleplayer has no spawn protection.
-	 */
 	public static boolean isSpawnProtected(ServerLevel level, BlockPos pos) {
 		if (!(level.getServer() instanceof DedicatedServer server)) {
 			return false;

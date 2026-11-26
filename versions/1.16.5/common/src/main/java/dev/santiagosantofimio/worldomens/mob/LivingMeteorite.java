@@ -21,11 +21,6 @@ import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The living meteorite: a chunk of burning space rock with eyes that climbs out of meteor craters and hops after
- * players, setting them on fire. Moves like a magma cube (the invisible mob under the model, which also gives the
- * bursts of flame when it lands). Crumbles when the meteor shower ends.
- */
 public final class LivingMeteorite {
 	public static final Creature.Kind KIND = Creature.kind("living_meteorite", Items.MAGMA_CUBE_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language))
@@ -49,7 +44,6 @@ public final class LivingMeteorite {
 		}
 		cube.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		cube.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
-		// The smallest size, which never splits on death. 1.18 cannot set it directly, so through its saved data.
 		CompoundTag size = cube.saveWithoutId(new CompoundTag());
 		size.putInt("Size", 0);
 		cube.load(size);
@@ -79,7 +73,6 @@ public final class LivingMeteorite {
 		Entities.awardExperience(level, at, XP_REWARD);
 	}
 
-	/** Ambient effect: embers and smoke rising from the rock. */
 	public static void smoke(ServerLevel level, Mob meteorite) {
 		double top = meteorite.getY() + meteorite.getBbHeight();
 		level.sendParticles(ParticleTypes.FLAME, meteorite.getX(), top, meteorite.getZ(), 2, 0.3, 0.1, 0.3, 0.01);

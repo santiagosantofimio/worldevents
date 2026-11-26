@@ -24,10 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The void stalker: a tall, thin shadow with burning eyes that blinks behind its prey every few seconds, and whose
- * touch blinds. Walks and fights like a vindicator (the invisible mob under the model), without the axe.
- */
 public final class VoidStalker {
 	public static final Creature.Kind KIND = Creature.kind("void_stalker", Items.ENDERMAN_SPAWN_EGG,
 					(level, pos, language, summoner) -> spawn(level, pos, language))
@@ -51,9 +47,7 @@ public final class VoidStalker {
 		}
 		stalker.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
 		stalker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
-		// Not part of any raid that happens to be nearby.
 		stalker.setCanJoinRaid(false);
-		// A vindicator spawns with an axe, which would float next to the shadow.
 		stalker.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 		MobSpawning.setBase(stalker, Attributes.MAX_HEALTH, 30.0);
 		MobSpawning.setBase(stalker, Attributes.ATTACK_DAMAGE, 6.0);
@@ -71,7 +65,6 @@ public final class VoidStalker {
 		return KIND.is(entity);
 	}
 
-	/** Blinks behind whoever it is after, unless it is already on top of them or has lost them. */
 	private static void act(ServerLevel level, Mob stalker, int tick) {
 		LivingEntity target = stalker.getTarget();
 		if (target == null || !Creature.everySeconds(stalker, tick, BLINK_SECONDS)) {
@@ -83,7 +76,6 @@ public final class VoidStalker {
 		}
 	}
 
-	/** Teleports to solid ground behind {@code target}. Returns whether there was somewhere to stand. */
 	public static boolean blinkBehind(ServerLevel level, Mob stalker, LivingEntity target) {
 		Vec3 facing = target.getLookAngle().multiply(1.0, 0.0, 1.0).normalize();
 		Vec3 behind = target.position().subtract(facing.scale(BEHIND_TARGET));

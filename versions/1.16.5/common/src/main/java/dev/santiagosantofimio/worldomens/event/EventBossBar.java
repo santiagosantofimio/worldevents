@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 
-/** Boss bar for a running event: its name and time left, for every player in the dimension. */
 final class EventBossBar {
 	private final WorldEvent event;
 	private final LocalizedBossBar bar;
